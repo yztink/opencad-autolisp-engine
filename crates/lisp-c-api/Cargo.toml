@@ -1,0 +1,13 @@
+[package]
+name = "lisp-c-api"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "opencad_lisp"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+lisp-core = { path = "../lisp-core" }
+lisp-cad = { path = "../lisp-cad" }

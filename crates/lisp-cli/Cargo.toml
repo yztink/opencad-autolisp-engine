@@ -1,0 +1,9 @@
+[package]
+name = "lisp-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+lisp-core = { path = "../lisp-core" }
+lisp-repl = { path = "../lisp-repl" }
