@@ -95,6 +95,58 @@ fn test_gui_all_controls_roundtrip() {
 }
 
 #[test]
+fn test_interactive_dialog_callback() {
+    let mock = Arc::new(Mutex::new(MockCadBridge::new()));
+    let mut env = create_cad_env(mock.clone());
+
+    // Prepare a mock action event (e.g. file picked)
+    let mut current_vals = std::collections::HashMap::new();
+    current_vals.insert("picker".to_string(), DialogValue::FilePath("C:/scripts/test.lsp".to_string()));
+    current_vals.insert("tbl_files".to_string(), DialogValue::Table(vec![vec!["C:/orig.lsp".to_string()]]));
+
+    let event = lisp_cad::ui_types::DialogEvent {
+        control_id: "picker".to_string(),
+        action: "pick".to_string(),
+        value: Some(DialogValue::FilePath("C:/scripts/test.lsp".to_string())),
+        current_values: current_vals,
+    };
+    mock.lock().unwrap().mock_dialog_actions.push(serde_json::to_string(&event).unwrap());
+
+    // Prepare submitted response
+    let mut submitted_vals = std::collections::HashMap::new();
+    submitted_vals.insert("lbl_status".to_string(), DialogValue::Text("Ready".to_string()));
+    mock.lock().unwrap().mock_dialog_response =
+        Some(serde_json::to_string(&DialogResponse::Submitted(submitted_vals)).unwrap());
+
+    let code = r#"
+        (setq callback-invoked nil)
+        (defun my-handler (id act vals)
+          (setq callback-invoked (list id act (ocl-get "picker" vals)))
+          (list
+            (cons "lbl_status" "Updated via action")
+            (cons "tbl_files" '(("C:/scripts/test.lsp")))
+          )
+        )
+        (setq dlg (ocl-dialog "Interactive Test"
+                    (ocl-info "lbl_status" "Initial")
+                    (ocl-row (ocl-file "picker" "Pick" ""))
+                    (ocl-row (ocl-table "tbl_files" "Files" '("Path") '(("C:/orig.lsp"))))))
+        (setq res (ocl-dialog-show dlg 'my-handler))
+        callback-invoked
+    "#;
+
+    let res = eval_str(code, &mut env).unwrap();
+    assert_eq!(
+        res,
+        Value::from_slice(&[
+            Value::Str("picker".into()),
+            Value::Str("pick".into()),
+            Value::Str("C:/scripts/test.lsp".into()),
+        ])
+    );
+}
+
+#[test]
 fn test_dialog_cancellation() {
     let mock = Arc::new(Mutex::new(MockCadBridge::new()));
     let mut env = create_cad_env(mock.clone());

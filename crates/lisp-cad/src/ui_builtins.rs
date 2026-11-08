@@ -325,10 +325,11 @@ pub fn lisp_to_control(val: &Value) -> Result<DialogControl, LispError> {
             Ok(DialogControl::Button { id, label, action, align_h, width })
         }
         "INFO" | "INFOTEXT" => {
+            let id = extract_str(&lookup_alist("id", val).unwrap_or(Value::Nil));
             let text = extract_str(&lookup_alist("text", val).unwrap_or(Value::Nil))
                 .unwrap_or_default();
             let align_h = lookup_alist("align-h", val).as_ref().and_then(parse_align_h);
-            Ok(DialogControl::InfoText { text, align_h })
+            Ok(DialogControl::InfoText { id, text, align_h })
         }
         other => Err(LispError::Eval(format!("Unknown control type: '{other}'"))),
     }
@@ -420,6 +421,13 @@ pub fn dialog_value_to_lisp(dv: DialogValue) -> Value {
             }
             Value::from_slice(&row_values)
         }
+        DialogValue::ChoiceOptions(opts) => {
+            let opt_vals: Vec<Value> = opts.into_iter().map(Value::Str).collect();
+            Value::from_slice(&opt_vals)
+        }
+        DialogValue::Enabled(b) | DialogValue::Visible(b) => {
+            if b { Value::T } else { Value::Nil }
+        }
     }
 }
 
@@ -434,6 +442,9 @@ pub fn lisp_to_dialog_value(val: &Value) -> DialogValue {
         Value::Nil => DialogValue::Bool(false),
         Value::Cons(_) => {
             if let Some(items) = val.to_vec() {
+                if items.is_empty() {
+                    return DialogValue::Table(Vec::new());
+                }
                 // Check if color list of 3 integers
                 if items.len() == 3 && items.iter().all(|i| matches!(i, Value::Int(_))) {
                     let r = if let Value::Int(v) = items[0] { v.clamp(0, 255) as u8 } else { 0 };
@@ -442,7 +453,7 @@ pub fn lisp_to_dialog_value(val: &Value) -> DialogValue {
                     return DialogValue::Color([r, g, b]);
                 }
                 // Check if table (list of lists)
-                if !items.is_empty() && items.iter().all(|i| i.to_vec().is_some()) {
+                if items.iter().all(|i| i.to_vec().is_some()) {
                     let mut rows = Vec::new();
                     for row_val in items {
                         if let Some(cells) = row_val.to_vec() {
@@ -454,6 +465,14 @@ pub fn lisp_to_dialog_value(val: &Value) -> DialogValue {
                         }
                     }
                     return DialogValue::Table(rows);
+                }
+                // Check if list of strings/symbols (for ChoiceOptions)
+                if items.iter().all(|i| matches!(i, Value::Str(_) | Value::Sym(_))) {
+                    let opt_strs: Vec<String> = items
+                        .into_iter()
+                        .filter_map(|c| extract_str(&c))
+                        .collect();
+                    return DialogValue::ChoiceOptions(opt_strs);
                 }
                 // Check if alist of fields
                 let mut map = HashMap::new();
@@ -479,6 +498,41 @@ pub fn lisp_to_dialog_value(val: &Value) -> DialogValue {
             DialogValue::Text(val.to_string())
         }
         _ => DialogValue::Text(val.to_string()),
+    }
+}
+
+pub fn lisp_to_action_response(val: &Value) -> Result<crate::ui_types::DialogActionResponse, String> {
+    use crate::ui_types::DialogActionResponse;
+    match val {
+        Value::Nil => Ok(DialogActionResponse::None),
+        Value::Sym(s) => match s.as_str().to_ascii_uppercase().as_str() {
+            "SUBMIT" | "OK" => Ok(DialogActionResponse::Submit),
+            "CLOSE" | "CANCEL" => Ok(DialogActionResponse::Close),
+            "NONE" => Ok(DialogActionResponse::None),
+            _ => Ok(DialogActionResponse::None),
+        },
+        Value::Cons(_) => {
+            if let Some(items) = val.to_vec() {
+                let mut updates = HashMap::new();
+                for item in items {
+                    if let Value::Cons(p_rc) = item {
+                        let p = p_rc.borrow();
+                        if let Some(k) = extract_str(&p.car) {
+                            let target_val = if (k.starts_with("tbl_") || k.contains("table") || k.contains("files") || k.contains("scripts")) && p.cdr.is_nil() {
+                                DialogValue::Table(Vec::new())
+                            } else {
+                                lisp_to_dialog_value(&p.cdr)
+                            };
+                            updates.insert(k, target_val);
+                        }
+                    }
+                }
+                Ok(DialogActionResponse::UpdateValues(updates))
+            } else {
+                Ok(DialogActionResponse::None)
+            }
+        }
+        _ => Ok(DialogActionResponse::None),
     }
 }
 
@@ -1110,18 +1164,29 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         Ok(Value::from_slice(&items))
     });
 
-    // (ocl-info text [options])
+    // (ocl-info [id] text [options])
     env.def_subr("OCL-INFO", |args, _| {
-        if args.is_empty() || args.len() > 2 {
+        if args.is_empty() || args.len() > 3 {
             return Err(LispError::WrongArgCount {
-                expected: "1 or 2 (text [options])",
+                expected: "1 to 3 ([id] text [options])",
                 actual: args.len(),
             });
         }
-        let text = extract_str(&args[0]).unwrap_or_else(|| args[0].to_string());
+        let (id, text, opts_idx) = if args.len() == 1 {
+            (None, extract_str(&args[0]).unwrap_or_else(|| args[0].to_string()), 1)
+        } else if args.len() == 2 {
+            if matches!(args[1], Value::Cons(_)) && lookup_alist("align-h", &args[1]).is_some() {
+                (None, extract_str(&args[0]).unwrap_or_else(|| args[0].to_string()), 1)
+            } else {
+                (extract_str(&args[0]), extract_str(&args[1]).unwrap_or_else(|| args[1].to_string()), 2)
+            }
+        } else {
+            (extract_str(&args[0]), extract_str(&args[1]).unwrap_or_else(|| args[1].to_string()), 2)
+        };
+
         let mut align_h = Value::Nil;
-        if args.len() >= 2 && matches!(args[1], Value::Cons(_)) {
-            if let Some(h) = lookup_alist("align-h", &args[1]) {
+        if opts_idx < args.len() && matches!(args[opts_idx], Value::Cons(_)) {
+            if let Some(h) = lookup_alist("align-h", &args[opts_idx]) {
                 align_h = h;
             }
         }
@@ -1130,6 +1195,9 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
             pair("TYPE", Value::Str("INFO".into())),
             pair("TEXT", Value::Str(text)),
         ];
+        if let Some(id_str) = id {
+            items.push(pair("ID", Value::Str(id_str)));
+        }
         if !align_h.is_nil() {
             items.push(pair("ALIGN-H", align_h));
         }
@@ -1181,12 +1249,12 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         ]))
     });
 
-    // ── 4. Dialog Display: (ocl-dialog-show dlg) ──────────────────────────────
+    // ── 4. Dialog Display: (ocl-dialog-show dlg [action_callback]) ─────────────
     let b = bridge.clone();
-    env.def_subr("OCL-DIALOG-SHOW", move |args, _| {
-        if args.len() != 1 {
+    env.def_subr("OCL-DIALOG-SHOW", move |args, env_rc| {
+        if args.is_empty() || args.len() > 2 {
             return Err(LispError::WrongArgCount {
-                expected: "1 (dialog-def)",
+                expected: "1 or 2 (dialog-def [action_callback])",
                 actual: args.len(),
             });
         }
@@ -1195,8 +1263,45 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         let json_str = serde_json::to_string(&def)
             .map_err(|e| LispError::Eval(format!("Failed to serialize dialog: {e}")))?;
 
+        let callback_opt = if args.len() == 2 {
+            Some(args[1].clone())
+        } else {
+            None
+        };
+
         let mut br = b.lock().unwrap();
-        let resp_json = br.show_dialog(&json_str).map_err(LispError::Cad)?;
+
+        let resp_json = if let Some(cb_val) = callback_opt {
+            let mut cb = |evt_json: &str| -> Result<String, String> {
+                let evt: crate::ui_types::DialogEvent = serde_json::from_str(evt_json)
+                    .map_err(|e| format!("Failed to deserialize dialog event: {e}"))?;
+
+                let id_val = Value::Str(evt.control_id.clone());
+                let action_val = Value::Str(evt.action.clone());
+                let mut current_pairs = Vec::new();
+                for (k, v) in evt.current_values {
+                    current_pairs.push(Value::cons(Value::Str(k), dialog_value_to_lisp(v)));
+                }
+                let current_alist = Value::from_slice(&current_pairs);
+
+                let eval_res = match &cb_val {
+                    Value::Sym(sym) => {
+                        let f = env_rc.borrow().get(sym)
+                            .ok_or_else(|| format!("Unknown callback function: {sym}"))?;
+                        lisp_core::eval::apply(&f, &[id_val, action_val, current_alist], env_rc)
+                    }
+                    _ => lisp_core::eval::apply(&cb_val, &[id_val, action_val, current_alist], env_rc),
+                }.map_err(|e| format!("Dialog action callback error: {e}"))?;
+
+                let action_response = lisp_to_action_response(&eval_res)?;
+                serde_json::to_string(&action_response)
+                    .map_err(|e| format!("Failed to serialize action response: {e}"))
+            };
+
+            br.show_dialog_interactive(&json_str, &mut cb).map_err(LispError::Cad)?
+        } else {
+            br.show_dialog(&json_str).map_err(LispError::Cad)?
+        };
 
         let response: DialogResponse = serde_json::from_str(&resp_json)
             .map_err(|e| LispError::Eval(format!("Failed to parse dialog response: {e}")))?;

@@ -21,6 +21,8 @@ pub enum VerticalAlign {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DialogControl {
     InfoText {
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        id: Option<String>,
         text: String,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         align_h: Option<HorizontalAlign>,
@@ -205,6 +207,28 @@ pub enum DialogValue {
     FilePath(String),
     Fields(HashMap<String, DialogValue>),
     Table(Vec<Vec<String>>),
+    ChoiceOptions(Vec<String>),
+    Enabled(bool),
+    Visible(bool),
+}
+
+/// An interaction event emitted by a control inside an open dialog.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DialogEvent {
+    pub control_id: String,
+    pub action: String,
+    pub value: Option<DialogValue>,
+    pub current_values: HashMap<String, DialogValue>,
+}
+
+/// The plugin or Lisp runtime response to a [`DialogEvent`].
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DialogActionResponse {
+    UpdateValues(HashMap<String, DialogValue>),
+    ReplaceDialog(Box<DialogDef>),
+    Submit,
+    Close,
+    None,
 }
 
 /// Response returned to the Lisp engine after dialog interaction.

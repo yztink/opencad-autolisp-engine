@@ -16,6 +16,7 @@ pub struct MockCadBridge {
     pub alerts: Vec<String>,
     pub ldata: HashMap<(String, String), String>,
     pub mock_dialog_response: Option<String>,
+    pub mock_dialog_actions: Vec<String>,
     pub shown_dialogs: Vec<String>,
     pub registered_panels: Vec<String>,
     pub updated_panels: Vec<(String, String)>,
@@ -458,6 +459,18 @@ impl CadBridge for MockCadBridge {
 
     fn show_dialog(&mut self, dialog_json: &str) -> Result<String, String> {
         self.shown_dialogs.push(dialog_json.to_string());
+        Ok(self.mock_dialog_response.clone().unwrap_or_else(|| "\"Cancelled\"".to_string()))
+    }
+
+    fn show_dialog_interactive(
+        &mut self,
+        dialog_json: &str,
+        callback: &mut dyn FnMut(&str) -> Result<String, String>,
+    ) -> Result<String, String> {
+        self.shown_dialogs.push(dialog_json.to_string());
+        for act in &self.mock_dialog_actions {
+            let _ = callback(act);
+        }
         Ok(self.mock_dialog_response.clone().unwrap_or_else(|| "\"Cancelled\"".to_string()))
     }
 

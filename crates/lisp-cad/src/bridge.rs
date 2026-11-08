@@ -67,6 +67,15 @@ pub trait CadBridge: Send + Sync {
         Err("Dialogs not supported by this CAD host".to_string())
     }
 
+    fn show_dialog_interactive(
+        &mut self,
+        dialog_json: &str,
+        callback: &mut dyn FnMut(&str) -> Result<String, String>,
+    ) -> Result<String, String> {
+        let _ = callback;
+        self.show_dialog(dialog_json)
+    }
+
     fn register_panel(&mut self, _panel_json: &str) -> Result<bool, String> {
         Err("Dockable panels not supported by this CAD host".to_string())
     }
