@@ -205,7 +205,7 @@ mod tests {
     }
 
     #[test]
-    fn test_msgbox_and_ocl_msgbox() {
+    fn test_msgbox_and_oca_msgbox() {
         let mock = Arc::new(Mutex::new(MockCadBridge::new()));
         let mut env = create_cad_env(mock.clone());
 
@@ -223,14 +223,14 @@ mod tests {
         let res_dos = eval_str(r#"(dos_msgbox "Dos prompt")"#, &mut env).unwrap();
         assert_eq!(res_dos, Value::Int(1));
 
-        // ocl-msgbox with symbol
+        // oca-msgbox with symbol
         mock.lock().unwrap().mock_msgbox_response = Some(6); // IDYES
-        let res_ocl = eval_str(r#"(ocl-msgbox "Proceed with operation?" "Confirm" 'yesno)"#, &mut env).unwrap();
+        let res_ocl = eval_str(r#"(oca-msgbox "Proceed with operation?" "Confirm" 'yesno)"#, &mut env).unwrap();
         assert_eq!(res_ocl, Value::Sym("YES".into()));
     }
 
     #[test]
-    fn test_ocl_dialog_construction_and_show() {
+    fn test_oca_dialog_construction_and_show() {
         let mock = Arc::new(Mutex::new(MockCadBridge::new()));
         let mut env = create_cad_env(mock.clone());
 
@@ -243,20 +243,20 @@ mod tests {
             Some(serde_json::to_string(&DialogResponse::Submitted(submitted_vals)).unwrap());
 
         let code = r#"
-            (setq dlg (ocl-dialog "Offset Tool"
+            (setq dlg (oca-dialog "Offset Tool"
                         '((width . 400.0) (submit . "Generate"))
-                        (ocl-row
-                          (ocl-text "txt_layer" "Target Layer" "0")
-                          (ocl-number "num_offset" "Offset Distance" 10.0 '((min . 0.1) (max . 500.0))))
-                        (ocl-row
-                          (ocl-checkbox "chk_join" "Join Segments" T))
-                        (ocl-row
-                          (ocl-choice "cmb_side" "Side" '("Both" "Left" "Right") "Both"))))
+                        (oca-row
+                          (oca-text "txt_layer" "Target Layer" "0")
+                          (oca-number "num_offset" "Offset Distance" 10.0 '((min . 0.1) (max . 500.0))))
+                        (oca-row
+                          (oca-checkbox "chk_join" "Join Segments" T))
+                        (oca-row
+                          (oca-choice "cmb_side" "Side" '("Both" "Left" "Right") "Both"))))
 
-            (setq res (ocl-dialog-show dlg))
-            (list (ocl-get "txt_layer" res)
-                  (ocl-get-real "num_offset" res)
-                  (ocl-get-bool "chk_join" res))
+            (setq res (oca-dialog-show dlg))
+            (list (oca-get "txt_layer" res)
+                  (oca-get-real "num_offset" res)
+                  (oca-get-bool "chk_join" res))
         "#;
 
         let res = eval_str(code, &mut env).unwrap();
@@ -280,24 +280,24 @@ mod tests {
     }
 
     #[test]
-    fn test_ocl_panel_integration() {
+    fn test_oca_panel_integration() {
         let mock = Arc::new(Mutex::new(MockCadBridge::new()));
         let mut env = create_cad_env(mock.clone());
 
         let code = r#"
-            (ocl-panel-register "wall_tool" "Wall Parameters"
+            (oca-panel-register "wall_tool" "Wall Parameters"
               '((width . 280) (command . "WALLTOOL"))
-              (ocl-fields "Wall Properties"
-                (ocl-row
-                  (ocl-text "thickness" "Thickness" "6.0")
-                  (ocl-number "height" "Height" 96.0)))
-              (ocl-button "btn_apply" "Apply Changes" "apply"))
+              (oca-fields "Wall Properties"
+                (oca-row
+                  (oca-text "thickness" "Thickness" "6.0")
+                  (oca-number "height" "Height" 96.0)))
+              (oca-button "btn_apply" "Apply Changes" "apply"))
 
-            (ocl-panel-update "wall_tool"
+            (oca-panel-update "wall_tool"
               '((thickness . "8.0")
                 (height . 120.0)))
 
-            (ocl-panel-toggle "wall_tool" T)
+            (oca-panel-toggle "wall_tool" T)
         "#;
 
         let res = eval_str(code, &mut env).unwrap();
@@ -318,4 +318,7 @@ mod tests {
         assert_eq!(br.toggled_panels[0], ("wall_tool".to_string(), Some(true)));
     }
 }
+
+
+
 

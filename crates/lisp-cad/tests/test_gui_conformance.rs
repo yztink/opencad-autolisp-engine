@@ -10,27 +10,27 @@ fn test_gui_all_controls_roundtrip() {
     // Construct a comprehensive dialog with all 11 control types
     let code = r#"
         (setq dlg
-          (ocl-dialog "Comprehensive CAD Tool"
+          (oca-dialog "Comprehensive CAD Tool"
             '((width . 520.0) (submit . "Execute") (cancel . "Dismiss"))
-            (ocl-info "Configure all tool parameters below:")
-            (ocl-row
-              (ocl-text "txt_name" "Feature Name" "DefaultFeature")
-              (ocl-number "num_depth" "Cut Depth" 12.5 '((min . 0.0) (max . 100.0) (step . 0.5))))
-            (ocl-row
-              (ocl-checkbox "chk_chamfer" "Apply Chamfer" T)
-              (ocl-choice "cmb_material" "Material" '("Steel" "Aluminum" "Titanium" "Brass") "Aluminum"))
-            (ocl-row
-              (ocl-color "col_highlight" "Render Color" '(255 128 0))
-              (ocl-file "fil_template" "Template Path" "C:/cad/part.dxf"
+            (oca-info "Configure all tool parameters below:")
+            (oca-row
+              (oca-text "txt_name" "Feature Name" "DefaultFeature")
+              (oca-number "num_depth" "Cut Depth" 12.5 '((min . 0.0) (max . 100.0) (step . 0.5))))
+            (oca-row
+              (oca-checkbox "chk_chamfer" "Apply Chamfer" T)
+              (oca-choice "cmb_material" "Material" '("Steel" "Aluminum" "Titanium" "Brass") "Aluminum"))
+            (oca-row
+              (oca-color "col_highlight" "Render Color" '(255 128 0))
+              (oca-file "fil_template" "Template Path" "C:/cad/part.dxf"
                 '((filter . "Drawing Exchange (*.dxf)") (extensions . ("dxf")) (save . nil))))
-            (ocl-fields "Advanced Settings" '((collapsed . nil))
-              (ocl-row
-                (ocl-table "tbl_offsets" "Tool Offsets"
+            (oca-fields "Advanced Settings" '((collapsed . nil))
+              (oca-row
+                (oca-table "tbl_offsets" "Tool Offsets"
                   '("Index" "X" "Y")
                   '(("1" "0.0" "0.0") ("2" "10.0" "5.0"))
                   '((allow_add . T) (allow_delete . nil))))
-              (ocl-row
-                (ocl-button "btn_preview" "Calculate Preview" "preview_action")))))
+              (oca-row
+                (oca-button "btn_preview" "Calculate Preview" "preview_action")))))
     "#;
 
     let dlg_val = eval_str(code, &mut env).unwrap();
@@ -57,16 +57,16 @@ fn test_gui_all_controls_roundtrip() {
         Some(serde_json::to_string(&DialogResponse::Submitted(submitted_vals)).unwrap());
 
     let eval_show = r#"
-        (setq res (ocl-dialog-show dlg))
+        (setq res (oca-dialog-show dlg))
         (list
-          (ocl-get-str "txt_name" res)
-          (ocl-get-real "num_depth" res)
-          (ocl-get-int "num_depth" res)
-          (ocl-get-bool "chk_chamfer" res)
-          (ocl-get "cmb_material" res)
-          (ocl-get "col_highlight" res)
-          (ocl-get-str "fil_template" res)
-          (length (ocl-get "tbl_offsets" res)))
+          (oca-get-str "txt_name" res)
+          (oca-get-real "num_depth" res)
+          (oca-get-int "num_depth" res)
+          (oca-get-bool "chk_chamfer" res)
+          (oca-get "cmb_material" res)
+          (oca-get "col_highlight" res)
+          (oca-get-str "fil_template" res)
+          (length (oca-get "tbl_offsets" res)))
     "#;
 
     let res = eval_str(eval_show, &mut env).unwrap();
@@ -121,17 +121,17 @@ fn test_interactive_dialog_callback() {
     let code = r#"
         (setq callback-invoked nil)
         (defun my-handler (id act vals)
-          (setq callback-invoked (list id act (ocl-get "picker" vals)))
+          (setq callback-invoked (list id act (oca-get "picker" vals)))
           (list
             (cons "lbl_status" "Updated via action")
             (cons "tbl_files" '(("C:/scripts/test.lsp")))
           )
         )
-        (setq dlg (ocl-dialog "Interactive Test"
-                    (ocl-info "lbl_status" "Initial")
-                    (ocl-row (ocl-file "picker" "Pick" ""))
-                    (ocl-row (ocl-table "tbl_files" "Files" '("Path") '(("C:/orig.lsp"))))))
-        (setq res (ocl-dialog-show dlg 'my-handler))
+        (setq dlg (oca-dialog "Interactive Test"
+                    (oca-info "lbl_status" "Initial")
+                    (oca-row (oca-file "picker" "Pick" ""))
+                    (oca-row (oca-table "tbl_files" "Files" '("Path") '(("C:/orig.lsp"))))))
+        (setq res (oca-dialog-show dlg 'my-handler))
         callback-invoked
     "#;
 
@@ -155,37 +155,37 @@ fn test_dialog_cancellation() {
         Some(serde_json::to_string(&DialogResponse::Cancelled).unwrap());
 
     let code = r#"
-        (setq dlg (ocl-dialog "Test Cancel" (ocl-text "t" "Text" "")))
-        (ocl-dialog-show dlg)
+        (setq dlg (oca-dialog "Test Cancel" (oca-text "t" "Text" "")))
+        (oca-dialog-show dlg)
     "#;
     let res = eval_str(code, &mut env).unwrap();
     assert_eq!(res, Value::Nil);
 }
 
 #[test]
-fn test_ocl_msgbox_conformance() {
+fn test_oca_msgbox_conformance() {
     let mock = Arc::new(Mutex::new(MockCadBridge::new()));
     let mut env = create_cad_env(mock.clone());
 
     // OK -> 1 -> 'OK
     mock.lock().unwrap().mock_msgbox_response = Some(1);
-    assert_eq!(eval_str(r#"(ocl-msgbox "Operation finished" "Done")"#, &mut env).unwrap(), Value::Sym("OK".into()));
+    assert_eq!(eval_str(r#"(oca-msgbox "Operation finished" "Done")"#, &mut env).unwrap(), Value::Sym("OK".into()));
 
     // Cancel -> 2 -> 'CANCEL
     mock.lock().unwrap().mock_msgbox_response = Some(2);
-    assert_eq!(eval_str(r#"(ocl-msgbox "Cancel test" "Title" 'okcancel)"#, &mut env).unwrap(), Value::Sym("CANCEL".into()));
+    assert_eq!(eval_str(r#"(oca-msgbox "Cancel test" "Title" 'okcancel)"#, &mut env).unwrap(), Value::Sym("CANCEL".into()));
 
     // Yes -> 6 -> 'YES
     mock.lock().unwrap().mock_msgbox_response = Some(6);
-    assert_eq!(eval_str(r#"(ocl-msgbox "Delete selected?" "Confirm" 'yesno)"#, &mut env).unwrap(), Value::Sym("YES".into()));
+    assert_eq!(eval_str(r#"(oca-msgbox "Delete selected?" "Confirm" 'yesno)"#, &mut env).unwrap(), Value::Sym("YES".into()));
 
     // No -> 7 -> 'NO
     mock.lock().unwrap().mock_msgbox_response = Some(7);
-    assert_eq!(eval_str(r#"(ocl-msgbox "Delete selected?" "Confirm" 'yesno)"#, &mut env).unwrap(), Value::Sym("NO".into()));
+    assert_eq!(eval_str(r#"(oca-msgbox "Delete selected?" "Confirm" 'yesno)"#, &mut env).unwrap(), Value::Sym("NO".into()));
 
     // Alist button options
     mock.lock().unwrap().mock_msgbox_response = Some(6);
-    assert_eq!(eval_str(r#"(ocl-msgbox "Overwrite file?" "Save" '((buttons . yesno)))"#, &mut env).unwrap(), Value::Sym("YES".into()));
+    assert_eq!(eval_str(r#"(oca-msgbox "Overwrite file?" "Save" '((buttons . yesno)))"#, &mut env).unwrap(), Value::Sym("YES".into()));
 }
 
 #[test]
@@ -194,28 +194,28 @@ fn test_panel_crud_conformance() {
     let mut env = create_cad_env(mock.clone());
 
     let reg_code = r#"
-        (ocl-panel-register "inspect_pal" "Inspector"
+        (oca-panel-register "inspect_pal" "Inspector"
           '((width . 300) (command . "INSPECT"))
-          (ocl-text "ent_type" "Type" "LINE")
-          (ocl-number "ent_len" "Length" 100.0)
-          (ocl-color "ent_col" "Color" '(0 255 0)))
+          (oca-text "ent_type" "Type" "LINE")
+          (oca-number "ent_len" "Length" 100.0)
+          (oca-color "ent_col" "Color" '(0 255 0)))
     "#;
     assert_eq!(eval_str(reg_code, &mut env).unwrap(), Value::T);
 
     let upd_code = r#"
-        (ocl-panel-update "inspect_pal"
+        (oca-panel-update "inspect_pal"
           '((ent_type . "CIRCLE")
             (ent_len . 50.0)
             (ent_col . (255 0 0))))
     "#;
     assert_eq!(eval_str(upd_code, &mut env).unwrap(), Value::T);
 
-    let get_code = r#"(ocl-panel-get "inspect_pal" "ent_type")"#;
+    let get_code = r#"(oca-panel-get "inspect_pal" "ent_type")"#;
     assert_eq!(eval_str(get_code, &mut env).unwrap(), Value::Str("CIRCLE".into()));
-    let get_len = r#"(ocl-panel-get "inspect_pal" "ent_len")"#;
+    let get_len = r#"(oca-panel-get "inspect_pal" "ent_len")"#;
     assert_eq!(eval_str(get_len, &mut env).unwrap(), Value::Real(50.0));
 
-    let toggle_code = r#"(ocl-panel-toggle "inspect_pal" nil)"#;
+    let toggle_code = r#"(oca-panel-toggle "inspect_pal" nil)"#;
     assert_eq!(eval_str(toggle_code, &mut env).unwrap(), Value::T);
 
     let br = mock.lock().unwrap();
@@ -228,13 +228,13 @@ fn test_custom_gui_panel_routine() {
     let mut env = create_cad_env(mock.clone());
 
     let code = r#"
-        (defun c:calc () (ocl-panel-toggle "calc_panel" T))
+        (defun c:calc () (oca-panel-toggle "calc_panel" T))
         (defun c:calcdlg () (princ "\nCALCDLG"))
         (defun c:calc-set (val) val)
         (defun calc-key (k) k)
-        (ocl-panel-register "calc_panel" "CAD Calculator"
+        (oca-panel-register "calc_panel" "CAD Calculator"
           '((width . 200) (command . "CALC"))
-          (ocl-text "display" "Value" "0"))
+          (oca-text "display" "Value" "0"))
     "#;
     eval_str(code, &mut env).expect("panel script failed evaluation");
 
@@ -255,7 +255,7 @@ fn test_custom_gui_panel_routine() {
 }
 
 #[test]
-fn test_ocl_alignment_and_column_conformance() {
+fn test_oca_alignment_and_column_conformance() {
     use lisp_cad::ui_types::{DialogControl, DialogDef, HorizontalAlign, VerticalAlign};
 
     let mock = Arc::new(Mutex::new(MockCadBridge::new()));
@@ -263,13 +263,13 @@ fn test_ocl_alignment_and_column_conformance() {
 
     let code = r#"
         (setq dlg
-          (ocl-dialog "Alignment Test"
-            (ocl-row '((align-h . "center") (align-v . "middle"))
-              (ocl-info "Centered Title" '((align-h . "center")))
-              (ocl-button "btn1" "Action" "act1" '((align-h . "right") (width . 150.0))))
-            (ocl-column '((align-h . "right") (align-v . "top"))
-              (ocl-text "txt1" "Label" "Val"))))
-        (ocl-dialog-show dlg)
+          (oca-dialog "Alignment Test"
+            (oca-row '((align-h . "center") (align-v . "middle"))
+              (oca-info "Centered Title" '((align-h . "center")))
+              (oca-button "btn1" "Action" "act1" '((align-h . "right") (width . 150.0))))
+            (oca-column '((align-h . "right") (align-v . "top"))
+              (oca-text "txt1" "Label" "Val"))))
+        (oca-dialog-show dlg)
     "#;
     eval_str(code, &mut env).unwrap();
 
@@ -304,4 +304,6 @@ fn test_ocl_alignment_and_column_conformance() {
         _ => panic!("Expected Column"),
     }
 }
+
+
 

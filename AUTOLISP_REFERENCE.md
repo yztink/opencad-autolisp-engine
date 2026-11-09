@@ -708,12 +708,19 @@ This reference documents every built-in function, special form, CAD bridge opera
   (dos_clipboard "Copied from AutoLISP")
   ```
 
-### `msgbox` / `dos_msgbox` / `ocl-msgbox`
-- **Syntax**: `(ocl-msgbox prompt [title] [buttons])` *(aliases: `msgbox`, `dos_msgbox`)*
-- **Summary**: Displays a modal message box dialog. `buttons` can be an integer or symbol (`0`/`"OK"`, `1`/`"OKCANCEL"`, `4`/`"YESNO"`, `5`/`"RETRYCANCEL"`). Returns standard button ID (`1`=OK, `2`=Cancel, `4`=Retry, `6`=Yes, `7`=No).
+### `msgbox` / `dos_msgbox` / `oca-msgbox`
+- **Syntax**: `(oca-msgbox prompt [title] [buttons-spec])` *(aliases: `msgbox`, `dos_msgbox`)*
+- **Parameters**:
+  - `prompt` *(string | any)*: Message text displayed in dialog body.
+  - `[title]` *(optional string, default: `"OpenCAD Studio"`)*: Dialog window title.
+  - `[buttons-spec]` *(optional integer, symbol, or alist, default: `0` (`"OK"`))*:
+    - Integer flags: `0`=OK, `1`=OK/Cancel, `2`=Abort/Retry/Ignore, `3`=Yes/No/Cancel, `4`=Yes/No, `5`=Retry/Cancel.
+    - Symbols / Strings: `'ok`, `'okcancel`, `'yesno`, `'retrycancel`, `'abortretryignore`, `'yesnocancel`.
+    - Alist: `'((buttons . yesno) (title . "...") (icon . warning))`.
+- **Returns**: Standard button ID integer: `1`=OK, `2`=Cancel, `3`=Abort, `4`=Retry, `5`=Ignore, `6`=Yes, `7`=No.
 - **Example**:
   ```lisp
-  (ocl-msgbox "Delete selected entities?" "Confirm" "YESNO") ; => 6 (Yes) or 7 (No)
+  (oca-msgbox "Delete selected entities?" "Confirm" "YESNO") ; => 6 (Yes) or 7 (No)
   ```
 
 ---
@@ -886,127 +893,247 @@ This reference documents every built-in function, special form, CAD bridge opera
 
 ---
 
-## 13. OpenCAD Native UI (`ocl-*`) — Dialogs & Dockable Panels
+## 13. OpenCAD Native UI (`oca-*`) — Dialogs & Dockable Panels
+
+OpenCAD Studio provides native UI controls and containers that can be instantiated and controlled directly from AutoLISP routines. These controls match the OpenCAD Studio dark/light design system and iced widget tree.
 
 ### Control Constructors
-Used inside both modal dialogs (`ocl-dialog`) and dockable side panels (`ocl-panel-register`):
+Used inside both modal dialogs (`oca-dialog`) and dockable side panels (`oca-panel-register`):
 
-- **`ocl-text`**: `(ocl-text id label [default])`
+- **`oca-text`**: `(oca-text id label [default])`
   - Creates a single-line text input box.
-  - Example: `(ocl-text "txt_name" "Name" "Part-A")`
-- **`ocl-number`**: `(ocl-number id label [default] [opts])`
-  - Creates a numeric input field with optional `'((min . 0) (max . 100) (step . 1))`.
-  - Example: `(ocl-number "radius" "Radius" 25.0)`
-- **`ocl-checkbox`**: `(ocl-checkbox id label [default-bool])`
-  - Creates a boolean toggle checkbox (`T` or `nil`).
-  - Example: `(ocl-checkbox "chk_x" "Draw 'X' Lines" nil)`
-- **`ocl-choice`**: `(ocl-choice id label options-list [default])`
-  - Creates a dropdown selector menu from a list of string options.
-  - Example: `(ocl-choice "col" "Color" '("Red" "Blue") "Red")`
-- **`ocl-color`**: `(ocl-color id label [default-rgb])`
-  - Creates an RGB color picker (`'(r g b)` where values are `0..255`).
-  - Example: `(ocl-color "clr" "Fill Color" '(255 0 0))`
-- **`ocl-file`**: `(ocl-file id label [default-path] [opts])`
-  - Creates a native file open/save browser control.
-  - Example: `(ocl-file "path" "Output File" "out.dxf")`
-- **`ocl-table`**: `(ocl-table id label headers [rows] [opts])`
-  - Creates an editable multi-column table grid.
-  - Example: `(ocl-table "tbl" "Points" '("X" "Y") '(("0" "0")))`
-- **`ocl-fields`**: `(ocl-fields [id] title [opts] ctrl1 ...)`
-  - Creates a collapsible group box containing nested controls.
-  - Example: `(ocl-fields "Advanced" (ocl-checkbox "snap" "Snap" T))`
-- **`ocl-button`**: `(ocl-button id label [action_or_opts] [opts])`
-  - Creates a clickable button. In a panel, `action` is an AutoLISP command string executed on click.
-  - Options alist supports `(align-h . "left"|"center"|"right")` and `(width . float)`.
-  - Example: `(ocl-button "btn_draw" "Draw Shape" "(c:draw-shape)" '((align-h . "center") (width . 140.0)))`
-- **`ocl-info`**: `(ocl-info text [opts])`
-  - Creates a read-only static label / informational text.
-  - Options alist supports `(align-h . "left"|"center"|"right")`.
-  - Example: `(ocl-info "Select options below:" '((align-h . "center")))`
-- **`ocl-row`**: `(ocl-row [opts] ctrl1 ctrl2 ...)`
+  - **Parameters**:
+    - `id` *(string | symbol)*: Unique control identifier for extracting values.
+    - `label` *(string | symbol)*: Label text displayed alongside the input field.
+    - `[default]` *(optional string, default: `""`)*: Initial text string.
+  - **Example**: `(oca-text "txt_name" "Name" "Part-A")`
+
+- **`oca-number`**: `(oca-number id label [default] [options])`
+  - Creates a numeric input field with spinner constraints.
+  - **Parameters**:
+    - `id` *(string | symbol)*: Unique control identifier.
+    - `label` *(string | symbol)*: Label text displayed alongside the input.
+    - `[default]` *(optional number or alist, default: `0.0`)*: Initial numeric value, or an options alist if passing options in the 3rd position.
+    - `[options]` *(optional alist)*: Constraints alist supporting:
+      - `(min . <number>)`: Minimum permitted value.
+      - `(max . <number>)`: Maximum permitted value.
+      - `(step . <number>)`: Step increment for adjustment.
+      - `(default . <number>)`: Default value when options passed in 3rd position.
+  - **Example**: `(oca-number "radius" "Radius" 25.0 '((min . 1.0) (max . 100.0) (step . 0.5)))`
+
+- **`oca-checkbox`**: `(oca-checkbox id label [default-bool] [options])`
+  - Creates a boolean toggle checkbox.
+  - **Parameters**:
+    - `id` *(string | symbol)*: Unique control identifier.
+    - `label` *(string | symbol)*: Label text displayed next to the checkbox.
+    - `[default-bool]` *(optional boolean, default: `nil`)*: Initial state (`T` for checked, `nil` for unchecked).
+    - `[options]` *(optional alist)*: Alignment alist supporting `(align-h . "left"|"center"|"right")` and `(align-v . "top"|"middle"|"bottom")`.
+  - **Example**: `(oca-checkbox "chk_x" "Draw 'X' Lines" nil)`
+
+- **`oca-choice`**: `(oca-choice id label options-list [default])`
+  - Creates a dropdown selector menu from a list of options.
+  - **Parameters**:
+    - `id` *(string | symbol)*: Unique control identifier.
+    - `label` *(string | symbol)*: Label text displayed beside the dropdown.
+    - `options-list` *(list of strings)*: Available dropdown item strings.
+    - `[default]` *(optional integer, string, or alist, default: `0`)*: 0-based index, matching string value, or `'((default . <val>))`.
+  - **Example**: `(oca-choice "col" "Color" '("Red" "Blue" "Green") "Red")`
+
+- **`oca-color`**: `(oca-color id label [default-rgb])`
+  - Creates an RGB color picker.
+  - **Parameters**:
+    - `id` *(string | symbol)*: Unique control identifier.
+    - `label` *(string | symbol)*: Label text displayed next to the color swatch.
+    - `[default-rgb]` *(optional list of 3 integers, default: `'(0 0 0)`)*: Initial RGB color `'(r g b)` with components in `0..255`.
+  - **Example**: `(oca-color "clr" "Fill Color" '(255 0 0))`
+
+- **`oca-file`**: `(oca-file id label [default-path] [options])`
+  - Creates a native file open/save browser control with a text path input and browse button.
+  - **Parameters**:
+    - `id` *(string | symbol)*: Unique control identifier.
+    - `label` *(string | symbol)*: Label text displayed beside the file input.
+    - `[default-path]` *(optional string, default: `""`)*: Initial file path.
+    - `[options]` *(optional alist)*: File picker options supporting:
+      - `(filter . "<label>")`: Descriptive filter label (e.g. `"DXF Files (*.dxf)"`).
+      - `(extensions . ("<ext1>" ...))`: List of allowed extensions without dots (e.g. `'("dxf" "dwg")`).
+      - `(save . <bool>)`: `T` for a Save File dialog, `nil` for an Open File dialog (default: `nil`).
+  - **Example**: `(oca-file "path" "Output File" "out.dxf" '((filter . "DXF Files (*.dxf)") (extensions . ("dxf")) (save . T)))`
+
+- **`oca-table`**: `(oca-table id label headers [rows] [options])`
+  - Creates an editable multi-column data table grid.
+  - **Parameters**:
+    - `id` *(string | symbol)*: Unique control identifier.
+    - `label` *(string | symbol)*: Table header title label.
+    - `headers` *(list of strings)*: List of column header names.
+    - `[rows]` *(optional list of row lists, default: `nil`)*: Initial 2D table data `'(("row1_col1" "row1_col2") ...)`.
+    - `[options]` *(optional alist)*: Table behavior options supporting:
+      - `(allow_add . <bool>)`: Show "+" button to append new rows (default: `T`).
+      - `(allow_delete . <bool>)`: Show "-" button to remove selected rows (default: `T`).
+  - **Example**: `(oca-table "tbl" "Points" '("X" "Y" "Z") '(("0" "0" "0")) '((allow_add . T) (allow_delete . T)))`
+
+- **`oca-fields`**: `(oca-fields [id] title [options] ctrl1 [ctrl2 ...])`
+  - Creates a collapsible group box containing nested child controls.
+  - **Parameters**:
+    - `[id]` *(optional string | symbol)*: Section identifier (defaults to slugified title).
+    - `title` *(string | symbol)*: Header title displayed on the group box banner.
+    - `[options]` *(optional alist)*: Group box options supporting:
+      - `(collapsed . <bool>)`: `T` to start collapsed, `nil` to start expanded (default: `nil`).
+    - `ctrl1 [ctrl2 ...]` *(controls)*: One or more nested child controls inside this section.
+  - **Example**: `(oca-fields "Advanced" '((collapsed . nil)) (oca-checkbox "snap" "Object Snap" T))`
+
+- **`oca-button`**: `(oca-button id label [action] [options])`
+  - Creates a clickable button.
+  - **Parameters**:
+    - `id` *(string | symbol)*: Unique button identifier.
+    - `label` *(string | symbol)*: Text displayed on the button face.
+    - `[action]` *(optional string or alist, default: `"click"`)*: In dock panels, an AutoLISP command string evaluated on click (e.g. `"(c:draw-shape)"`). In interactive modal dialogs, passed to the action callback as the `action` string.
+    - `[options]` *(optional alist)*: Layout and styling options supporting:
+      - `(action . "<str>")`: Action string if passed in options alist.
+      - `(align-h . "left"|"center"|"right")`: Horizontal button alignment within its container.
+      - `(width . <number>)`: Explicit button width in pixels (e.g. `140.0`).
+  - **Example**: `(oca-button "btn_draw" "Draw Shape" "draw_action" '((align-h . "center") (width . 140.0)))`
+
+- **`oca-info`**: `(oca-info [id] text [options])`
+  - Creates a read-only static label / informational text block.
+  - **Parameters**:
+    - `[id]` *(optional string | symbol)*: Optional control identifier for reactive text updates.
+    - `text` *(string | symbol)*: Informational or instructional text string to display.
+    - `[options]` *(optional alist)*: Styling options supporting:
+      - `(align-h . "left"|"center"|"right")`: Horizontal text alignment (default: `"left"`).
+  - **Example**: `(oca-info "lbl_status" "Select options below:" '((align-h . "center")))`
+
+- **`oca-row`**: `(oca-row [options] ctrl1 ctrl2 ...)`
   - Arranges multiple controls horizontally on a single row.
-  - Options alist supports `(align-h . "left"|"center"|"right")` and `(align-v . "top"|"middle"|"bottom")`.
-  - Example: `(ocl-row '((align-h . "center") (align-v . "middle")) (ocl-button "b1" "1" "(k 1)") (ocl-button "b2" "2" "(k 2)"))`
-- **`ocl-column`**: `(ocl-column [opts] ctrl1 ctrl2 ...)`
+  - **Parameters**:
+    - `[options]` *(optional alist)*: Alignment options supporting:
+      - `(align-h . "left"|"center"|"right")`: Horizontal alignment of controls in row.
+      - `(align-v . "top"|"middle"|"bottom")`: Vertical alignment of controls in row.
+    - `ctrl1 ctrl2 ...` *(controls)*: One or more controls placed horizontally side-by-side.
+  - **Example**: `(oca-row '((align-h . "center") (align-v . "middle")) (oca-button "b1" "Action 1") (oca-button "b2" "Action 2"))`
+
+- **`oca-column`**: `(oca-column [options] ctrl1 ctrl2 ...)`
   - Arranges multiple controls vertically in a single column container.
-  - Options alist supports `(align-h . "left"|"center"|"right")` and `(align-v . "top"|"middle"|"bottom")`.
-  - Example: `(ocl-column '((align-h . "center")) (ocl-text "t1" "Label" "") (ocl-button "b1" "OK"))`
+  - **Parameters**:
+    - `[options]` *(optional alist)*: Alignment options supporting:
+      - `(align-h . "left"|"center"|"right")`: Horizontal alignment within column.
+      - `(align-v . "top"|"middle"|"bottom")`: Vertical alignment within column.
+    - `ctrl1 ctrl2 ...` *(controls)*: One or more controls stacked vertically.
+  - **Example**: `(oca-column '((align-h . "center")) (oca-text "t1" "Label" "") (oca-button "b1" "OK"))`
+
+---
 
 ### Modal Dialog Functions
 
-#### `ocl-dialog` & `ocl-dialog-show`
+#### `oca-dialog` & `oca-dialog-show`
 - **Syntax**:
-  - `(ocl-dialog title [options-alist] row1 [row2 ...])`
-  - `(ocl-dialog-show dialog-def)`
-- **Summary**: `ocl-dialog` builds a dialog definition (optional alist supports `'((width . 400.0) (submit . "OK") (cancel . "Cancel"))`). `ocl-dialog-show` displays it modally and returns an association list of `(id . value)` pairs when submitted, or `nil` if cancelled.
+  - `(oca-dialog title [options] row1 [row2 ...])`
+  - `(oca-dialog-show dialog-def [action_callback])`
+- **Parameters (`oca-dialog`)**:
+  - `title` *(string | symbol)*: Title bar text for the modal dialog window.
+  - `[options]` *(optional alist)*: Dialog window options supporting:
+    - `(width . <number>)`: Minimum dialog width in pixels (e.g. `450.0`).
+    - `(submit . "<str>")`: Custom text for the submit button (default: `"OK"`).
+    - `(cancel . "<str>")`: Custom text for the cancel button (default: `"Cancel"`).
+  - `row1 [row2 ...]` *(controls)*: One or more rows, columns, or controls defining the dialog content.
+- **Parameters (`oca-dialog-show`)**:
+  - `dialog-def` *(dialog definition)*: Dialog object created by `(oca-dialog ...)`.
+  - `[action_callback]` *(optional symbol or lambda)*: Interactive callback function `(defun callback (control-id action current-values) ...)`. When supplied, buttons, inputs, and picks trigger this callback without closing the dialog, enabling real-time two-way updates.
+    - Return `'((update . ((control-id . new-val) ...)))` to update values in-place.
+    - Return `'((replace . new-dialog-def))` to dynamically replace the dialog layout.
+    - Return `'submit` to programmatically submit, `'close` to dismiss, or `nil` for no-op.
+- **Summary**: `oca-dialog` builds a modal dialog definition. `oca-dialog-show` displays it modally and returns an association list of `(id . value)` pairs when submitted, or `nil` if cancelled.
 - **Example**:
   ```lisp
-  (setq dlg (ocl-dialog "Circle Parameters"
-              (ocl-number "rad" "Radius" 30.0)
-              (ocl-checkbox "cross" "Add Crosshairs" T)))
-  (setq res (ocl-dialog-show dlg))
+  (setq dlg (oca-dialog "Circle Parameters"
+              '((width . 400.0))
+              (oca-number "rad" "Radius" 30.0 '((min . 1.0) (max . 500.0)))
+              (oca-checkbox "cross" "Add Crosshairs" T)))
+  (setq res (oca-dialog-show dlg))
   (if res
-    (princ (ocl-get-real "rad" res))
+    (princ (strcat "\nRadius: " (rtos (oca-get-real "rad" res))))
   )
   ```
 
-#### Dialog Result Getters (`ocl-get*`)
+#### Dialog Result Getters (`oca-get*`)
 - **Syntax**:
-  - `(ocl-get key alist)`
-  - `(ocl-get-int key alist)`
-  - `(ocl-get-real key alist)`
-  - `(ocl-get-str key alist)`
-  - `(ocl-get-bool key alist)`
-- **Summary**: Extracts and coerces control values by `key` from the association list returned by `ocl-dialog-show`.
+  - `(oca-get key alist)`
+  - `(oca-get-int key alist)`
+  - `(oca-get-real key alist)`
+  - `(oca-get-str key alist)`
+  - `(oca-get-bool key alist)`
+- **Parameters**:
+  - `key` *(string | symbol)*: Control ID string to look up.
+  - `alist` *(association list)*: Result association list returned by `(oca-dialog-show ...)`.
+- **Summary**: Extracts and coerces control values by `key` from the association list returned by `oca-dialog-show`.
 - **Example**:
   ```lisp
-  (setq r (ocl-get-real "rad" res))
+  (setq r (oca-get-real "rad" res))
+  (setq s (oca-get-str "txt_name" res))
+  (setq b (oca-get-bool "cross" res))
   ```
+
+---
 
 ### Dockable Side Panel Functions
 
-#### `ocl-panel-register`
-- **Syntax**: `(ocl-panel-register panel-id title [options-alist] ctrl1 [ctrl2 ...])`
+#### `oca-panel-register`
+- **Syntax**: `(oca-panel-register panel-id title [options] ctrl1 [ctrl2 ...])`
+- **Parameters**:
+  - `panel-id` *(string | symbol)*: Unique identifier for the dockable side panel.
+  - `title` *(string | symbol)*: Header title text displayed on the side panel tab.
+  - `[options]` *(optional alist)*: Panel configuration options supporting:
+    - `(width . <number>)`: Default dock panel width in pixels (e.g. `260.0`).
+    - `(command . "<cmd>")`: AutoLISP command string to invoke if opened from menu.
+  - `ctrl1 [ctrl2 ...]` *(controls)*: Controls rendered vertically inside the side panel.
 - **Summary**: Registers a persistent dockable panel in the OpenCAD Studio side pane and seeds all default control states.
 - **Example**:
   ```lisp
-  (ocl-panel-register "shape_panel" "Shape Generator"
+  (oca-panel-register "shape_panel" "Shape Generator"
     '((width . 260.0))
-    (ocl-choice "choice_color" "Color" '("Red" "Green" "Blue") "Red")
-    (ocl-checkbox "chk_draw_x" "Draw 'X' Lines" nil)
-    (ocl-button "btn_draw" "Draw Shape" "(c:draw-shape)")
+    (oca-choice "choice_color" "Color" '("Red" "Green" "Blue") "Red")
+    (oca-checkbox "chk_draw_x" "Draw 'X' Lines" nil)
+    (oca-button "btn_draw" "Draw Shape" "(c:draw-shape)")
   )
   ```
 
-#### `ocl-panel-toggle`
-- **Syntax**: `(ocl-panel-toggle panel-id [show-bool])`
-- **Summary**: Opens, closes, or toggles visibility of a registered dockable panel. Pass `T` to explicitly show, or omit `show-bool` to toggle.
+#### `oca-panel-toggle`
+- **Syntax**: `(oca-panel-toggle panel-id [show])`
+- **Parameters**:
+  - `panel-id` *(string | symbol)*: Identifier of the registered side panel.
+  - `[show]` *(optional boolean)*: `T` to explicitly show, `nil` to hide. If omitted, toggles open/closed.
+- **Summary**: Opens, closes, or toggles visibility of a registered dockable panel.
 - **Example**:
   ```lisp
-  (ocl-panel-toggle "shape_panel" T)
+  (oca-panel-toggle "shape_panel" T)
   ```
 
-#### `ocl-panel-update`
-- **Syntax**: `(ocl-panel-update panel-id values-alist)`
-- **Summary**: Programmatically updates one or more control values in a live dockable panel without re-registering it.
+#### `oca-panel-update`
+- **Syntax**: `(oca-panel-update panel-id values-alist)`
+- **Parameters**:
+  - `panel-id` *(string | symbol)*: Identifier of the registered side panel.
+  - `values-alist` *(association list)*: List of `(("control_id" . new-value) ...)` pairs to update in-place without re-registering.
+- **Summary**: Programmatically updates one or more control values in a live dockable panel.
 - **Example**:
   ```lisp
-  (ocl-panel-update "calc" (list (cons "display" "123.45")))
+  (oca-panel-update "calc" (list (cons "display" "123.45")))
   ```
 
-#### `ocl-panel-get` / `ocl-panel-get-num` / `ocl-panel-get-real` / `ocl-panel-get-bool` / `ocl-panel-get-str`
+#### `oca-panel-get` / `oca-panel-get-num` / `oca-panel-get-real` / `oca-panel-get-bool` / `oca-panel-get-str`
 - **Syntax**:
-  - `(ocl-panel-get panel-id control-id)`
-  - `(ocl-panel-get-num panel-id control-id)`
-  - `(ocl-panel-get-real panel-id control-id)`
-  - `(ocl-panel-get-bool panel-id control-id)`
-  - `(ocl-panel-get-str panel-id control-id)`
+  - `(oca-panel-get panel-id control-id)`
+  - `(oca-panel-get-num panel-id control-id)`
+  - `(oca-panel-get-real panel-id control-id)`
+  - `(oca-panel-get-bool panel-id control-id)`
+  - `(oca-panel-get-str panel-id control-id)`
+- **Parameters**:
+  - `panel-id` *(string | symbol)*: Side panel identifier.
+  - `control-id` *(string | symbol)*: Target control identifier inside the panel.
 - **Summary**: Reads the current live value of any control (`checkbox`, `choice`, `text`, `number`, `color`) inside a dockable panel. Automatically synchronized whenever the user interacts with the panel UI.
 - **Example**:
   ```lisp
-  (setq col    (ocl-panel-get "shape_panel" "choice_color"))
-  (setq draw-x (ocl-panel-get-bool "shape_panel" "chk_draw_x"))
-  (setq radius (ocl-panel-get-num "shape_panel" "rad"))
+  (setq col    (oca-panel-get "shape_panel" "choice_color"))
+  (setq draw-x (oca-panel-get-bool "shape_panel" "chk_draw_x"))
+  (setq radius (oca-panel-get-num "shape_panel" "rad"))
   ```
 
 ---
