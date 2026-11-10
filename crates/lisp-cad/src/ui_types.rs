@@ -103,12 +103,6 @@ pub enum DialogControl {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         align_v: Option<VerticalAlign>,
     },
-    Label {
-        id: String,
-        text: String,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        align_h: Option<HorizontalAlign>,
-    },
 }
 
 fn default_true() -> bool {

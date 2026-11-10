@@ -325,15 +325,10 @@ pub fn lisp_to_control(val: &Value) -> Result<DialogControl, LispError> {
             Ok(DialogControl::Button { id, label, action, align_h, width })
         }
         "INFO" | "INFOTEXT" => {
-            let id = extract_str(&lookup_alist("id", val).unwrap_or(Value::Nil));
             let text = extract_str(&lookup_alist("text", val).unwrap_or(Value::Nil))
                 .unwrap_or_default();
             let align_h = lookup_alist("align-h", val).as_ref().and_then(parse_align_h);
-            if let Some(id_str) = id {
-                Ok(DialogControl::Label { id: id_str, text, align_h })
-            } else {
-                Ok(DialogControl::InfoText { text, align_h })
-            }
+            Ok(DialogControl::InfoText { text, align_h })
         }
         other => Err(LispError::Eval(format!("Unknown control type: '{other}'"))),
     }
