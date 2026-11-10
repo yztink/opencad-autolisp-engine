@@ -324,10 +324,20 @@ pub fn lisp_to_control(val: &Value) -> Result<DialogControl, LispError> {
             let width = lookup_alist("width", val).as_ref().and_then(extract_num).map(|w| w as f32);
             Ok(DialogControl::Button { id, label, action, align_h, width })
         }
-        "INFO" | "INFOTEXT" => {
-            let text = extract_str(&lookup_alist("text", val).unwrap_or(Value::Nil))
+        "INFO" | "INFOTEXT" | "LABEL" => {
+            let raw_text = extract_str(&lookup_alist("text", val).unwrap_or(Value::Nil))
                 .unwrap_or_default();
             let align_h = lookup_alist("align-h", val).as_ref().and_then(parse_align_h);
+            let id = extract_str(&lookup_alist("id", val).unwrap_or(Value::Nil));
+            let text = if let Some(id_str) = id {
+                if !id_str.is_empty() {
+                    format!("{id_str}::{raw_text}")
+                } else {
+                    raw_text
+                }
+            } else {
+                raw_text
+            };
             Ok(DialogControl::InfoText { text, align_h })
         }
         other => Err(LispError::Eval(format!("Unknown control type: '{other}'"))),
@@ -1195,6 +1205,59 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
 
         let mut items = vec![
             pair("TYPE", Value::Str("INFO".into())),
+            pair("TEXT", Value::Str(text)),
+        ];
+        if let Some(id_str) = id {
+            items.push(pair("ID", Value::Str(id_str)));
+        }
+        if !align_h.is_nil() {
+            items.push(pair("ALIGN-H", align_h));
+        }
+
+        Ok(Value::from_slice(&items))
+    });
+
+    // (OCA-label [id] text [options]) or (OCA-label id label text [options])
+    env.def_subr("OCA-LABEL", |args, _| {
+        if args.is_empty() || args.len() > 4 {
+            return Err(LispError::WrongArgCount {
+                expected: "1 to 4 ([id] text [options] or id label text [options])",
+                actual: args.len(),
+            });
+        }
+        let (id, text, opts_idx) = if args.len() == 1 {
+            (None, extract_str(&args[0]).unwrap_or_else(|| args[0].to_string()), 1)
+        } else if args.len() == 2 {
+            if matches!(args[1], Value::Cons(_)) && lookup_alist("align-h", &args[1]).is_some() {
+                (None, extract_str(&args[0]).unwrap_or_else(|| args[0].to_string()), 1)
+            } else {
+                (extract_str(&args[0]), extract_str(&args[1]).unwrap_or_else(|| args[1].to_string()), 2)
+            }
+        } else if args.len() == 3 {
+            if matches!(args[2], Value::Cons(_)) {
+                (extract_str(&args[0]), extract_str(&args[1]).unwrap_or_else(|| args[1].to_string()), 2)
+            } else {
+                let label = extract_str(&args[1]).unwrap_or_default();
+                let txt = extract_str(&args[2]).unwrap_or_else(|| args[2].to_string());
+                let full = if label.is_empty() { txt } else { format!("{label}: {txt}") };
+                (extract_str(&args[0]), full, 3)
+            }
+        } else {
+            let label = extract_str(&args[1]).unwrap_or_default();
+            let txt = extract_str(&args[2]).unwrap_or_else(|| args[2].to_string());
+            let full = if label.is_empty() { txt } else { format!("{label}: {txt}") };
+            (extract_str(&args[0]), full, 3)
+        };
+
+        let mut align_h = Value::Nil;
+        if opts_idx < args.len() && matches!(args[opts_idx], Value::Cons(_)) {
+            if let Some(h) = lookup_alist("align-h", &args[opts_idx]) {
+                align_h = h;
+            }
+        }
+
+        let mut items = vec![
+            pair("TYPE", Value::Str("LABEL".into())),
             pair("TEXT", Value::Str(text)),
         ];
         if let Some(id_str) = id {
