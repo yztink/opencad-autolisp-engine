@@ -21,8 +21,6 @@ pub enum VerticalAlign {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DialogControl {
     InfoText {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        id: Option<String>,
         text: String,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         align_h: Option<HorizontalAlign>,
@@ -104,6 +102,12 @@ pub enum DialogControl {
         align_h: Option<HorizontalAlign>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         align_v: Option<VerticalAlign>,
+    },
+    Label {
+        id: String,
+        text: String,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        align_h: Option<HorizontalAlign>,
     },
 }
 
@@ -207,7 +211,10 @@ pub enum DialogValue {
     FilePath(String),
     Fields(HashMap<String, DialogValue>),
     Table(Vec<Vec<String>>),
-    ChoiceOptions(Vec<String>),
+    ChoiceOptions {
+        options: Vec<String>,
+        selected_index: usize,
+    },
     Enabled(bool),
     Visible(bool),
 }

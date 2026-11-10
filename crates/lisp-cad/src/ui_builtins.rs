@@ -329,7 +329,11 @@ pub fn lisp_to_control(val: &Value) -> Result<DialogControl, LispError> {
             let text = extract_str(&lookup_alist("text", val).unwrap_or(Value::Nil))
                 .unwrap_or_default();
             let align_h = lookup_alist("align-h", val).as_ref().and_then(parse_align_h);
-            Ok(DialogControl::InfoText { id, text, align_h })
+            if let Some(id_str) = id {
+                Ok(DialogControl::Label { id: id_str, text, align_h })
+            } else {
+                Ok(DialogControl::InfoText { text, align_h })
+            }
         }
         other => Err(LispError::Eval(format!("Unknown control type: '{other}'"))),
     }
@@ -421,8 +425,8 @@ pub fn dialog_value_to_lisp(dv: DialogValue) -> Value {
             }
             Value::from_slice(&row_values)
         }
-        DialogValue::ChoiceOptions(opts) => {
-            let opt_vals: Vec<Value> = opts.into_iter().map(Value::Str).collect();
+        DialogValue::ChoiceOptions { options, .. } => {
+            let opt_vals: Vec<Value> = options.into_iter().map(Value::Str).collect();
             Value::from_slice(&opt_vals)
         }
         DialogValue::Enabled(b) | DialogValue::Visible(b) => {
@@ -472,7 +476,10 @@ pub fn lisp_to_dialog_value(val: &Value) -> DialogValue {
                         .into_iter()
                         .filter_map(|c| extract_str(&c))
                         .collect();
-                    return DialogValue::ChoiceOptions(opt_strs);
+                    return DialogValue::ChoiceOptions {
+                        options: opt_strs,
+                        selected_index: 0,
+                    };
                 }
                 // Check if alist of fields
                 let mut map = HashMap::new();
