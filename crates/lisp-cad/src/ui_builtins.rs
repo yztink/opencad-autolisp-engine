@@ -324,21 +324,33 @@ pub fn lisp_to_control(val: &Value) -> Result<DialogControl, LispError> {
             let width = lookup_alist("width", val).as_ref().and_then(extract_num).map(|w| w as f32);
             Ok(DialogControl::Button { id, label, action, align_h, width })
         }
-        "INFO" | "INFOTEXT" | "LABEL" => {
+        "INFO" | "INFOTEXT" => {
             let raw_text = extract_str(&lookup_alist("text", val).unwrap_or(Value::Nil))
                 .unwrap_or_default();
             let align_h = lookup_alist("align-h", val).as_ref().and_then(parse_align_h);
             let id = extract_str(&lookup_alist("id", val).unwrap_or(Value::Nil));
-            let text = if let Some(id_str) = id {
+            if let Some(id_str) = id {
                 if !id_str.is_empty() {
-                    format!("{id_str}::{raw_text}")
-                } else {
-                    raw_text
+                    return Ok(DialogControl::Label {
+                        id: id_str,
+                        text: raw_text,
+                        align_h,
+                    });
                 }
+            }
+            Ok(DialogControl::InfoText { text: raw_text, align_h })
+        }
+        "LABEL" => {
+            let id = extract_str(&lookup_alist("id", val).unwrap_or(Value::Nil))
+                .unwrap_or_default();
+            let text = extract_str(&lookup_alist("text", val).unwrap_or(Value::Nil))
+                .unwrap_or_default();
+            let align_h = lookup_alist("align-h", val).as_ref().and_then(parse_align_h);
+            if id.is_empty() {
+                Ok(DialogControl::InfoText { text, align_h })
             } else {
-                raw_text
-            };
-            Ok(DialogControl::InfoText { text, align_h })
+                Ok(DialogControl::Label { id, text, align_h })
+            }
         }
         other => Err(LispError::Eval(format!("Unknown control type: '{other}'"))),
     }

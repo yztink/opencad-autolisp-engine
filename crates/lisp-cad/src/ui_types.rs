@@ -103,6 +103,31 @@ pub enum DialogControl {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         align_v: Option<VerticalAlign>,
     },
+    /// A display-only text label with an explicit ID so its text can be dynamically updated.
+    Label {
+        id: String,
+        text: String,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        align_h: Option<HorizontalAlign>,
+    },
+}
+
+impl DialogControl {
+    pub fn id(&self) -> Option<&str> {
+        match self {
+            Self::InfoText { .. } | Self::Row { .. } | Self::Column { .. } => None,
+            Self::Label { id, .. }
+            | Self::Text { id, .. }
+            | Self::Number { id, .. }
+            | Self::Checkbox { id, .. }
+            | Self::Choice { id, .. }
+            | Self::Color { id, .. }
+            | Self::FilePicker { id, .. }
+            | Self::Fields { id, .. }
+            | Self::Table { id, .. }
+            | Self::Button { id, .. } => Some(id.as_str()),
+        }
+    }
 }
 
 fn default_true() -> bool {

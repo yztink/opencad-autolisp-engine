@@ -584,6 +584,11 @@ fn seed_mock_panel_defaults(
     let pid = panel_id.to_lowercase();
     for ctrl in controls {
         match ctrl {
+            DialogControl::Label { id, text, .. } => {
+                if let Ok(s) = serde_json::to_string(&DialogValue::Text(text.clone())) {
+                    map.insert((pid.clone(), id.to_lowercase()), s);
+                }
+            }
             DialogControl::Checkbox { id, default, .. } => {
                 if let Ok(s) = serde_json::to_string(&DialogValue::Bool(*default)) {
                     map.insert((pid.clone(), id.to_lowercase()), s);

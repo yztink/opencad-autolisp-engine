@@ -1,5 +1,5 @@
 use std::sync::{Arc, Mutex};
-use lisp_cad::{create_cad_env, DialogDef, DialogResponse, DialogValue, MockCadBridge};
+use lisp_cad::{create_cad_env, DialogControl, DialogDef, DialogResponse, DialogValue, HorizontalAlign, MockCadBridge};
 use lisp_core::{eval_str, Value};
 
 #[test]
@@ -304,6 +304,73 @@ fn test_oca_alignment_and_column_conformance() {
         _ => panic!("Expected Column"),
     }
 }
+
+#[test]
+fn test_oca_label_and_info_control_conformance() {
+    let mock = Arc::new(Mutex::new(MockCadBridge::new()));
+    let mut env = create_cad_env(mock.clone());
+
+    let code = r#"
+        (setq dlg (oca-dialog "Label Test"
+            (oca-row
+                (oca-info "Plain Info Without ID")
+                (oca-info "info_id" "Info With ID")
+                (oca-label "label_id" "Label Text")
+                (oca-label "status_id" "Status" "Active" '((align-h . "right"))))))
+        (oca-dialog-show dlg)
+    "#;
+    eval_str(code, &mut env).unwrap();
+
+    let br = mock.lock().unwrap();
+    let def: DialogDef = serde_json::from_str(&br.shown_dialogs[0]).unwrap();
+    assert_eq!(def.rows.len(), 1);
+    let controls = &def.rows[0].controls;
+    assert_eq!(controls.len(), 4);
+
+    // 1. Plain info without id -> DialogControl::InfoText
+    match &controls[0] {
+        DialogControl::InfoText { text, align_h } => {
+            assert_eq!(text, "Plain Info Without ID");
+            assert_eq!(*align_h, None);
+            assert_eq!(controls[0].id(), None);
+        }
+        _ => panic!("Expected InfoText for plain oca-info"),
+    }
+
+    // 2. Info with id -> DialogControl::Label
+    match &controls[1] {
+        DialogControl::Label { id, text, align_h } => {
+            assert_eq!(id, "info_id");
+            assert_eq!(text, "Info With ID");
+            assert_eq!(*align_h, None);
+            assert_eq!(controls[1].id(), Some("info_id"));
+        }
+        _ => panic!("Expected Label for oca-info with id"),
+    }
+
+    // 3. Label with id -> DialogControl::Label
+    match &controls[2] {
+        DialogControl::Label { id, text, align_h } => {
+            assert_eq!(id, "label_id");
+            assert_eq!(text, "Label Text");
+            assert_eq!(*align_h, None);
+            assert_eq!(controls[2].id(), Some("label_id"));
+        }
+        _ => panic!("Expected Label for oca-label"),
+    }
+
+    // 4. Label with id, prefix label, text, and options -> DialogControl::Label
+    match &controls[3] {
+        DialogControl::Label { id, text, align_h } => {
+            assert_eq!(id, "status_id");
+            assert_eq!(text, "Status: Active");
+            assert_eq!(*align_h, Some(HorizontalAlign::Right));
+            assert_eq!(controls[3].id(), Some("status_id"));
+        }
+        _ => panic!("Expected Label with align_h for oca-label with options"),
+    }
+}
+
 
 
 
