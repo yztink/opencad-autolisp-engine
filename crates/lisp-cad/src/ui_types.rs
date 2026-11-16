@@ -205,6 +205,8 @@ pub struct PanelDef {
     pub width: Option<f32>,
     #[serde(default)]
     pub command: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub style: Option<String>,
 }
 
 impl PanelDef {
@@ -215,6 +217,7 @@ impl PanelDef {
             controls: Vec::new(),
             width: None,
             command: None,
+            style: None,
         }
     }
 }

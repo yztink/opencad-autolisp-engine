@@ -371,6 +371,35 @@ fn test_oca_label_and_info_control_conformance() {
     }
 }
 
+#[test]
+fn test_panel_register_style_option_serialization() {
+    let mock = Arc::new(Mutex::new(MockCadBridge::new()));
+    let mut env = create_cad_env(mock.clone());
 
+    let code = r#"
+        (oca-panel-register "p1" "Dialog Look"
+          '(("width" . 280) ("style" . "dialog"))
+          (oca-text "x" "X" "0"))
+        (oca-panel-register "p2" "Form Look"
+          '((style . form))
+          (oca-text "x" "X" "0"))
+        (oca-panel-register "p3" "Default Look"
+          '((width . 280))
+          (oca-text "x" "X" "0"))
+    "#;
+    eval_str(code, &mut env).unwrap();
+
+    let br = mock.lock().unwrap();
+    assert_eq!(br.registered_panels.len(), 3);
+
+    let p1: serde_json::Value = serde_json::from_str(&br.registered_panels[0]).unwrap();
+    assert_eq!(p1["style"], serde_json::json!("form"));
+
+    let p2: serde_json::Value = serde_json::from_str(&br.registered_panels[1]).unwrap();
+    assert_eq!(p2["style"], serde_json::json!("form"));
+
+    let p3: serde_json::Value = serde_json::from_str(&br.registered_panels[2]).unwrap();
+    assert!(p3.get("style").is_none());
+}
 
 

@@ -1554,6 +1554,13 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
                 if let Some(cmd) = lookup_alist("command", &args[idx]).as_ref().and_then(extract_str) {
                     def.command = Some(cmd);
                 }
+                if let Some(style) = lookup_alist("style", &args[idx]).as_ref().and_then(extract_str) {
+                    let normalized = match style.trim().to_ascii_lowercase().as_str() {
+                        "form" | "dialog" => "form".to_string(),
+                        _ => "palette".to_string(),
+                    };
+                    def.style = Some(normalized);
+                }
                 idx += 1;
             }
         }
