@@ -377,20 +377,28 @@ fn test_panel_register_style_option_serialization() {
     let mut env = create_cad_env(mock.clone());
 
     let code = r#"
-        (oca-panel-register "p1" "Dialog Look"
-          '(("width" . 280) ("style" . "dialog"))
-          (oca-text "x" "X" "0"))
-        (oca-panel-register "p2" "Form Look"
-          '((style . form))
-          (oca-text "x" "X" "0"))
-        (oca-panel-register "p3" "Default Look"
+        (oca-panel-register "p1" "Default With Options Look"
           '((width . 280))
+          (oca-text "x" "X" "0"))
+        (oca-panel-register "p2" "Default No Options Look"
+          (oca-text "x" "X" "0"))
+        (oca-panel-register "p3" "Palette String Look"
+          '(("width" . 280) ("style" . "palette"))
+          (oca-text "x" "X" "0"))
+        (oca-panel-register "p4" "Palette Symbol Look"
+          '((style . palette))
+          (oca-text "x" "X" "0"))
+        (oca-panel-register "p5" "Dialog Explicit Look"
+          '(("style" . "dialog"))
+          (oca-text "x" "X" "0"))
+        (oca-panel-register "p6" "Form Explicit Look"
+          '((style . form))
           (oca-text "x" "X" "0"))
     "#;
     eval_str(code, &mut env).unwrap();
 
     let br = mock.lock().unwrap();
-    assert_eq!(br.registered_panels.len(), 3);
+    assert_eq!(br.registered_panels.len(), 6);
 
     let p1: serde_json::Value = serde_json::from_str(&br.registered_panels[0]).unwrap();
     assert_eq!(p1["style"], serde_json::json!("form"));
@@ -399,7 +407,16 @@ fn test_panel_register_style_option_serialization() {
     assert_eq!(p2["style"], serde_json::json!("form"));
 
     let p3: serde_json::Value = serde_json::from_str(&br.registered_panels[2]).unwrap();
-    assert!(p3.get("style").is_none());
+    assert_eq!(p3["style"], serde_json::json!("palette"));
+
+    let p4: serde_json::Value = serde_json::from_str(&br.registered_panels[3]).unwrap();
+    assert_eq!(p4["style"], serde_json::json!("palette"));
+
+    let p5: serde_json::Value = serde_json::from_str(&br.registered_panels[4]).unwrap();
+    assert_eq!(p5["style"], serde_json::json!("form"));
+
+    let p6: serde_json::Value = serde_json::from_str(&br.registered_panels[5]).unwrap();
+    assert_eq!(p6["style"], serde_json::json!("form"));
 }
 
 

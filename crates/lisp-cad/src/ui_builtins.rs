@@ -1556,8 +1556,8 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
                 }
                 if let Some(style) = lookup_alist("style", &args[idx]).as_ref().and_then(extract_str) {
                     let normalized = match style.trim().to_ascii_lowercase().as_str() {
-                        "form" | "dialog" => "form".to_string(),
-                        _ => "palette".to_string(),
+                        "palette" => "palette".to_string(),
+                        _ => "form".to_string(),
                     };
                     def.style = Some(normalized);
                 }

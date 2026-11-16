@@ -217,7 +217,7 @@ impl PanelDef {
             controls: Vec::new(),
             width: None,
             command: None,
-            style: None,
+            style: Some("form".to_string()),
         }
     }
 }
