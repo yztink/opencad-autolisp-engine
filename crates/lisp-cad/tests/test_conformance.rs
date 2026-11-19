@@ -320,12 +320,24 @@ fn test_table_and_curve_features() {
     let next_layer2 = eval_str("(tblnext \"LAYER\")", &mut env).unwrap();
     assert!(next_layer2 != Value::Nil);
 
-    // 3. Selection (entsel, nentsel)
+    // 3. Selection (entsel, nentsel, nentselp)
     eval_str("(entmake '((0 . \"LINE\") (8 . \"0\") (10 0.0 0.0 0.0) (11 50.0 0.0 0.0)))", &mut env).unwrap();
     let es = eval_str("(entsel \"Pick: \")", &mut env).unwrap();
     assert!(matches!(es, Value::Cons(_)));
     let nes = eval_str("(nentsel)", &mut env).unwrap();
     assert!(matches!(nes, Value::Cons(_)));
+    let nesp = eval_str("(nentselp \"Pick nested: \" '(0.0 0.0 0.0))", &mut env).unwrap();
+    assert!(matches!(nesp, Value::Cons(_)));
+    assert!(eval_str("(entsel 123)", &mut env).is_err());
+    eval_str("(command \"_.ERASE\" (entsel \"Pick to erase: \") \"\")", &mut env).unwrap();
+    assert!(
+        mock.lock()
+            .unwrap()
+            .executed_commands
+            .last()
+            .is_some_and(|cmd| cmd.starts_with("_.ERASE ") && !cmd.contains("0.0000")),
+        "Passing (entsel) to (command) should serialize the entity handle, not the pick point"
+    );
 
     // 4. Undo Marks
     assert_eq!(mock.lock().unwrap().undo_marks, 0);
@@ -368,4 +380,25 @@ fn test_table_and_curve_features() {
     // 6. Special form LET
     let let_res = eval_str("(let ((x 10) (y 25)) (+ x y))", &mut env).unwrap();
     assert_eq!(let_res, Value::Int(35));
+
+    // 7. initdia, vl-cmdf, command-s
+    assert_eq!(eval_str("(initdia)", &mut env).unwrap(), Value::Nil);
+    assert!(mock.lock().unwrap().init_dia_flag);
+    assert_eq!(eval_str("(initdia 0)", &mut env).unwrap(), Value::Nil);
+    assert!(!mock.lock().unwrap().init_dia_flag);
+    assert_eq!(eval_str("(initdia 1)", &mut env).unwrap(), Value::Nil);
+    assert!(mock.lock().unwrap().init_dia_flag);
+    assert_eq!(eval_str("(initdia nil)", &mut env).unwrap(), Value::Nil);
+    assert!(!mock.lock().unwrap().init_dia_flag);
+
+    assert_eq!(eval_str("(vl-cmdf \"LINE\" '(0 0) '(10 10) \"\")", &mut env).unwrap(), Value::T);
+    assert_eq!(
+        mock.lock().unwrap().executed_commands.last().map(|s| s.as_str()),
+        Some("LINE 0.0000,0.0000 10.0000,10.0000 ENTER")
+    );
+    assert_eq!(eval_str("(command-s \"LINE\" '(1 1) '(5 5) \"\")", &mut env).unwrap(), Value::Nil);
+    assert_eq!(
+        mock.lock().unwrap().executed_commands.last().map(|s| s.as_str()),
+        Some("LINE 1.0000,1.0000 5.0000,5.0000 ENTER")
+    );
 }

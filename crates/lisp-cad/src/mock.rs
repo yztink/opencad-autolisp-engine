@@ -28,6 +28,7 @@ pub struct MockCadBridge {
     pub tables: HashMap<String, Vec<Vec<(i16, DxfValue)>>>,
     pub table_cursors: HashMap<String, usize>,
     pub undo_marks: usize,
+    pub init_dia_flag: bool,
 }
 
 impl MockCadBridge {
@@ -195,6 +196,10 @@ impl MockCadBridge {
 }
 
 impl CadBridge for MockCadBridge {
+    fn init_dia(&mut self, use_dialog: bool) {
+        self.init_dia_flag = use_dialog;
+    }
+
     fn execute_command(&mut self, cmd: &str) -> Result<(), String> {
         self.executed_commands.push(cmd.to_string());
         Ok(())

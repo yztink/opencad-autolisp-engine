@@ -44,6 +44,9 @@ pub trait CadBridge: Send + Sync {
     fn get_real(&mut self, prompt: &str) -> Result<Option<f64>, String>;
     fn get_kword(&mut self, prompt: &str) -> Result<Option<String>, String>;
     fn init_get(&mut self, bits: i32, keywords: &str);
+    /// Control whether the next command invoked via `(command ...)` should display
+    /// its GUI dialog (`true`) instead of its command-line `-` version (`false`).
+    fn init_dia(&mut self, _use_dialog: bool) {}
 
     fn get_var(&self, name: &str) -> Result<DxfValue, String>;
     fn set_var(&mut self, name: &str, val: DxfValue) -> Result<(), String>;

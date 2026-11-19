@@ -44,6 +44,60 @@ fn parse_point_list(val: &Value) -> Option<Vec<[f64; 3]>> {
     Some(pts)
 }
 
+fn format_command_tokens(args: &[Value], b: &Arc<Mutex<dyn CadBridge>>) -> Vec<String> {
+    let mut tokens = Vec::new();
+    for arg in args {
+        match arg {
+            Value::Str(s) => {
+                if s.trim().is_empty() {
+                    tokens.push("ENTER".to_string());
+                } else {
+                    tokens.push(s.clone());
+                }
+            }
+            Value::Int(n) => tokens.push(n.to_string()),
+            Value::Real(r) => tokens.push(format!("{:.4}", r)),
+            Value::Sym(s) => tokens.push(s.to_string()),
+            Value::Cons(_) => {
+                if let Some(items) = arg.to_vec() {
+                    if let Some(Value::Ename(h)) = items.first() {
+                        tokens.push(format!("{:X}", h));
+                    } else {
+                        // Coordinates list '(x y [z])
+                        let formatted: Vec<String> = items
+                            .iter()
+                            .map(|c| match c {
+                                Value::Real(r) => format!("{:.4}", r),
+                                Value::Int(n) => format!("{:.4}", *n as f64),
+                                other => other.to_string(),
+                            })
+                            .collect();
+                        tokens.push(formatted.join(","));
+                    }
+                } else {
+                    tokens.push(arg.to_string());
+                }
+            }
+            Value::Ename(h) => tokens.push(format!("{:X}", h)),
+            Value::PickSet(ss_id) => {
+                let len = {
+                    let br = b.lock().unwrap();
+                    br.ss_length(*ss_id)
+                };
+                let br = b.lock().unwrap();
+                for idx in 0..len {
+                    if let Some(ename) = br.ss_name(*ss_id, idx) {
+                        tokens.push(format!("{:X}", ename));
+                    }
+                }
+            }
+            Value::Nil => tokens.push(String::new()),
+            other => tokens.push(other.to_string()),
+        }
+    }
+    tokens
+}
+
 pub fn register_cad_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
     // Set auto-command registration hook for (defun c:NAME ...)
     let b_cmd = bridge.clone();
@@ -54,55 +108,41 @@ pub fn register_cad_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
 
     let b = bridge.clone();
     env.def_subr("COMMAND", move |args, _| {
-        let mut tokens = Vec::new();
-        for arg in args {
-            match arg {
-                Value::Str(s) => {
-                    if s.trim().is_empty() {
-                        tokens.push("ENTER".to_string());
-                    } else {
-                        tokens.push(s.clone());
-                    }
-                }
-                Value::Int(n) => tokens.push(n.to_string()),
-                Value::Real(r) => tokens.push(format!("{:.4}", r)),
-                Value::Sym(s) => tokens.push(s.to_string()),
-                Value::Cons(_) => {
-                    // Coordinates list '(x y [z])
-                    if let Some(coords) = arg.to_vec() {
-                        let formatted: Vec<String> = coords
-                            .iter()
-                            .map(|c| match c {
-                                Value::Real(r) => format!("{:.4}", r),
-                                Value::Int(n) => format!("{:.4}", *n as f64),
-                                other => other.to_string(),
-                            })
-                            .collect();
-                        tokens.push(formatted.join(","));
-                    } else {
-                        tokens.push(arg.to_string());
-                    }
-                }
-                Value::Ename(h) => tokens.push(format!("{:X}", h)),
-                Value::PickSet(ss_id) => {
-                    let len = {
-                        let br = b.lock().unwrap();
-                        br.ss_length(*ss_id)
-                    };
-                    let br = b.lock().unwrap();
-                    for idx in 0..len {
-                        if let Some(ename) = br.ss_name(*ss_id, idx) {
-                            tokens.push(format!("{:X}", ename));
-                        }
-                    }
-                }
-                Value::Nil => tokens.push(String::new()),
-                other => tokens.push(other.to_string()),
-            }
-        }
-
+        let tokens = format_command_tokens(args, &b);
         let mut br = b.lock().unwrap();
         br.execute_command_args(&tokens).map_err(LispError::Cad)?;
+        Ok(Value::Nil)
+    });
+
+    let b = bridge.clone();
+    env.def_subr("COMMAND-S", move |args, _| {
+        let tokens = format_command_tokens(args, &b);
+        let mut br = b.lock().unwrap();
+        br.execute_command_args(&tokens).map_err(LispError::Cad)?;
+        Ok(Value::Nil)
+    });
+
+    let b = bridge.clone();
+    env.def_subr("VL-CMDF", move |args, _| {
+        let tokens = format_command_tokens(args, &b);
+        let mut br = b.lock().unwrap();
+        br.execute_command_args(&tokens).map_err(LispError::Cad)?;
+        Ok(Value::T)
+    });
+
+    let b = bridge.clone();
+    env.def_subr("INITDIA", move |args, _| {
+        if args.len() > 1 {
+            return Err(LispError::WrongArgCount { expected: "0 or 1 ([dialogflag])", actual: args.len() });
+        }
+        let use_dialog = match args.first() {
+            None => true,
+            Some(Value::Int(n)) => *n != 0,
+            Some(Value::Nil) => false,
+            Some(other) => return Err(LispError::TypeError { expected: "integer", actual: other.to_string() }),
+        };
+        let mut br = b.lock().unwrap();
+        br.init_dia(use_dialog);
         Ok(Value::Nil)
     });
 
@@ -258,50 +298,96 @@ pub fn register_cad_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         }
     });
 
-    let b = bridge.clone();
-    env.def_subr("ENTSEL", move |args, _| {
+    fn extract_optional_prompt(args: &[Value]) -> Result<Option<&str>, LispError> {
         if args.len() > 1 {
-            return Err(LispError::WrongArgCount { expected: "0 or 1 ([prompt])", actual: args.len() });
+            return Err(LispError::WrongArgCount {
+                expected: "0 or 1 ([prompt])",
+                actual: args.len(),
+            });
         }
-        let prompt = if args.len() == 1 {
+        if args.len() == 1 {
             match &args[0] {
-                Value::Str(s) => Some(s.as_str()),
-                _ => None,
+                Value::Str(s) => Ok(Some(s.as_str())),
+                Value::Nil => Ok(None),
+                other => Err(LispError::TypeError {
+                    expected: "string prompt or nil",
+                    actual: other.to_string(),
+                }),
             }
         } else {
-            None
-        };
-        let mut br = b.lock().unwrap();
+            Ok(None)
+        }
+    }
+
+    fn run_ent_sel(
+        bridge: &Arc<Mutex<dyn CadBridge>>,
+        prompt: Option<&str>,
+    ) -> Result<Value, LispError> {
+        let mut br = bridge.lock().unwrap();
         match br.ent_sel(prompt).map_err(LispError::Cad)? {
             Some((h, pt)) => {
-                let pt_val = Value::from_slice(&[Value::Real(pt[0]), Value::Real(pt[1]), Value::Real(pt[2])]);
+                let pt_val =
+                    Value::from_slice(&[Value::Real(pt[0]), Value::Real(pt[1]), Value::Real(pt[2])]);
                 Ok(Value::from_slice(&[Value::Ename(h), pt_val]))
             }
             None => Ok(Value::Nil),
         }
+    }
+
+    let b = bridge.clone();
+    env.def_subr("ENTSEL", move |args, _| {
+        let prompt = extract_optional_prompt(args)?;
+        run_ent_sel(&b, prompt)
     });
 
     let b = bridge.clone();
     env.def_subr("NENTSEL", move |args, _| {
-        if args.len() > 1 {
-            return Err(LispError::WrongArgCount { expected: "0 or 1 ([prompt])", actual: args.len() });
+        let prompt = extract_optional_prompt(args)?;
+        run_ent_sel(&b, prompt)
+    });
+
+    let b = bridge.clone();
+    env.def_subr("NENTSELP", move |args, _| {
+        if args.len() > 2 {
+            return Err(LispError::WrongArgCount {
+                expected: "0 to 2 ([prompt] [pt])",
+                actual: args.len(),
+            });
         }
-        let prompt = if args.len() == 1 {
-            match &args[0] {
+        let prompt = match args.len() {
+            0 => None,
+            1 => match &args[0] {
                 Value::Str(s) => Some(s.as_str()),
-                _ => None,
+                Value::Nil => None,
+                other if parse_point(other).is_some() => None,
+                other => {
+                    return Err(LispError::TypeError {
+                        expected: "string prompt or point list",
+                        actual: other.to_string(),
+                    })
+                }
+            },
+            2 => {
+                if !matches!(args[1], Value::Nil) && parse_point(&args[1]).is_none() {
+                    return Err(LispError::TypeError {
+                        expected: "point coordinate list '(x y [z]) or nil",
+                        actual: args[1].to_string(),
+                    });
+                }
+                match &args[0] {
+                    Value::Str(s) => Some(s.as_str()),
+                    Value::Nil => None,
+                    other => {
+                        return Err(LispError::TypeError {
+                            expected: "string prompt or nil",
+                            actual: other.to_string(),
+                        })
+                    }
+                }
             }
-        } else {
-            None
+            _ => unreachable!(),
         };
-        let mut br = b.lock().unwrap();
-        match br.ent_sel(prompt).map_err(LispError::Cad)? {
-            Some((h, pt)) => {
-                let pt_val = Value::from_slice(&[Value::Real(pt[0]), Value::Real(pt[1]), Value::Real(pt[2])]);
-                Ok(Value::from_slice(&[Value::Ename(h), pt_val]))
-            }
-            None => Ok(Value::Nil),
-        }
+        run_ent_sel(&b, prompt)
     });
 
     let b = bridge.clone();
