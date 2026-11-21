@@ -443,33 +443,56 @@ fn combine_results(results: &[bool], mode: &str) -> bool {
 }
 
 pub fn get_entity_bbox(elist: &[(i16, DxfValue)]) -> Option<[f64; 4]> {
+    let mut points: Vec<[f64; 3]> = Vec::new();
     let mut p10 = None;
-    let mut p11 = None;
     let mut rad = None;
+    let mut etype = "";
 
     for (code, val) in elist {
         match (*code, val) {
-            (10, DxfValue::Point(p)) => p10 = Some(*p),
-            (11, DxfValue::Point(p)) => p11 = Some(*p),
+            (0, DxfValue::Str(s)) => etype = s.as_str(),
+            (10, DxfValue::Point(p)) => {
+                if p10.is_none() {
+                    p10 = Some(*p);
+                }
+                points.push(*p);
+            }
+            (11..=16, DxfValue::Point(p)) => points.push(*p),
             (40, DxfValue::Real(r)) => rad = Some(*r),
             (40, DxfValue::Int(n)) => rad = Some(*n as f64),
             _ => {}
         }
     }
 
-    if let (Some(p1), Some(p2)) = (p10, p11) {
-        Some([
-            p1[0].min(p2[0]),
-            p1[1].min(p2[1]),
-            p1[0].max(p2[0]),
-            p1[1].max(p2[1]),
-        ])
-    } else if let (Some(c), Some(r)) = (p10, rad) {
-        Some([c[0] - r, c[1] - r, c[0] + r, c[1] + r])
-    } else if let Some(p) = p10 {
-        Some([p[0], p[1], p[0], p[1]])
-    } else {
+    let is_radial = etype.eq_ignore_ascii_case("CIRCLE")
+        || etype.eq_ignore_ascii_case("ARC")
+        || (points.len() == 1
+            && !etype.eq_ignore_ascii_case("TEXT")
+            && !etype.eq_ignore_ascii_case("MTEXT")
+            && !etype.eq_ignore_ascii_case("DIMENSION")
+            && !etype.eq_ignore_ascii_case("ARC_DIMENSION")
+            && !etype.eq_ignore_ascii_case("LARGE_RADIAL_DIMENSION"));
+
+    if is_radial {
+        if let (Some(c), Some(r)) = (p10, rad) {
+            return Some([c[0] - r, c[1] - r, c[0] + r, c[1] + r]);
+        }
+    }
+
+    if points.is_empty() {
         None
+    } else {
+        let mut min_x = f64::INFINITY;
+        let mut min_y = f64::INFINITY;
+        let mut max_x = f64::NEG_INFINITY;
+        let mut max_y = f64::NEG_INFINITY;
+        for p in points {
+            min_x = min_x.min(p[0]);
+            min_y = min_y.min(p[1]);
+            max_x = max_x.max(p[0]);
+            max_y = max_y.max(p[1]);
+        }
+        Some([min_x, min_y, max_x, max_y])
     }
 }
 

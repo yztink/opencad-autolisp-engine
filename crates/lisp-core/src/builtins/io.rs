@@ -28,6 +28,27 @@ where
     f(guard.as_mut().unwrap())
 }
 
+/// Decode `.lsp` source bytes as UTF-8 (stripping an optional UTF-8 BOM), falling back to Windows-1252.
+pub fn decode_lsp_bytes(bytes: &[u8]) -> String {
+    if let Ok(s) = std::str::from_utf8(bytes) {
+        return s.strip_prefix('\u{FEFF}').unwrap_or(s).to_string();
+    }
+    // 0x80..=0x9F in Windows-1252; the five undefined slots map to the C1 control of the same value.
+    const CP1252_HIGH: [char; 32] = [
+        '\u{20AC}', '\u{81}', '\u{201A}', '\u{0192}', '\u{201E}', '\u{2026}', '\u{2020}', '\u{2021}',
+        '\u{02C6}', '\u{2030}', '\u{0160}', '\u{2039}', '\u{0152}', '\u{8D}', '\u{017D}', '\u{8F}',
+        '\u{90}', '\u{2018}', '\u{2019}', '\u{201C}', '\u{201D}', '\u{2022}', '\u{2013}', '\u{2014}',
+        '\u{02DC}', '\u{2122}', '\u{0161}', '\u{203A}', '\u{0153}', '\u{9D}', '\u{017E}', '\u{0178}',
+    ];
+    bytes
+        .iter()
+        .map(|&b| match b {
+            0x80..=0x9F => CP1252_HIGH[(b - 0x80) as usize],
+            _ => b as char,
+        })
+        .collect()
+}
+
 pub fn register(env: &mut Env) {
     // ── Output Primitives ─────────────────────────────────────────────────────
 
@@ -301,7 +322,7 @@ pub fn register(env: &mut Env) {
             }
         }
 
-        match std::fs::read_to_string(&filename) {
+        match std::fs::read(&filename).map(|b| decode_lsp_bytes(&b)) {
             Ok(code) => crate::eval_str(&code, env_rc),
             Err(e) => {
                 if args.len() == 2 {

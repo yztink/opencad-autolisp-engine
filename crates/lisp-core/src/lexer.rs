@@ -59,9 +59,13 @@ pub fn tokenize_spanned(source: &str) -> Result<Vec<SpannedToken>, LispError> {
     while i < len {
         let b = bytes[i];
 
-        // Whitespace
+        // Whitespace (and optional UTF-8 BOM)
         if b.is_ascii_whitespace() {
             i += 1;
+            continue;
+        }
+        if source[i..].starts_with('\u{FEFF}') {
+            i += '\u{FEFF}'.len_utf8();
             continue;
         }
 
@@ -162,24 +166,27 @@ pub fn tokenize_spanned(source: &str) -> Result<Vec<SpannedToken>, LispError> {
             let mut terminated = false;
 
             while i < len {
-                if bytes[i] == b'\\' && i + 1 < len {
+                let ch = source[i..].chars().next().unwrap();
+                if ch == '\\' && i + 1 < len {
                     i += 1;
-                    match bytes[i] {
-                        b'n' => s.push('\n'),
-                        b't' => s.push('\t'),
-                        b'r' => s.push('\r'),
-                        b'"' => s.push('"'),
-                        b'\\' => s.push('\\'),
-                        other => s.push(other as char),
+                    let esc = source[i..].chars().next().unwrap();
+                    match esc {
+                        'n' => s.push('\n'),
+                        't' => s.push('\t'),
+                        'r' => s.push('\r'),
+                        '"' => s.push('"'),
+                        '\\' => s.push('\\'),
+                        other => s.push(other),
                     }
-                } else if bytes[i] == b'"' {
+                    i += esc.len_utf8();
+                } else if ch == '"' {
                     i += 1;
                     terminated = true;
                     break;
                 } else {
-                    s.push(bytes[i] as char);
+                    s.push(ch);
+                    i += ch.len_utf8();
                 }
-                i += 1;
             }
 
             if !terminated {
