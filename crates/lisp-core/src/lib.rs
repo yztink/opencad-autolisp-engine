@@ -165,6 +165,16 @@ mod tests {
     }
 
     #[test]
+    fn test_eq_strings_by_value_lists_by_identity() {
+        let mut env = create_default_env();
+        assert_eq!(eval_str("(eq \"abc\" \"abc\")", &mut env).unwrap(), Value::T);
+        assert_eq!(eval_str("(eq \"abc\" \"abd\")", &mut env).unwrap(), Value::Nil);
+        assert_eq!(eval_str("(setq v \"Above\") (eq v \"Above\")", &mut env).unwrap(), Value::T);
+        assert_eq!(eval_str("(eq '(1) '(1))", &mut env).unwrap(), Value::Nil);
+        assert_eq!(eval_str("(setq a '(1)) (eq a a)", &mut env).unwrap(), Value::T);
+    }
+
+    #[test]
     fn test_multiline_setq() {
         let mut env = create_default_env();
         let code = r#"
