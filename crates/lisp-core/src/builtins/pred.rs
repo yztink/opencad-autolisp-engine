@@ -161,6 +161,8 @@ pub fn register(env: &mut Env) {
             (Value::Nil, Value::Nil) => Ok(Value::T),
             (Value::T, Value::T) => Ok(Value::T),
             (Value::Int(a), Value::Int(b)) => if a == b { Ok(Value::T) } else { Ok(Value::Nil) },
+            // identical string literals are eq in practice, so compare strings by value
+            (Value::Str(a), Value::Str(b)) => if a == b { Ok(Value::T) } else { Ok(Value::Nil) },
             (Value::Sym(a), Value::Sym(b)) => if a == b { Ok(Value::T) } else { Ok(Value::Nil) },
             (Value::Cons(a), Value::Cons(b)) => if std::rc::Rc::ptr_eq(a, b) { Ok(Value::T) } else { Ok(Value::Nil) },
             _ => Ok(Value::Nil),
