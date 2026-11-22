@@ -372,9 +372,12 @@ This reference documents every built-in function, special form, CAD bridge opera
 
 ### `eq` / `equal`
 - **Syntax**: `(eq expr1 expr2)` / `(equal expr1 expr2 [fuzz])`
-- **Summary**: Checks equality of two expressions. `equal` performs deep structural comparison and accepts an optional numeric `fuzz` tolerance.
+- **Summary**: `eq` tests identity (same object reference for lists and user functions; exact same-type value or handle match for atoms without numeric coercion). `equal` performs deep structural comparison with numeric coercion and accepts an optional numeric `fuzz` tolerance.
 - **Example**:
   ```lisp
+  (eq "LINE" "LINE")          ; => T
+  (eq 1 1.0)                  ; => nil
+  (eq '(a b) '(a b))          ; => nil
   (equal 10.0001 10.0 0.001) ; => T
   ```
 

@@ -1074,7 +1074,7 @@
             </a>
             
 
-            <a href="#eq" class="nav-item" data-id="eq" data-cat="cat-4" data-search="eq equal `(eq expr1 expr2)` / `(equal expr1 expr2 [fuzz])` checks equality of two expressions. `equal` performs deep structural comparison and accepts an optional numeric `fuzz` tolerance. ">
+            <a href="#eq" class="nav-item" data-id="eq" data-cat="cat-4" data-search="eq equal `(eq expr1 expr2)` / `(equal expr1 expr2 [fuzz])` `eq` tests identity (same object reference for lists and user functions; exact same-type value or handle match for atoms without numeric coercion). `equal` performs deep structural comparison with numeric coercion and accepts an optional numeric `fuzz` tolerance. ">
                 <span class="nav-fn-name">eq</span>
                 <span class="sb-alias">+1</span>
             </a>
@@ -3395,7 +3395,7 @@
             </div>
             
 
-            <div class="func-card" id="eq" data-cat="cat-4" data-search="eq equal `(eq expr1 expr2)` / `(equal expr1 expr2 [fuzz])` checks equality of two expressions. `equal` performs deep structural comparison and accepts an optional numeric `fuzz` tolerance.  comparison, logic &amp; type predicates">
+            <div class="func-card" id="eq" data-cat="cat-4" data-search="eq equal `(eq expr1 expr2)` / `(equal expr1 expr2 [fuzz])` `eq` tests identity (same object reference for lists and user functions; exact same-type value or handle match for atoms without numeric coercion). `equal` performs deep structural comparison with numeric coercion and accepts an optional numeric `fuzz` tolerance.  comparison, logic &amp; type predicates">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#eq" class="card-title-link">
@@ -3415,7 +3415,7 @@
                 </div>
                 
                 <div class="summary-body">
-                    <p>Checks equality of two expressions. <code>equal</code> performs deep structural comparison and accepts an optional numeric <code>fuzz</code> tolerance.</p>
+                    <p><code>eq</code> tests identity (same object reference for lists and user functions; exact same-type value or handle match for atoms without numeric coercion). <code>equal</code> performs deep structural comparison with numeric coercion and accepts an optional numeric <code>fuzz</code> tolerance.</p>
                 </div>
                 
                 <div class="example-box">

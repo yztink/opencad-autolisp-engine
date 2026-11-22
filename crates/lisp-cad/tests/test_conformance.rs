@@ -402,3 +402,26 @@ fn test_table_and_curve_features() {
         Some("LINE 1.0000,1.0000 5.0000,5.0000 ENTER")
     );
 }
+
+#[test]
+fn test_conformance_eq() {
+    let (_mock, mut env) = setup_env();
+
+    eval_str("(entmake '((0 . \"CIRCLE\") (8 . \"0\") (10 0.0 0.0 0.0) (40 5.0)))", &mut env).unwrap();
+    eval_str("(setq e1 (entlast))", &mut env).unwrap();
+    assert_eq!(eval_str("(eq e1 (entlast))", &mut env).unwrap(), Value::T);
+
+    eval_str("(entmake '((0 . \"LINE\") (8 . \"0\") (10 0.0 0.0 0.0) (11 10.0 0.0 0.0)))", &mut env).unwrap();
+    eval_str("(setq e2 (entlast))", &mut env).unwrap();
+    assert_eq!(eval_str("(eq e1 e2)", &mut env).unwrap(), Value::Nil);
+    assert_eq!(eval_str("(eq (cdr (assoc 0 (entget e2))) \"LINE\")", &mut env).unwrap(), Value::T);
+    assert_eq!(eval_str("(eq (cdr (assoc 0 (entget e2))) \"CIRCLE\")", &mut env).unwrap(), Value::Nil);
+
+    eval_str("(setq ss1 (ssadd) ss2 ss1 ss3 (ssadd))", &mut env).unwrap();
+    assert_eq!(eval_str("(eq ss1 ss2)", &mut env).unwrap(), Value::T);
+    assert_eq!(eval_str("(eq ss1 ss3)", &mut env).unwrap(), Value::Nil);
+
+    assert_eq!(eval_str("(eq (vlax-ename->vla-object e1) (vlax-ename->vla-object e1))", &mut env).unwrap(), Value::T);
+    assert_eq!(eval_str("(eq (vlax-ename->vla-object e1) (vlax-ename->vla-object e2))", &mut env).unwrap(), Value::Nil);
+    assert_eq!(eval_str("(eq e1 (vlax-ename->vla-object e1))", &mut env).unwrap(), Value::Nil);
+}
