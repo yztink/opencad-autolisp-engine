@@ -84,6 +84,12 @@ cargo run -p lisp-cli -- path/to/script.lsp
 
 ---
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for pull request guidelines, repository boundaries, CAD conventions, and testing expectations. AI coding tools should also follow [AGENTS.md](AGENTS.md).
+
+---
+
 ## License
 
 GNU General Public License v3.0 (GPL-3.0-only).

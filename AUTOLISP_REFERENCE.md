@@ -682,7 +682,7 @@ This reference documents every built-in function, special form, CAD bridge opera
 
 ---
 
-## 8. Clipboard & DOSLib Extensions
+## 8. Clipboard & Utility Extensions
 
 ### `get_clipboard` / `dos_getclipboard`
 - **Syntax**: `(get_clipboard)` or `(dos_getclipboard)`
