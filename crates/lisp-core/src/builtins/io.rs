@@ -54,7 +54,7 @@ pub fn register(env: &mut Env) {
 
     env.def_subr("PRINC", |args, _| {
         if args.is_empty() {
-            return Ok(Value::Nil);
+            return Ok(Value::quiet_symbol());
         }
         if args.len() > 2 {
             return Err(LispError::WrongArgCount { expected: "1 or 2", actual: args.len() });
@@ -90,7 +90,7 @@ pub fn register(env: &mut Env) {
 
     env.def_subr("PRIN1", |args, _| {
         if args.is_empty() {
-            return Ok(Value::Str(String::new()));
+            return Ok(Value::quiet_symbol());
         }
         if args.len() > 2 {
             return Err(LispError::WrongArgCount { expected: "1 or 2", actual: args.len() });
@@ -125,8 +125,12 @@ pub fn register(env: &mut Env) {
     });
 
     env.def_subr("PRINT", |args, _| {
-        if args.is_empty() || args.len() > 2 {
-            return Err(LispError::WrongArgCount { expected: "1 or 2", actual: args.len() });
+        if args.is_empty() {
+            crate::write_output("\n");
+            return Ok(Value::quiet_symbol());
+        }
+        if args.len() > 2 {
+            return Err(LispError::WrongArgCount { expected: "0, 1, or 2", actual: args.len() });
         }
         let val = &args[0];
         let text = match val {

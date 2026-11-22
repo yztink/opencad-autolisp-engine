@@ -411,4 +411,19 @@ mod tests {
             );
         }
     }
+
+    #[test]
+    fn princ_quiet_symbol_is_distinct_from_nil() {
+        let mut env = create_default_env();
+        let q = eq_of("(princ)", &mut env);
+        assert!(q.is_quiet_symbol());
+        assert_eq!(eq_of("(type (princ))", &mut env), Value::Sym(Symbol::new("SYM")));
+        assert_eq!(eq_of("(vl-symbol-name (princ))", &mut env), Value::Str(String::new()));
+        assert_eq_nil("(null (princ))", &mut env);
+        assert_eq_nil("(eq (princ) nil)", &mut env);
+        assert_eq_t("(eq (princ) (princ))", &mut env);
+        assert_eq_t("(eq (princ) (prin1))", &mut env);
+        assert!(eq_of("(prin1)", &mut env).is_quiet_symbol());
+        assert!(eq_of("(print)", &mut env).is_quiet_symbol());
+    }
 }

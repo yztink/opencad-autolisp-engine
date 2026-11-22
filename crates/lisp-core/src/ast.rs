@@ -182,6 +182,17 @@ impl Value {
         matches!(self, Value::Nil)
     }
 
+    /// Empty-name symbol returned by 0-argument `(princ)`, `(prin1)`, and `(print)`
+    /// for quiet command/script exits (distinct from `nil` per standard AutoLISP).
+    pub fn quiet_symbol() -> Self {
+        Value::Sym(Symbol(String::new()))
+    }
+
+    /// Returns `true` if this value is the empty-name quiet symbol.
+    pub fn is_quiet_symbol(&self) -> bool {
+        matches!(self, Value::Sym(s) if s.as_str().is_empty())
+    }
+
     pub fn car(&self) -> Value {
         match self {
             Value::Cons(c) => c.borrow().car.clone(),

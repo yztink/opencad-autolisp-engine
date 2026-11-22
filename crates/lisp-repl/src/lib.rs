@@ -1,7 +1,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use lisp_core::{create_default_env, eval_str, Env, Value};
+use lisp_core::{create_default_env, eval_str, Env};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -57,10 +57,10 @@ impl ReplSession {
 
             match eval_str(&full_code, &mut self.env) {
                 Ok(val) => {
-                    let out = if val != Value::Nil {
-                        Some(format!("{}", val))
+                    let out = if val.is_quiet_symbol() {
+                        None
                     } else {
-                        Some("nil".to_string())
+                        Some(format!("{}", val))
                     };
                     (
                         ReplInputStatus::Complete,
@@ -192,5 +192,18 @@ mod tests {
         let (status2, out2) = session.feed_line("      (+ 10 20))");
         assert!(matches!(status2, ReplInputStatus::Complete));
         assert_eq!(out2.unwrap().result.unwrap(), "30");
+    }
+
+    #[test]
+    fn test_repl_prints_nil_and_suppresses_quiet_princ() {
+        let mut session = ReplSession::new();
+        let (_, out_nil) = session.feed_line("(eq 1 2)");
+        assert_eq!(out_nil.unwrap().result.as_deref(), Some("nil"));
+
+        let (_, out_t) = session.feed_line("(eq \"test\" \"test\")");
+        assert_eq!(out_t.unwrap().result.as_deref(), Some("T"));
+
+        let (_, out_quiet) = session.feed_line("(princ)");
+        assert_eq!(out_quiet.unwrap().result, None);
     }
 }
