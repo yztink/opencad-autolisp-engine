@@ -567,7 +567,7 @@ fn pair(key: &str, val: Value) -> Value {
 
 /// Register all OpenCAD GUI functions into the Lisp environment.
 pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
-    // ── 1. Traditional MSGBOX / DOS_MSGBOX (Legacy CAD compatible) ────────────
+    // ── 1. Traditional MSGBOX ───────────────────────────────────────────────
     let b = bridge.clone();
     let msgbox_fn = move |args: &[Value], _env: &mut _| -> Result<Value, LispError> {
         if args.is_empty() || args.len() > 4 {
@@ -611,12 +611,11 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         Ok(Value::Int(code as i64))
     };
 
-    env.def_subr("MSGBOX", msgbox_fn.clone());
-    env.def_subr("DOS_MSGBOX", msgbox_fn);
+    env.def_subr("MSGBOX", msgbox_fn);
 
-    // ── 2. Enhanced (OCA-msgbox prompt [title] [buttons-arg]) ──────────────────
+    // ── 2. Enhanced (OC-msgbox prompt [title] [buttons-arg]) ──────────────────
     let b = bridge.clone();
-    env.def_subr("OCA-MSGBOX", move |args, _| {
+    env.def_subr("OC-MSGBOX", move |args, _| {
         if args.is_empty() || args.len() > 3 {
             return Err(LispError::WrongArgCount {
                 expected: "1 to 3 (prompt [title] [buttons-arg])",
@@ -710,8 +709,8 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
 
     // ── 3. Dialog and Control Constructors ─────────────────────────────────────
 
-    // (OCA-row [options] ctrl1 ctrl2 ...)
-    env.def_subr("OCA-ROW", |args, _| {
+    // (OC-row [options] ctrl1 ctrl2 ...)
+    env.def_subr("OC-ROW", |args, _| {
         let mut align_h_val = Value::Nil;
         let mut align_v_val = Value::Nil;
         let mut controls_slice = args;
@@ -749,8 +748,8 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         Ok(Value::from_slice(&items))
     });
 
-    // (OCA-column [options] ctrl1 ctrl2 ...)
-    env.def_subr("OCA-COLUMN", |args, _| {
+    // (OC-column [options] ctrl1 ctrl2 ...)
+    env.def_subr("OC-COLUMN", |args, _| {
         let mut align_h_val = Value::Nil;
         let mut align_v_val = Value::Nil;
         let mut controls_slice = args;
@@ -788,8 +787,8 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         Ok(Value::from_slice(&items))
     });
 
-    // (OCA-text id label [default])
-    env.def_subr("OCA-TEXT", |args, _| {
+    // (OC-text id label [default])
+    env.def_subr("OC-TEXT", |args, _| {
         if args.len() < 2 || args.len() > 3 {
             return Err(LispError::WrongArgCount {
                 expected: "2 or 3 (id label [default])",
@@ -814,8 +813,8 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         ]))
     });
 
-    // (OCA-number id label [default_or_opts] [opts])
-    env.def_subr("OCA-NUMBER", |args, _| {
+    // (OC-number id label [default_or_opts] [opts])
+    env.def_subr("OC-NUMBER", |args, _| {
         if args.len() < 2 || args.len() > 4 {
             return Err(LispError::WrongArgCount {
                 expected: "2 to 4 (id label [default|options] [options])",
@@ -882,8 +881,8 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         Ok(Value::from_slice(&items))
     });
 
-    // (OCA-checkbox id label [default-bool] [opts])
-    env.def_subr("OCA-CHECKBOX", |args, _| {
+    // (OC-checkbox id label [default-bool] [opts])
+    env.def_subr("OC-CHECKBOX", |args, _| {
         if args.len() < 2 || args.len() > 4 {
             return Err(LispError::WrongArgCount {
                 expected: "2, 3, or 4 (id label [default] [opts])",
@@ -926,8 +925,8 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         Ok(Value::from_slice(&items))
     });
 
-    // (OCA-choice id label options-list [default_or_opts])
-    env.def_subr("OCA-CHOICE", |args, _| {
+    // (OC-choice id label options-list [default_or_opts])
+    env.def_subr("OC-CHOICE", |args, _| {
         if args.len() < 3 || args.len() > 4 {
             return Err(LispError::WrongArgCount {
                 expected: "3 or 4 (id label options [default|options])",
@@ -960,8 +959,8 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         ]))
     });
 
-    // (OCA-color id label [default_rgb])
-    env.def_subr("OCA-COLOR", |args, _| {
+    // (OC-color id label [default_rgb])
+    env.def_subr("OC-COLOR", |args, _| {
         if args.len() < 2 || args.len() > 3 {
             return Err(LispError::WrongArgCount {
                 expected: "2 or 3 (id label [default-rgb])",
@@ -986,8 +985,8 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         ]))
     });
 
-    // (OCA-file id label [default_path] [options])
-    env.def_subr("OCA-FILE", |args, _| {
+    // (OC-file id label [default_path] [options])
+    env.def_subr("OC-FILE", |args, _| {
         if args.len() < 2 || args.len() > 4 {
             return Err(LispError::WrongArgCount {
                 expected: "2 to 4 (id label [default-path] [options])",
@@ -1043,8 +1042,8 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         ]))
     });
 
-    // (OCA-table id label headers [rows] [options])
-    env.def_subr("OCA-TABLE", |args, _| {
+    // (OC-table id label headers [rows] [options])
+    env.def_subr("OC-TABLE", |args, _| {
         if args.len() < 3 || args.len() > 5 {
             return Err(LispError::WrongArgCount {
                 expected: "3 to 5 (id label headers [rows] [options])",
@@ -1097,8 +1096,8 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         ]))
     });
 
-    // (OCA-fields [id] title [options] ctrl1 ctrl2 ...)
-    env.def_subr("OCA-FIELDS", |args, _| {
+    // (OC-fields [id] title [options] ctrl1 ctrl2 ...)
+    env.def_subr("OC-FIELDS", |args, _| {
         if args.is_empty() {
             return Err(LispError::WrongArgCount {
                 expected: "at least 1 (title [options] ctrl1 ...)",
@@ -1139,8 +1138,8 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         ]))
     });
 
-    // (OCA-button id label [action_or_opts] [opts])
-    env.def_subr("OCA-BUTTON", |args, _| {
+    // (OC-button id label [action_or_opts] [opts])
+    env.def_subr("OC-BUTTON", |args, _| {
         if args.len() < 2 || args.len() > 4 {
             return Err(LispError::WrongArgCount {
                 expected: "2 to 4 (id label [action|options] [options])",
@@ -1188,8 +1187,8 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         Ok(Value::from_slice(&items))
     });
 
-    // (OCA-info [id] text [options])
-    env.def_subr("OCA-INFO", |args, _| {
+    // (OC-info [id] text [options])
+    env.def_subr("OC-INFO", |args, _| {
         if args.is_empty() || args.len() > 3 {
             return Err(LispError::WrongArgCount {
                 expected: "1 to 3 ([id] text [options])",
@@ -1229,8 +1228,8 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         Ok(Value::from_slice(&items))
     });
 
-    // (OCA-label [id] text [options]) or (OCA-label id label text [options])
-    env.def_subr("OCA-LABEL", |args, _| {
+    // (OC-label [id] text [options]) or (OC-label id label text [options])
+    env.def_subr("OC-LABEL", |args, _| {
         if args.is_empty() || args.len() > 4 {
             return Err(LispError::WrongArgCount {
                 expected: "1 to 4 ([id] text [options] or id label text [options])",
@@ -1282,8 +1281,8 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         Ok(Value::from_slice(&items))
     });
 
-    // (OCA-dialog title [options] row1 row2 ...)
-    env.def_subr("OCA-DIALOG", |args, _| {
+    // (OC-dialog title [options] row1 row2 ...)
+    env.def_subr("OC-DIALOG", |args, _| {
         if args.is_empty() {
             return Err(LispError::WrongArgCount {
                 expected: "at least 1 (title [options] row1 ...)",
@@ -1326,9 +1325,9 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         ]))
     });
 
-    // ── 4. Dialog Display: (OCA-dialog-show dlg [action_callback]) ─────────────
+    // ── 4. Dialog Display: (OC-dialog-show dlg [action_callback]) ─────────────
     let b = bridge.clone();
-    env.def_subr("OCA-DIALOG-SHOW", move |args, env_rc| {
+    env.def_subr("OC-DIALOG-SHOW", move |args, env_rc| {
         if args.is_empty() || args.len() > 2 {
             return Err(LispError::WrongArgCount {
                 expected: "1 or 2 (dialog-def [action_callback])",
@@ -1397,8 +1396,8 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
 
     // ── 5. Association-List Query Helpers ─────────────────────────────────────
 
-    // (OCA-get key alist)
-    env.def_subr("OCA-GET", |args, _| {
+    // (OC-get key alist)
+    env.def_subr("OC-GET", |args, _| {
         if args.len() != 2 {
             return Err(LispError::WrongArgCount {
                 expected: "2 (key alist)",
@@ -1414,8 +1413,8 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         Ok(lookup_alist(&key_str, &args[1]).unwrap_or(Value::Nil))
     });
 
-    // (OCA-get-int key alist)
-    env.def_subr("OCA-GET-INT", |args, _| {
+    // (OC-get-int key alist)
+    env.def_subr("OC-GET-INT", |args, _| {
         if args.len() != 2 {
             return Err(LispError::WrongArgCount {
                 expected: "2 (key alist)",
@@ -1443,8 +1442,8 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         }
     });
 
-    // (OCA-get-real key alist)
-    env.def_subr("OCA-GET-REAL", |args, _| {
+    // (OC-get-real key alist)
+    env.def_subr("OC-GET-REAL", |args, _| {
         if args.len() != 2 {
             return Err(LispError::WrongArgCount {
                 expected: "2 (key alist)",
@@ -1470,8 +1469,8 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         }
     });
 
-    // (OCA-get-str key alist)
-    env.def_subr("OCA-GET-STR", |args, _| {
+    // (OC-get-str key alist)
+    env.def_subr("OC-GET-STR", |args, _| {
         if args.len() != 2 {
             return Err(LispError::WrongArgCount {
                 expected: "2 (key alist)",
@@ -1493,8 +1492,8 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         }
     });
 
-    // (OCA-get-bool key alist)
-    env.def_subr("OCA-GET-BOOL", |args, _| {
+    // (OC-get-bool key alist)
+    env.def_subr("OC-GET-BOOL", |args, _| {
         if args.len() != 2 {
             return Err(LispError::WrongArgCount {
                 expected: "2 (key alist)",
@@ -1525,11 +1524,11 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         }
     });
 
-    // ── 6. Dockable Side Panels: (OCA-panel-*) ─────────────────────────────────
+    // ── 6. Dockable Side Panels: (OC-panel-*) ─────────────────────────────────
 
-    // (OCA-panel-register id title [options] ctrl1 ctrl2 ...)
+    // (OC-panel-register id title [options] ctrl1 ctrl2 ...)
     let b = bridge.clone();
-    env.def_subr("OCA-PANEL-REGISTER", move |args, _| {
+    env.def_subr("OC-PANEL-REGISTER", move |args, _| {
         if args.len() < 2 {
             return Err(LispError::WrongArgCount {
                 expected: "at least 2 (id title [options] ctrl1 ...)",
@@ -1577,9 +1576,9 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         Ok(if ok { Value::T } else { Value::Nil })
     });
 
-    // (OCA-panel-update id alist)
+    // (OC-panel-update id alist)
     let b = bridge.clone();
-    env.def_subr("OCA-PANEL-UPDATE", move |args, _| {
+    env.def_subr("OC-PANEL-UPDATE", move |args, _| {
         if args.len() != 2 {
             return Err(LispError::WrongArgCount {
                 expected: "2 (id alist)",
@@ -1611,9 +1610,9 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         Ok(if ok { Value::T } else { Value::Nil })
     });
 
-    // (OCA-panel-toggle id [show])
+    // (OC-panel-toggle id [show])
     let b = bridge.clone();
-    env.def_subr("OCA-PANEL-TOGGLE", move |args, _| {
+    env.def_subr("OC-PANEL-TOGGLE", move |args, _| {
         if args.is_empty() || args.len() > 2 {
             return Err(LispError::WrongArgCount {
                 expected: "1 or 2 (id [show])",
@@ -1634,9 +1633,9 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         Ok(if ok { Value::T } else { Value::Nil })
     });
 
-    // (OCA-panel-get panel-id control-id)
+    // (OC-panel-get panel-id control-id)
     let b = bridge.clone();
-    env.def_subr("OCA-PANEL-GET", move |args, _| {
+    env.def_subr("OC-PANEL-GET", move |args, _| {
         if args.len() != 2 {
             return Err(LispError::WrongArgCount {
                 expected: "2 (panel-id control-id)",
@@ -1657,9 +1656,9 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         Ok(Value::Nil)
     });
 
-    // (OCA-panel-get-bool panel-id control-id)
+    // (OC-panel-get-bool panel-id control-id)
     let b = bridge.clone();
-    env.def_subr("OCA-PANEL-GET-BOOL", move |args, _| {
+    env.def_subr("OC-PANEL-GET-BOOL", move |args, _| {
         if args.len() != 2 {
             return Err(LispError::WrongArgCount {
                 expected: "2 (panel-id control-id)",
@@ -1683,9 +1682,9 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         Ok(Value::Nil)
     });
 
-    // (OCA-panel-get-str panel-id control-id)
+    // (OC-panel-get-str panel-id control-id)
     let b = bridge.clone();
-    env.def_subr("OCA-PANEL-GET-STR", move |args, _| {
+    env.def_subr("OC-PANEL-GET-STR", move |args, _| {
         if args.len() != 2 {
             return Err(LispError::WrongArgCount {
                 expected: "2 (panel-id control-id)",
@@ -1711,7 +1710,7 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         Ok(Value::Str(String::new()))
     });
 
-    // (OCA-panel-get-real panel-id control-id) / (OCA-panel-get-num panel-id control-id)
+    // (OC-panel-get-real panel-id control-id) / (OC-panel-get-num panel-id control-id)
     let b = bridge.clone();
     let num_fn = move |args: &[Value], _env: &mut _| -> Result<Value, LispError> {
         if args.len() != 2 {
@@ -1737,7 +1736,7 @@ pub fn register_ui_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         }
         Ok(Value::Real(0.0))
     };
-    env.def_subr("OCA-PANEL-GET-REAL", num_fn.clone());
-    env.def_subr("OCA-PANEL-GET-NUM", num_fn);
+    env.def_subr("OC-PANEL-GET-REAL", num_fn.clone());
+    env.def_subr("OC-PANEL-GET-NUM", num_fn);
 }
 

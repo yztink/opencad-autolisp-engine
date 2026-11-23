@@ -455,7 +455,7 @@ pub fn register(env: &mut Env) {
         let test_on_seg = if args.len() == 5 {
             args[4].is_truthy()
         } else {
-            true // AutoLISP default: nil means infinite lines, non-nil or omitted means bounded segments
+            true // OpenCAD LISP default: nil means infinite lines, non-nil or omitted means bounded segments
         };
 
         // 2D line intersection: line 1 = pt1->pt2, line 2 = pt3->pt4

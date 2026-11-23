@@ -63,7 +63,7 @@ fn test_audit_function_inventory() {
         ("CAD Command & System", &[
             "COMMAND", "ALERT", "VER", "VL-VERSION"
         ]),
-        ("Visual LISP Extensions (vl-*)", &[
+        ("LISP Extensions (vl-*)", &[
             "VL-LOAD-COM", "VL-STRING-TRIM", "VL-STRING-LEFT-TRIM", "VL-STRING-RIGHT-TRIM", "VL-STRING-SEARCH",
             "VL-STRING-SUBST", "VL-STRING-TRANSLATE", "VL-STRING->LIST", "VL-LIST->STRING",
             "VL-LIST-EXPORT", "VL-LIST-LENGTH", "VL-SORT", "VL-SORT-I", "VL-EVERY", "VL-SOME",
@@ -72,7 +72,7 @@ fn test_audit_function_inventory() {
             "VL-FILENAME-BASE", "VL-FILENAME-DIRECTORY", "VL-FILENAME-EXTENSION",
             "VL-FILE-COPY", "VL-FILE-DELETE", "VL-FILE-RENAME", "VL-FILE-SIZE", "VL-FILE-SYSTIME", "VL-DIRECTORY-FILES"
         ]),
-        ("ActiveX & Object Extensions (vlax-*)", &[
+        ("Object Model Extensions (vlax-*)", &[
             "VLAX-ENAME->VLA-OBJECT", "VLAX-VLA-OBJECT->ENAME", "VLAX-GET-PROPERTY", "VLAX-PUT-PROPERTY",
             "VLAX-GET", "VLAX-PUT", "VLAX-INVOKE", "VLAX-INVOKE-METHOD",
             "VLAX-LDATA-GET", "VLAX-LDATA-PUT", "VLAX-LDATA-DELETE", "VLAX-LDATA-LIST",
@@ -83,7 +83,7 @@ fn test_audit_function_inventory() {
     ];
 
     println!("\n========================================================");
-    println!("     AUTOLISP & VISUAL LISP CONFORMANCE AUDIT REPORT     ");
+    println!("          OPENCAD LISP CONFORMANCE AUDIT REPORT         ");
     println!("========================================================");
 
     let mut total_funcs = 0;

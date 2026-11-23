@@ -50,7 +50,7 @@ pub enum LispError {
     UserExit,
 }
 
-/// Represents a single user-function (`defun` / `lambda`) frame in an AutoLISP call stack.
+/// Represents a single user-function (`defun` / `lambda`) frame in an OpenCAD LISP call stack.
 #[derive(Debug, Clone, PartialEq)]
 pub struct ErrorFrame {
     pub func_name: String,
@@ -58,7 +58,7 @@ pub struct ErrorFrame {
     pub defun_source: String,
 }
 
-/// Rich diagnostic context captured when an AutoLISP error occurs.
+/// Rich diagnostic context captured when an OpenCAD LISP error occurs.
 #[derive(Debug, Clone, PartialEq)]
 pub struct ErrorDiagnostic {
     pub error: LispError,
@@ -314,7 +314,7 @@ pub fn is_function_traced(name: &str) -> bool {
     })
 }
 
-/// Stepping mode for the AutoLISP S-expression debugger.
+/// Stepping mode for the OpenCAD LISP S-expression debugger.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum DebugStepMode {
     #[default]

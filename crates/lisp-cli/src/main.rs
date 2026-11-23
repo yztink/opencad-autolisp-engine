@@ -28,7 +28,7 @@ fn main() {
                         }
                     }
                     Err(err) => {
-                        eprintln!("AutoLISP Error: {}", err);
+                        eprintln!("OpenCAD LISP Error: {}", err);
                         process::exit(1);
                     }
                 }
@@ -45,8 +45,8 @@ fn main() {
 }
 
 fn run_repl() {
-    println!("OpenCAD AutoLISP Engine (Rust) v0.1.0");
-    println!("Type AutoLISP expressions to evaluate. Multiline parentheses are balanced automatically.\nType 'quit' or 'exit' to exit.\n");
+    println!("OpenCAD LISP Engine (Rust) v0.1.0");
+    println!("Type OpenCAD LISP expressions to evaluate. Multiline parentheses are balanced automatically.\nType 'quit' or 'exit' to exit.\n");
 
     let mut session = ReplSession::new();
     let stdin = io::stdin();

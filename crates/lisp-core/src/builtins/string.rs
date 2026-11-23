@@ -30,7 +30,7 @@ pub fn register(env: &mut Env) {
             Value::Str(s) => s,
             other => return Err(LispError::TypeError { expected: "string", actual: other.to_string() }),
         };
-        // AutoLISP substr is 1-indexed!
+        // OpenCAD LISP substr is 1-indexed!
         let start_1based = match &args[1] {
             Value::Int(n) => *n,
             other => return Err(LispError::TypeError { expected: "integer start", actual: other.to_string() }),
@@ -234,7 +234,7 @@ pub fn register(env: &mut Env) {
     });
 }
 
-/// Wildcard matching for AutoLISP `wcmatch` patterns (*, ?, etc.)
+/// Wildcard matching for OpenCAD LISP `wcmatch` patterns (*, ?, etc.)
 pub(crate) fn wcmatch(text: &str, pattern: &str) -> bool {
     let patterns = pattern.split(',');
     for pat in patterns {

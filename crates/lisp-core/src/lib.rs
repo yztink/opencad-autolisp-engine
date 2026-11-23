@@ -20,7 +20,7 @@ pub use eval::{apply, apply_with_depth, eval, eval_with_depth, MAX_CALL_DEPTH};
 pub use lexer::{tokenize, tokenize_spanned, Span, SpannedToken, Token};
 pub use parser::{parse, parse_one};
 
-/// Creates a standard AutoLISP environment loaded with all core and Visual LISP built-ins.
+/// Creates a standard OpenCAD LISP environment loaded with all core and extended LISP built-ins.
 pub fn create_default_env() -> Rc<RefCell<Env>> {
     let env = Env::new();
     builtins::register_all(&mut env.borrow_mut());
@@ -34,7 +34,7 @@ thread_local! {
     static IN_ERROR_HANDLER: Cell<bool> = const { Cell::new(false) };
 }
 
-/// Set a global hook for AutoLISP standard output functions (`princ`, `prin1`, `print`, `prompt`, `write-line`).
+/// Set a global hook for OpenCAD LISP standard output functions (`princ`, `prin1`, `print`, `prompt`, `write-line`).
 /// When None (the default), output is written to `std::io::stdout()`.
 pub fn set_output_sink(sink: Option<OutputSink>) {
     *OUTPUT_SINK.lock().unwrap() = sink;
@@ -53,7 +53,7 @@ pub fn write_output(s: &str) {
     let _ = std::io::stdout().flush();
 }
 
-/// Parses and evaluates an AutoLISP source string in the given environment.
+/// Parses and evaluates an OpenCAD LISP source string in the given environment.
 /// Automatically executes the user-defined `*error*` handler if an evaluation error occurs.
 pub fn eval_str(source: &str, env: &mut Rc<RefCell<Env>>) -> Result<Value, LispError> {
     error::clear_unwind_state();
@@ -105,7 +105,7 @@ pub fn eval_str(source: &str, env: &mut Rc<RefCell<Env>>) -> Result<Value, LispE
     Ok(last_val)
 }
 
-/// Parses and evaluates an AutoLISP source string without attaching source spans to top-level expressions.
+/// Parses and evaluates an OpenCAD LISP source string without attaching source spans to top-level expressions.
 /// Useful for synthetic command wrappers like `(c:mycmd)` so they do not trigger `(1, 1)` breakpoints,
 /// while preserving all spans inside the user functions they invoke.
 pub fn eval_str_unspanned(source: &str, env: &mut Rc<RefCell<Env>>) -> Result<Value, LispError> {
@@ -190,7 +190,7 @@ mod tests {
         "#;
         let res = eval_str(code, &mut env).unwrap();
         assert_eq!(res, Value::Int(49));
-        // Ensure local `sum` is not leaked to global scope (evaluates to nil in AutoLISP)
+        // Ensure local `sum` is not leaked to global scope (evaluates to nil in OpenCAD LISP)
         assert_eq!(eval_str("sum", &mut env).unwrap(), Value::Nil);
     }
 
@@ -223,7 +223,7 @@ mod tests {
     fn test_vl_string_and_sort() {
         let mut env = create_default_env();
         let code = r#"
-            (vl-string-subst "OpenCAD" "AutoLISP" "AutoLISP is great")
+            (vl-string-subst "OpenCAD" "LISP" "LISP is great")
         "#;
         let res = eval_str(code, &mut env).unwrap();
         assert_eq!(res, Value::Str("OpenCAD is great".into()));
@@ -256,7 +256,7 @@ mod tests {
         let write_code = format!(
             r#"
             (setq f (open "{}" "w"))
-            (write-line "Line 1: Hello from AutoLISP" f)
+            (write-line "Line 1: Hello from OpenCAD LISP" f)
             (write-line "Line 2: 12345" f)
             (close f)
         "#,
@@ -276,7 +276,7 @@ mod tests {
         );
         let res = eval_str(&read_code, &mut env).unwrap();
         let expected = Value::from_slice(&[
-            Value::Str("Line 1: Hello from AutoLISP".into()),
+            Value::Str("Line 1: Hello from OpenCAD LISP".into()),
             Value::Str("Line 2: 12345".into()),
         ]);
         assert_eq!(res, expected);

@@ -1,5 +1,5 @@
-//! Comprehensive conformance and gap-analysis test suite for all AutoLISP built-in functions,
-//! special forms, Visual LISP (VL), ActiveX (VLAX), and OpenCAD Lisp (OCL) extensions.
+//! Comprehensive conformance and gap-analysis test suite for all OpenCAD LISP built-in functions,
+//! special forms, LISP extensions (VL), Object Model (VLAX), and OpenCAD UI extensions.
 
 use std::sync::{Arc, Mutex};
 use lisp_cad::{create_cad_env, MockCadBridge};
@@ -57,7 +57,7 @@ where
 }
 
 #[test]
-fn test_all_autolisp_builtins_suite() {
+fn test_all_opencad_lisp_builtins_suite() {
     let mut results: Vec<TestResult> = Vec::new();
 
     // ── 1. Core Evaluation, Scope & Control Flow ────────────────────────────
@@ -178,7 +178,7 @@ fn test_all_autolisp_builtins_suite() {
         eval_str("(strcat \"Open\" \"CAD\" \"Studio\")", env).map(|v| v == Value::Str("OpenCADStudio".into())).map_err(|e| format!("{:?}", e))
     });
     check(&mut results, "String", "strlen", "String character length", |env| {
-        eval_str("(strlen \"AutoLISP\")", env).map(|v| v == Value::Int(8)).map_err(|e| format!("{:?}", e))
+        eval_str("(strlen \"OpenCADLISP\")", env).map(|v| v == Value::Int(11)).map_err(|e| format!("{:?}", e))
     });
     check(&mut results, "String", "substr", "Substring with 1-based index and length", |env| {
         eval_str("(and (= (substr \"OpenCAD\" 1 4) \"Open\") (= (substr \"OpenCAD\" 5) \"CAD\"))", env)
@@ -387,7 +387,7 @@ fn test_all_autolisp_builtins_suite() {
             .map(|v| v != Value::Nil).map_err(|e| format!("{:?}", e))
     });
 
-    // ── 10. Visual LISP Extensions (VL-*) ───────────────────────────────────
+    // ── 10. LISP Extensions (VL-*) ──────────────────────────────────────────
     check(&mut results, "VL", "vl-consp", "Cons pair predicate", |env| {
         eval_str("(and (vl-consp '(1 . 2)) (vl-consp '(1 2 3)) (not (vl-consp nil)))", env)
             .map(|v| v != Value::Nil).map_err(|e| format!("{:?}", e))
@@ -412,30 +412,30 @@ fn test_all_autolisp_builtins_suite() {
         eval_str(code, env).map(|v| v != Value::Nil).map_err(|e| format!("{:?}", e))
     });
 
-    // ── 11. OpenCAD Studio GUI Extensions (OCL-*) ───────────────────────────
-    check(&mut results, "GUI", "ocl-dialog", "Define dialog layout", |env| {
+    // ── 11. OpenCAD Studio GUI Extensions (OC-*) ────────────────────────────
+    check(&mut results, "GUI", "oc-dialog", "Define dialog layout", |env| {
         let code = r#"
-            (ocl-dialog "test_dlg" "Test Dialog"
-                (ocl-row
-                    (ocl-text "lbl" "Label")
-                    (ocl-button "btn" "Click" nil)))
+            (oc-dialog "Test Dialog"
+                (oc-row
+                    (oc-text "lbl" "Label")
+                    (oc-button "btn" "Click" nil)))
         "#;
         eval_str(code, env).map(|v| v != Value::Nil).map_err(|e| format!("{:?}", e))
     });
-    check(&mut results, "GUI", "ocl-panel-register", "Register dockable side panel", |env| {
+    check(&mut results, "GUI", "oc-panel-register", "Register dockable side panel", |env| {
         let code = r#"
-            (ocl-panel-register "pnl" "My Panel"
-                (ocl-checkbox "chk" "Option" T)
-                (ocl-choice "ch" "Color" '("Red" "Green") "Red"))
+            (oc-panel-register "pnl" "My Panel"
+                (oc-checkbox "chk" "Option" T)
+                (oc-choice "ch" "Color" '("Red" "Green") "Red"))
         "#;
         eval_str(code, env).map(|v| v != Value::Nil).map_err(|e| format!("{:?}", e))
     });
-    check(&mut results, "GUI", "ocl-panel-get", "Read panel state value", |env| {
-        eval_str("(ocl-panel-get \"pnl\" \"chk\")", env).map(|v| v != Value::Nil).map_err(|e| format!("{:?}", e))
+    check(&mut results, "GUI", "oc-panel-get", "Read panel state value", |env| {
+        eval_str("(oc-panel-get \"pnl\" \"chk\")", env).map(|v| v != Value::Nil).map_err(|e| format!("{:?}", e))
     });
 
     // Print consolidated summary for reporting
-    println!("\n=================== AUTOLISP BUILT-INS CONFORMANCE REPORT ===================");
+    println!("\n================= OPENCAD LISP BUILT-INS CONFORMANCE REPORT =================");
     let mut pass = 0;
     let mut fail = 0;
     let mut missing = 0;

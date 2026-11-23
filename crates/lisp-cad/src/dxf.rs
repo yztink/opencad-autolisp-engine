@@ -2,7 +2,7 @@ use lisp_core::{LispError, Value};
 
 use crate::bridge::DxfValue;
 
-/// Converts internal DXF records into an AutoLISP DXF association list:
+/// Converts internal DXF records into an OpenCAD LISP DXF association list:
 /// `((0 . "LINE") (8 . "0") (10 0.0 0.0 0.0) ...)`
 pub fn dxf_to_lisp(records: &[(i16, DxfValue)]) -> Value {
     let mut pairs = Vec::with_capacity(records.len());
@@ -11,7 +11,7 @@ pub fn dxf_to_lisp(records: &[(i16, DxfValue)]) -> Value {
         let code_val = Value::Int(*code as i64);
         match val {
             DxfValue::Point(pt) => {
-                // Points in AutoLISP DXF are lists: (10 x y z)
+                // Points in OpenCAD LISP DXF are lists: (10 x y z)
                 let item = Value::from_slice(&[
                     code_val,
                     Value::Real(pt[0]),
@@ -74,7 +74,7 @@ pub fn dxf_to_lisp(records: &[(i16, DxfValue)]) -> Value {
     Value::from_slice(&pairs)
 }
 
-/// Parses an AutoLISP DXF association list back into internal DXF records.
+/// Parses an OpenCAD LISP DXF association list back into internal DXF records.
 pub fn lisp_to_dxf(val: &Value) -> Result<Vec<(i16, DxfValue)>, LispError> {
     let items = val.to_vec().ok_or_else(|| {
         LispError::TypeError {

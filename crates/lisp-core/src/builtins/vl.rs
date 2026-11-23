@@ -5,7 +5,7 @@ use crate::env::Env;
 use crate::error::LispError;
 
 pub fn register(env: &mut Env) {
-    // ── Visual LISP String Utilities ──────────────────────────────────────────
+    // ── Extended LISP String Utilities ────────────────────────────────────────
 
     env.def_subr("VL-STRING-SEARCH", |args, _| {
         if args.len() < 2 || args.len() > 3 {
@@ -210,7 +210,7 @@ pub fn register(env: &mut Env) {
         }
     });
 
-    // ── Visual LISP List Utilities ───────────────────────────────────────────
+    // ── Extended LISP List Utilities ─────────────────────────────────────────
 
     env.def_subr("VL-REMOVE", |args, _| {
         if args.len() != 2 { return Err(LispError::WrongArgCount { expected: "2", actual: args.len() }); }
@@ -443,7 +443,7 @@ pub fn register(env: &mut Env) {
         Ok(Value::Nil)
     });
 
-    // ── Visual LISP File & Path Utilities ────────────────────────────────────
+    // ── Extended LISP File & Path Utilities ──────────────────────────────────
 
     env.def_subr("VL-FILENAME-BASE", |args, _| {
         if args.len() != 1 { return Err(LispError::WrongArgCount { expected: "1", actual: args.len() }); }
@@ -611,7 +611,7 @@ pub fn register(env: &mut Env) {
         Ok(Value::from_slice(&results))
     });
 
-    // ── Visual LISP Catch-All Error Handling ─────────────────────────────────
+    // ── Extended LISP Catch-All Error Handling ───────────────────────────────
 
     env.def_subr("VL-CATCH-ALL-APPLY", |args, env_rc| {
         if args.len() != 2 { return Err(LispError::WrongArgCount { expected: "2", actual: args.len() }); }
@@ -672,7 +672,7 @@ pub fn register(env: &mut Env) {
     });
 
     env.def_subr("VL-LOAD-COM", |_args, _| {
-        // Initializes ActiveX/COM support
+        // Initializes object model support
         Ok(Value::T)
     });
 }

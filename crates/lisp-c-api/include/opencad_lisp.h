@@ -16,13 +16,13 @@ typedef struct LispEngine LispEngine;
 typedef int (*LispCmdCallback)(const char* cmd_str);
 
 /**
- * Creates a new AutoLISP engine instance.
+ * Creates a new OpenCAD LISP engine instance.
  * Caller is responsible for destroying it with `lisp_engine_destroy`.
  */
 LispEngine* lisp_engine_create(void);
 
 /**
- * Destroys an AutoLISP engine instance and releases all associated memory.
+ * Destroys an OpenCAD LISP engine instance and releases all associated memory.
  */
 void lisp_engine_destroy(LispEngine* engine);
 
@@ -32,10 +32,10 @@ void lisp_engine_destroy(LispEngine* engine);
 void lisp_engine_set_command_callback(LispEngine* engine, LispCmdCallback callback);
 
 /**
- * Evaluates an AutoLISP code string.
+ * Evaluates an OpenCAD LISP code string.
  *
  * @param engine Pointer to active LispEngine
- * @param code Null-terminated UTF-8 string containing AutoLISP code
+ * @param code Null-terminated UTF-8 string containing OpenCAD LISP code
  * @param out_buf Optional buffer to receive string representation of the result or error
  * @param out_buf_len Size of out_buf in bytes
  * @return 0 on success, -1 on evaluation error, -2 on null parameters

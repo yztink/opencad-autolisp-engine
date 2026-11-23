@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpenCAD Studio AutoLISP Function Reference</title>
+    <title>OpenCAD LISP Function Reference</title>
     <style>
         :root {
             --bg-body: #131418;
@@ -756,7 +756,7 @@
         <div class="sidebar-header">
             <div class="logo-row">
                 <div class="logo-title">
-                    <span>AutoLISP Reference</span>
+                    <span>OpenCAD LISP Reference</span>
                     <span class="cad-badge">v0.2.0</span>
                 </div>
                 <button class="theme-btn" id="theme-toggle" title="Toggle Dark/Light Mode">🌙</button>
@@ -779,19 +779,19 @@
 <option value="cat-5">5. List Manipulation &amp; Higher-Order Functions (13)</option>
 <option value="cat-6">6. String Manipulation &amp; Conversions (10)</option>
 <option value="cat-7">7. Console Output, File I/O &amp; Environment (6)</option>
-<option value="cat-8">8. Clipboard &amp; Utility Extensions (4)</option>
+<option value="cat-8">8. Clipboard &amp; Utility Extensions (3)</option>
 <option value="cat-9">9. CAD Command Execution &amp; System Variables (5)</option>
 <option value="cat-10">10. Entity Manipulation (DXF) (5)</option>
 <option value="cat-11">11. Selection Sets (3)</option>
 <option value="cat-12">12. Interactive User Prompts (4)</option>
-<option value="cat-13">13. OpenCAD Native UI (oca-*) — Dialogs &amp; Dockable Panels (17)</option>
-<option value="cat-14">14. Visual LISP (vl-*) Extensions (21)</option>
-<option value="cat-15">15. ActiveX / VLA (vlax-*) Extensions (12)</option>
+<option value="cat-13">13. OpenCAD Native UI (oc-*) — Dialogs &amp; Dockable Panels (17)</option>
+<option value="cat-14">14. Extended LISP (vl-*) Functions (21)</option>
+<option value="cat-15">15. Object Model / VLA (vlax-*) Extensions (12)</option>
                 </select>
             </div>
             
             <div class="stats-row">
-                <span id="match-stats">Showing 143 of 143 functions</span>
+                <span id="match-stats">Showing 142 of 142 functions</span>
                 <span id="active-cat-label">All</span>
             </div>
         </div>
@@ -884,7 +884,7 @@
             </a>
             
 
-            <a href="#eval" class="nav-item" data-id="eval" data-cat="cat-1" data-search="eval  `(eval expr)` evaluates `expr` a second time as an autolisp expression. ">
+            <a href="#eval" class="nav-item" data-id="eval" data-cat="cat-1" data-search="eval  `(eval expr)` evaluates `expr` a second time as an opencad lisp expression. ">
                 <span class="nav-fn-name">eval</span>
                 
             </a>
@@ -916,7 +916,7 @@
             </a>
             
 
-            <a href="#ver" class="nav-item" data-id="ver" data-cat="cat-2" data-search="ver vl-version lisp-implementation-type `(ver)`, `(vl-version)`, `(lisp-implementation-type)` returns version and implementation strings for the autolisp runtime. ">
+            <a href="#ver" class="nav-item" data-id="ver" data-cat="cat-2" data-search="ver vl-version lisp-implementation-type `(ver)`, `(vl-version)`, `(lisp-implementation-type)` returns version and implementation strings for the opencad lisp runtime. ">
                 <span class="nav-fn-name">ver</span>
                 <span class="sb-alias">+2</span>
             </a>
@@ -1307,7 +1307,7 @@
             </a>
             
 
-            <a href="#load" class="nav-item" data-id="load" data-cat="cat-7" data-search="load  `(load filename [onfailure])` reads and evaluates an autolisp `.lsp` file. automatically appends `.lsp` if omitted. if loading fails and `onfailure` is provided, returns `onfailure`. ">
+            <a href="#load" class="nav-item" data-id="load" data-cat="cat-7" data-search="load  `(load filename [onfailure])` reads and evaluates an opencad lisp `.lsp` file. automatically appends `.lsp` if omitted. if loading fails and `onfailure` is provided, returns `onfailure`. ">
                 <span class="nav-fn-name">load</span>
                 
             </a>
@@ -1326,31 +1326,23 @@
             <div class="nav-cat-header" onclick="toggleNavCategory('cat-8')">
                 <span class="nav-cat-chevron">▼</span>
                 <span class="nav-cat-title">8. Clipboard &amp; Utility Extensions</span>
-                <span class="nav-cat-count" id="count-cat-8">4</span>
+                <span class="nav-cat-count" id="count-cat-8">3</span>
             </div>
             <div class="nav-cat-items" id="items-cat-8">
                 
-            <a href="#get_clipboard" class="nav-item" data-id="get_clipboard" data-cat="cat-8" data-search="get_clipboard dos_getclipboard `(get_clipboard)` or `(dos_getclipboard)` retrieves the current plain-text contents of the system clipboard. ">
+            <a href="#get_clipboard" class="nav-item" data-id="get_clipboard" data-cat="cat-8" data-search="get_clipboard `(get_clipboard)` retrieves the current plain-text contents of the system clipboard. ">
                 <span class="nav-fn-name">get_clipboard</span>
-                <span class="sb-alias">+1</span>
             </a>
             
 
-            <a href="#set_clipboard" class="nav-item" data-id="set_clipboard" data-cat="cat-8" data-search="set_clipboard dos_setclipboard `(set_clipboard val)` or `(dos_setclipboard val)` copies `val` (converted to string) to the system clipboard and returns the string. ">
+            <a href="#set_clipboard" class="nav-item" data-id="set_clipboard" data-cat="cat-8" data-search="set_clipboard `(set_clipboard val)` copies `val` (converted to string) to the system clipboard and returns the string. ">
                 <span class="nav-fn-name">set_clipboard</span>
-                <span class="sb-alias">+1</span>
             </a>
             
 
-            <a href="#dos_clipboard" class="nav-item" data-id="dos_clipboard" data-cat="cat-8" data-search="dos_clipboard  `(dos_clipboard [new-text])` unified getter/setter. with no arguments, returns current clipboard text; with `new-text`, sets the clipboard and returns the new text. ">
-                <span class="nav-fn-name">dos_clipboard</span>
-                
-            </a>
-            
-
-            <a href="#msgbox" class="nav-item" data-id="msgbox" data-cat="cat-8" data-search="msgbox dos_msgbox oca-msgbox `(oca-msgbox prompt [title] [buttons])` *(aliases: `msgbox`, `dos_msgbox`)* displays a modal message box dialog. `buttons` can be an integer or symbol (`0`/`&quot;ok&quot;`, `1`/`&quot;okcancel&quot;`, `4`/`&quot;yesno&quot;`, `5`/`&quot;retrycancel&quot;`). returns standard button id (`1`=ok, `2`=cancel, `4`=retry, `6`=yes, `7`=no). ">
+            <a href="#msgbox" class="nav-item" data-id="msgbox" data-cat="cat-8" data-search="msgbox oc-msgbox `(oc-msgbox prompt [title] [buttons])` *(alias: `msgbox`)* displays a modal message box dialog. `buttons` can be an integer or symbol (`0`/`&quot;ok&quot;`, `1`/`&quot;okcancel&quot;`, `4`/`&quot;yesno&quot;`, `5`/`&quot;retrycancel&quot;`). returns standard button id (`1`=ok, `2`=cancel, `4`=retry, `6`=yes, `7`=no). ">
                 <span class="nav-fn-name">msgbox</span>
-                <span class="sb-alias">+2</span>
+                <span class="sb-alias">+1</span>
             </a>
             
             </div>
@@ -1510,116 +1502,116 @@
         <div class="nav-category" data-cat-id="cat-13">
             <div class="nav-cat-header" onclick="toggleNavCategory('cat-13')">
                 <span class="nav-cat-chevron">▼</span>
-                <span class="nav-cat-title">13. OpenCAD Native UI (oca-*) — Dialogs &amp; Dockable Panels</span>
+                <span class="nav-cat-title">13. OpenCAD Native UI (oc-*) — Dialogs &amp; Dockable Panels</span>
                 <span class="nav-cat-count" id="count-cat-13">17</span>
             </div>
             <div class="nav-cat-items" id="items-cat-13">
                 
-            <a href="#oca-text" class="nav-item" data-id="oca-text" data-cat="cat-13" data-search="oca-text  (oca-text id label [default]) creates a single-line text input box. control constructors">
-                <span class="nav-fn-name">oca-text</span>
+            <a href="#oc-text" class="nav-item" data-id="oc-text" data-cat="cat-13" data-search="oc-text  (oc-text id label [default]) creates a single-line text input box. control constructors">
+                <span class="nav-fn-name">oc-text</span>
                 
             </a>
             
 
-            <a href="#oca-number" class="nav-item" data-id="oca-number" data-cat="cat-13" data-search="oca-number  (oca-number id label [default] [opts]) creates a numeric input field with optional `&#x27;((min . 0) (max . 100) (step . 1))`. control constructors">
-                <span class="nav-fn-name">oca-number</span>
+            <a href="#oc-number" class="nav-item" data-id="oc-number" data-cat="cat-13" data-search="oc-number  (oc-number id label [default] [opts]) creates a numeric input field with optional `&#x27;((min . 0) (max . 100) (step . 1))`. control constructors">
+                <span class="nav-fn-name">oc-number</span>
                 
             </a>
             
 
-            <a href="#oca-checkbox" class="nav-item" data-id="oca-checkbox" data-cat="cat-13" data-search="oca-checkbox  (oca-checkbox id label [default-bool]) creates a boolean toggle checkbox (`t` or `nil`). control constructors">
-                <span class="nav-fn-name">oca-checkbox</span>
+            <a href="#oc-checkbox" class="nav-item" data-id="oc-checkbox" data-cat="cat-13" data-search="oc-checkbox  (oc-checkbox id label [default-bool]) creates a boolean toggle checkbox (`t` or `nil`). control constructors">
+                <span class="nav-fn-name">oc-checkbox</span>
                 
             </a>
             
 
-            <a href="#oca-choice" class="nav-item" data-id="oca-choice" data-cat="cat-13" data-search="oca-choice  (oca-choice id label options-list [default]) creates a dropdown selector menu from a list of string options. control constructors">
-                <span class="nav-fn-name">oca-choice</span>
+            <a href="#oc-choice" class="nav-item" data-id="oc-choice" data-cat="cat-13" data-search="oc-choice  (oc-choice id label options-list [default]) creates a dropdown selector menu from a list of string options. control constructors">
+                <span class="nav-fn-name">oc-choice</span>
                 
             </a>
             
 
-            <a href="#oca-color" class="nav-item" data-id="oca-color" data-cat="cat-13" data-search="oca-color  (oca-color id label [default-rgb]) creates an rgb color picker (`&#x27;(r g b)` where values are `0..255`). control constructors">
-                <span class="nav-fn-name">oca-color</span>
+            <a href="#oc-color" class="nav-item" data-id="oc-color" data-cat="cat-13" data-search="oc-color  (oc-color id label [default-rgb]) creates an rgb color picker (`&#x27;(r g b)` where values are `0..255`). control constructors">
+                <span class="nav-fn-name">oc-color</span>
                 
             </a>
             
 
-            <a href="#oca-file" class="nav-item" data-id="oca-file" data-cat="cat-13" data-search="oca-file  (oca-file id label [default-path] [opts]) creates a native file open/save browser control. control constructors">
-                <span class="nav-fn-name">oca-file</span>
+            <a href="#oc-file" class="nav-item" data-id="oc-file" data-cat="cat-13" data-search="oc-file  (oc-file id label [default-path] [opts]) creates a native file open/save browser control. control constructors">
+                <span class="nav-fn-name">oc-file</span>
                 
             </a>
             
 
-            <a href="#oca-table" class="nav-item" data-id="oca-table" data-cat="cat-13" data-search="oca-table  (oca-table id label headers [rows] [opts]) creates an editable multi-column table grid. control constructors">
-                <span class="nav-fn-name">oca-table</span>
+            <a href="#oc-table" class="nav-item" data-id="oc-table" data-cat="cat-13" data-search="oc-table  (oc-table id label headers [rows] [opts]) creates an editable multi-column table grid. control constructors">
+                <span class="nav-fn-name">oc-table</span>
                 
             </a>
             
 
-            <a href="#oca-fields" class="nav-item" data-id="oca-fields" data-cat="cat-13" data-search="oca-fields  (oca-fields [id] title [opts] ctrl1 ...) creates a collapsible group box containing nested controls. control constructors">
-                <span class="nav-fn-name">oca-fields</span>
+            <a href="#oc-fields" class="nav-item" data-id="oc-fields" data-cat="cat-13" data-search="oc-fields  (oc-fields [id] title [opts] ctrl1 ...) creates a collapsible group box containing nested controls. control constructors">
+                <span class="nav-fn-name">oc-fields</span>
                 
             </a>
             
 
-            <a href="#oca-button" class="nav-item" data-id="oca-button" data-cat="cat-13" data-search="oca-button  (oca-button id label [action]) creates a clickable button. in a panel, `action` is an autolisp command string executed on click. control constructors">
-                <span class="nav-fn-name">oca-button</span>
+            <a href="#oc-button" class="nav-item" data-id="oc-button" data-cat="cat-13" data-search="oc-button  (oc-button id label [action]) creates a clickable button. in a panel, `action` is an opencad lisp command string executed on click. control constructors">
+                <span class="nav-fn-name">oc-button</span>
                 
             </a>
             
 
-            <a href="#oca-info" class="nav-item" data-id="oca-info" data-cat="cat-13" data-search="oca-info  (oca-info text) creates a read-only static label / informational text. control constructors">
-                <span class="nav-fn-name">oca-info</span>
+            <a href="#oc-info" class="nav-item" data-id="oc-info" data-cat="cat-13" data-search="oc-info  (oc-info text) creates a read-only static label / informational text. control constructors">
+                <span class="nav-fn-name">oc-info</span>
                 
             </a>
             
 
-            <a href="#oca-row" class="nav-item" data-id="oca-row" data-cat="cat-13" data-search="oca-row  (oca-row ctrl1 ctrl2 ...) arranges multiple controls horizontally on a single row. control constructors">
-                <span class="nav-fn-name">oca-row</span>
+            <a href="#oc-row" class="nav-item" data-id="oc-row" data-cat="cat-13" data-search="oc-row  (oc-row ctrl1 ctrl2 ...) arranges multiple controls horizontally on a single row. control constructors">
+                <span class="nav-fn-name">oc-row</span>
                 
             </a>
             
 
-            <a href="#oca-dialog" class="nav-item" data-id="oca-dialog" data-cat="cat-13" data-search="oca-dialog oca-dialog-show `(oca-dialog title [options-alist] row1 [row2 ...])`
-`(oca-dialog-show dialog-def)` `oca-dialog` builds a dialog definition (optional alist supports `&#x27;((width . 400.0) (submit . &quot;ok&quot;) (cancel . &quot;cancel&quot;))`). `oca-dialog-show` displays it modally and returns an association list of `(id . value)` pairs when submitted, or `nil` if cancelled. modal dialog functions">
-                <span class="nav-fn-name">oca-dialog</span>
+            <a href="#oc-dialog" class="nav-item" data-id="oc-dialog" data-cat="cat-13" data-search="oc-dialog oc-dialog-show `(oc-dialog title [options-alist] row1 [row2 ...])`
+`(oc-dialog-show dialog-def)` `oc-dialog` builds a dialog definition (optional alist supports `&#x27;((width . 400.0) (submit . &quot;ok&quot;) (cancel . &quot;cancel&quot;))`). `oc-dialog-show` displays it modally and returns an association list of `(id . value)` pairs when submitted, or `nil` if cancelled. modal dialog functions">
+                <span class="nav-fn-name">oc-dialog</span>
                 <span class="sb-alias">+1</span>
             </a>
             
 
-            <a href="#oca-get" class="nav-item" data-id="oca-get" data-cat="cat-13" data-search="oca-get oca-get-int oca-get-real oca-get-str oca-get-bool `(oca-get key alist)`
-`(oca-get-int key alist)`
-`(oca-get-real key alist)`
-`(oca-get-str key alist)`
-`(oca-get-bool key alist)` extracts and coerces control values by `key` from the association list returned by `oca-dialog-show`. modal dialog functions">
-                <span class="nav-fn-name">oca-get</span>
+            <a href="#oc-get" class="nav-item" data-id="oc-get" data-cat="cat-13" data-search="oc-get oc-get-int oc-get-real oc-get-str oc-get-bool `(oc-get key alist)`
+`(oc-get-int key alist)`
+`(oc-get-real key alist)`
+`(oc-get-str key alist)`
+`(oc-get-bool key alist)` extracts and coerces control values by `key` from the association list returned by `oc-dialog-show`. modal dialog functions">
+                <span class="nav-fn-name">oc-get</span>
                 <span class="sb-alias">+4</span>
             </a>
             
 
-            <a href="#oca-panel-register" class="nav-item" data-id="oca-panel-register" data-cat="cat-13" data-search="oca-panel-register  `(oca-panel-register panel-id title [options-alist] ctrl1 [ctrl2 ...])` registers a persistent dockable panel in the opencad studio side pane and seeds all default control states. dockable side panel functions">
-                <span class="nav-fn-name">oca-panel-register</span>
+            <a href="#oc-panel-register" class="nav-item" data-id="oc-panel-register" data-cat="cat-13" data-search="oc-panel-register  `(oc-panel-register panel-id title [options-alist] ctrl1 [ctrl2 ...])` registers a persistent dockable panel in the opencad studio side pane and seeds all default control states. dockable side panel functions">
+                <span class="nav-fn-name">oc-panel-register</span>
                 
             </a>
             
 
-            <a href="#oca-panel-toggle" class="nav-item" data-id="oca-panel-toggle" data-cat="cat-13" data-search="oca-panel-toggle  `(oca-panel-toggle panel-id [show-bool])` opens, closes, or toggles visibility of a registered dockable panel. pass `t` to explicitly show, or omit `show-bool` to toggle. dockable side panel functions">
-                <span class="nav-fn-name">oca-panel-toggle</span>
+            <a href="#oc-panel-toggle" class="nav-item" data-id="oc-panel-toggle" data-cat="cat-13" data-search="oc-panel-toggle  `(oc-panel-toggle panel-id [show-bool])` opens, closes, or toggles visibility of a registered dockable panel. pass `t` to explicitly show, or omit `show-bool` to toggle. dockable side panel functions">
+                <span class="nav-fn-name">oc-panel-toggle</span>
                 
             </a>
             
 
-            <a href="#oca-panel-update" class="nav-item" data-id="oca-panel-update" data-cat="cat-13" data-search="oca-panel-update  `(oca-panel-update panel-id values-alist)` programmatically updates one or more control values in a live dockable panel without re-registering it. dockable side panel functions">
-                <span class="nav-fn-name">oca-panel-update</span>
+            <a href="#oc-panel-update" class="nav-item" data-id="oc-panel-update" data-cat="cat-13" data-search="oc-panel-update  `(oc-panel-update panel-id values-alist)` programmatically updates one or more control values in a live dockable panel without re-registering it. dockable side panel functions">
+                <span class="nav-fn-name">oc-panel-update</span>
                 
             </a>
             
 
-            <a href="#oca-panel-get" class="nav-item" data-id="oca-panel-get" data-cat="cat-13" data-search="oca-panel-get oca-panel-get-bool oca-panel-get-str `(oca-panel-get panel-id control-id)`
-`(oca-panel-get-bool panel-id control-id)`
-`(oca-panel-get-str panel-id control-id)` reads the current live value of any control (`checkbox`, `choice`, `text`, `number`, `color`) inside a dockable panel. automatically synchronized whenever the user interacts with the panel ui. dockable side panel functions">
-                <span class="nav-fn-name">oca-panel-get</span>
+            <a href="#oc-panel-get" class="nav-item" data-id="oc-panel-get" data-cat="cat-13" data-search="oc-panel-get oc-panel-get-bool oc-panel-get-str `(oc-panel-get panel-id control-id)`
+`(oc-panel-get-bool panel-id control-id)`
+`(oc-panel-get-str panel-id control-id)` reads the current live value of any control (`checkbox`, `choice`, `text`, `number`, `color`) inside a dockable panel. automatically synchronized whenever the user interacts with the panel ui. dockable side panel functions">
+                <span class="nav-fn-name">oc-panel-get</span>
                 <span class="sb-alias">+2</span>
             </a>
             
@@ -1630,7 +1622,7 @@
         <div class="nav-category" data-cat-id="cat-14">
             <div class="nav-cat-header" onclick="toggleNavCategory('cat-14')">
                 <span class="nav-cat-chevron">▼</span>
-                <span class="nav-cat-title">14. Visual LISP (vl-*) Extensions</span>
+                <span class="nav-cat-title">14. Extended LISP (vl-*) Functions</span>
                 <span class="nav-cat-count" id="count-cat-14">21</span>
             </div>
             <div class="nav-cat-items" id="items-cat-14">
@@ -1771,7 +1763,7 @@
         <div class="nav-category" data-cat-id="cat-15">
             <div class="nav-cat-header" onclick="toggleNavCategory('cat-15')">
                 <span class="nav-cat-chevron">▼</span>
-                <span class="nav-cat-title">15. ActiveX / VLA (vlax-*) Extensions</span>
+                <span class="nav-cat-title">15. Object Model / VLA (vlax-*) Extensions</span>
                 <span class="nav-cat-count" id="count-cat-15">12</span>
             </div>
             <div class="nav-cat-items" id="items-cat-15">
@@ -1857,9 +1849,9 @@
     <main id="main">
         <div class="content-container">
             <header class="doc-header">
-                <h1 class="doc-title">OpenCAD Studio AutoLISP Function Reference</h1>
+                <h1 class="doc-title">OpenCAD LISP Function Reference</h1>
                 <p class="doc-intro">
-                    Complete reference manual for all built-in functions, special forms, CAD bridge operations, Visual LISP extensions, and native UI controls implemented in the <strong>opencad-lisp</strong> engine.
+                    Complete reference manual for all built-in functions, special forms, CAD bridge operations, Extended LISP extensions, and native UI controls implemented in the <strong>opencad-lisp</strong> engine.
                 </p>
                 <div class="conventions-bar">
                     <span><strong>Argument Conventions:</strong></span>
@@ -2408,7 +2400,7 @@
             </div>
             
 
-            <div class="func-card" id="eval" data-cat="cat-1" data-search="eval  `(eval expr)` evaluates `expr` a second time as an autolisp expression.  special forms &amp; control flow">
+            <div class="func-card" id="eval" data-cat="cat-1" data-search="eval  `(eval expr)` evaluates `expr` a second time as an opencad lisp expression.  special forms &amp; control flow">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#eval" class="card-title-link">
@@ -2428,7 +2420,7 @@
                 </div>
                 
                 <div class="summary-body">
-                    <p>Evaluates <code>expr</code> a second time as an AutoLISP expression.</p>
+                    <p>Evaluates <code>expr</code> a second time as an OpenCAD LISP expression.</p>
                 </div>
                 
                 <div class="example-box">
@@ -2537,7 +2529,7 @@
             </div>
             
 
-            <div class="func-card" id="ver" data-cat="cat-2" data-search="ver vl-version lisp-implementation-type `(ver)`, `(vl-version)`, `(lisp-implementation-type)` returns version and implementation strings for the autolisp runtime.  predefined constants &amp; system info">
+            <div class="func-card" id="ver" data-cat="cat-2" data-search="ver vl-version lisp-implementation-type `(ver)`, `(vl-version)`, `(lisp-implementation-type)` returns version and implementation strings for the opencad lisp runtime.  predefined constants &amp; system info">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#ver" class="card-title-link">
@@ -2557,18 +2549,18 @@
                 </div>
                 
                 <div class="summary-body">
-                    <p>Returns version and implementation strings for the AutoLISP runtime.</p>
+                    <p>Returns version and implementation strings for the OpenCAD LISP runtime.</p>
                 </div>
                 
                 <div class="example-box">
                     <div class="example-header">
                         <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(ver) ; =&gt; &quot;Visual LISP 2026 (opencad-lisp native Rust engine v0.1.0)&quot;">
+                        <button class="copy-btn" onclick="copyExample(this)" data-code="(ver) ; =&gt; &quot;OpenCAD LISP 2026 (opencad-lisp-engine native Rust engine v0.1.0)&quot;">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             Copy
                         </button>
                     </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span>ver<span class="tok-paren">)</span> <span class="tok-comment">; =&gt; &quot;Visual LISP 2026 (opencad-lisp native Rust engine v0.1.0)&quot;</span></code></pre>
+                    <pre class="example-code"><code><span class="tok-paren">(</span>ver<span class="tok-paren">)</span> <span class="tok-comment">; =&gt; &quot;OpenCAD LISP 2026 (opencad-lisp-engine native Rust engine v0.1.0)&quot;</span></code></pre>
                 </div>
                 
             </div>
@@ -4650,7 +4642,7 @@
             </div>
             
 
-            <div class="func-card" id="load" data-cat="cat-7" data-search="load  `(load filename [onfailure])` reads and evaluates an autolisp `.lsp` file. automatically appends `.lsp` if omitted. if loading fails and `onfailure` is provided, returns `onfailure`.  console output, file i/o &amp; environment">
+            <div class="func-card" id="load" data-cat="cat-7" data-search="load  `(load filename [onfailure])` reads and evaluates an opencad lisp `.lsp` file. automatically appends `.lsp` if omitted. if loading fails and `onfailure` is provided, returns `onfailure`.  console output, file i/o &amp; environment">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#load" class="card-title-link">
@@ -4670,7 +4662,7 @@
                 </div>
                 
                 <div class="summary-body">
-                    <p>Reads and evaluates an AutoLISP <code>.lsp</code> file. Automatically appends <code>.lsp</code> if omitted. If loading fails and <code>onfailure</code> is provided, returns <code>onfailure</code>.</p>
+                    <p>Reads and evaluates an OpenCAD LISP <code>.lsp</code> file. Automatically appends <code>.lsp</code> if omitted. If loading fails and <code>onfailure</code> is provided, returns <code>onfailure</code>.</p>
                 </div>
                 
                 <div class="example-box">
@@ -4731,11 +4723,11 @@
             <div class="cat-section-header">
                 <span class="cat-num-pill">8</span>
                 <h2 class="cat-heading">Clipboard &amp; Utility Extensions</h2>
-                <span class="cat-badge">4 functions</span>
+                <span class="cat-badge">3 functions</span>
             </div>
             <div class="cat-cards">
                 
-            <div class="func-card" id="get_clipboard" data-cat="cat-8" data-search="get_clipboard dos_getclipboard `(get_clipboard)` or `(dos_getclipboard)` retrieves the current plain-text contents of the system clipboard.  clipboard &amp; utility extensions">
+            <div class="func-card" id="get_clipboard" data-cat="cat-8" data-search="get_clipboard `(get_clipboard)` retrieves the current plain-text contents of the system clipboard.  clipboard &amp; utility extensions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#get_clipboard" class="card-title-link">
@@ -4746,12 +4738,11 @@
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                         </button>
                     </div>
-                    <div class="alias-group"><span class="alias-label">Aliases:</span> <span class="alias-pill">dos_getclipboard</span></div>
                 </div>
                 
                 <div class="syntax-banner">
                     <span class="section-label">SYNTAX</span>
-                    <div class="syntax-code"><code>`(get_clipboard)` or `(dos_getclipboard)`</code></div>
+                    <div class="syntax-code"><code>`(get_clipboard)`</code></div>
                 </div>
                 
                 <div class="summary-body">
@@ -4761,18 +4752,18 @@
                 <div class="example-box">
                     <div class="example-header">
                         <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(setq text (dos_getclipboard))">
+                        <button class="copy-btn" onclick="copyExample(this)" data-code="(setq text (get_clipboard))">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             Copy
                         </button>
                     </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span><span class="tok-keyword">setq</span> text <span class="tok-paren">(</span>dos_getclipboard<span class="tok-paren">)</span><span class="tok-paren">)</span></code></pre>
+                    <pre class="example-code"><code><span class="tok-paren">(</span><span class="tok-keyword">setq</span> text <span class="tok-paren">(</span>get_clipboard<span class="tok-paren">)</span><span class="tok-paren">)</span></code></pre>
                 </div>
                 
             </div>
             
 
-            <div class="func-card" id="set_clipboard" data-cat="cat-8" data-search="set_clipboard dos_setclipboard `(set_clipboard val)` or `(dos_setclipboard val)` copies `val` (converted to string) to the system clipboard and returns the string.  clipboard &amp; utility extensions">
+            <div class="func-card" id="set_clipboard" data-cat="cat-8" data-search="set_clipboard `(set_clipboard val)` copies `val` (converted to string) to the system clipboard and returns the string.  clipboard &amp; utility extensions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#set_clipboard" class="card-title-link">
@@ -4783,12 +4774,11 @@
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                         </button>
                     </div>
-                    <div class="alias-group"><span class="alias-label">Aliases:</span> <span class="alias-pill">dos_setclipboard</span></div>
                 </div>
                 
                 <div class="syntax-banner">
                     <span class="section-label">SYNTAX</span>
-                    <div class="syntax-code"><code>`(set_clipboard val)` or `(dos_setclipboard val)`</code></div>
+                    <div class="syntax-code"><code>`(set_clipboard val)`</code></div>
                 </div>
                 
                 <div class="summary-body">
@@ -4798,55 +4788,18 @@
                 <div class="example-box">
                     <div class="example-header">
                         <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(dos_setclipboard &quot;42.50&quot;)">
+                        <button class="copy-btn" onclick="copyExample(this)" data-code="(set_clipboard &quot;42.50&quot;)">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             Copy
                         </button>
                     </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span>dos_setclipboard <span class="tok-string">&quot;42.50&quot;</span><span class="tok-paren">)</span></code></pre>
+                    <pre class="example-code"><code><span class="tok-paren">(</span>set_clipboard <span class="tok-string">&quot;42.50&quot;</span><span class="tok-paren">)</span></code></pre>
                 </div>
                 
             </div>
             
 
-            <div class="func-card" id="dos_clipboard" data-cat="cat-8" data-search="dos_clipboard  `(dos_clipboard [new-text])` unified getter/setter. with no arguments, returns current clipboard text; with `new-text`, sets the clipboard and returns the new text.  clipboard &amp; utility extensions">
-                <div class="card-header">
-                    <div class="card-title-row">
-                        <a href="#dos_clipboard" class="card-title-link">
-                            <h3 class="func-name">dos_clipboard</h3>
-                        </a>
-                        
-                        <button class="anchor-btn" onclick="copyDirectLink('dos_clipboard')" title="Copy link to dos_clipboard">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
-                        </button>
-                    </div>
-                    
-                </div>
-                
-                <div class="syntax-banner">
-                    <span class="section-label">SYNTAX</span>
-                    <div class="syntax-code"><code>`(dos_clipboard [new-text])`</code></div>
-                </div>
-                
-                <div class="summary-body">
-                    <p>Unified getter/setter. With no arguments, returns current clipboard text; with <code>new-text</code>, sets the clipboard and returns the new text.</p>
-                </div>
-                
-                <div class="example-box">
-                    <div class="example-header">
-                        <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(dos_clipboard &quot;Copied from AutoLISP&quot;)">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                            Copy
-                        </button>
-                    </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span>dos_clipboard <span class="tok-string">&quot;Copied from AutoLISP&quot;</span><span class="tok-paren">)</span></code></pre>
-                </div>
-                
-            </div>
-            
-
-            <div class="func-card" id="msgbox" data-cat="cat-8" data-search="msgbox dos_msgbox oca-msgbox `(oca-msgbox prompt [title] [buttons])` *(aliases: `msgbox`, `dos_msgbox`)* displays a modal message box dialog. `buttons` can be an integer or symbol (`0`/`&quot;ok&quot;`, `1`/`&quot;okcancel&quot;`, `4`/`&quot;yesno&quot;`, `5`/`&quot;retrycancel&quot;`). returns standard button id (`1`=ok, `2`=cancel, `4`=retry, `6`=yes, `7`=no).  clipboard &amp; utility extensions">
+            <div class="func-card" id="msgbox" data-cat="cat-8" data-search="msgbox oc-msgbox `(oc-msgbox prompt [title] [buttons])` *(alias: `msgbox`)* displays a modal message box dialog. `buttons` can be an integer or symbol (`0`/`&quot;ok&quot;`, `1`/`&quot;okcancel&quot;`, `4`/`&quot;yesno&quot;`, `5`/`&quot;retrycancel&quot;`). returns standard button id (`1`=ok, `2`=cancel, `4`=retry, `6`=yes, `7`=no).  clipboard &amp; utility extensions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#msgbox" class="card-title-link">
@@ -4857,12 +4810,12 @@
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                         </button>
                     </div>
-                    <div class="alias-group"><span class="alias-label">Aliases:</span> <span class="alias-pill">dos_msgbox</span> <span class="alias-pill">oca-msgbox</span></div>
+                    <div class="alias-group"><span class="alias-label">Aliases:</span> <span class="alias-pill">oc-msgbox</span></div>
                 </div>
                 
                 <div class="syntax-banner">
                     <span class="section-label">SYNTAX</span>
-                    <div class="syntax-code"><code>`(oca-msgbox prompt [title] [buttons])` *(aliases: `msgbox`, `dos_msgbox`)*</code></div>
+                    <div class="syntax-code"><code>`(oc-msgbox prompt [title] [buttons])` *(alias: `msgbox`)*</code></div>
                 </div>
                 
                 <div class="summary-body">
@@ -4872,12 +4825,12 @@
                 <div class="example-box">
                     <div class="example-header">
                         <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oca-msgbox &quot;Delete selected entities?&quot; &quot;Confirm&quot; &quot;YESNO&quot;) ; =&gt; 6 (Yes) or 7 (No)">
+                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oc-msgbox &quot;Delete selected entities?&quot; &quot;Confirm&quot; &quot;YESNO&quot;) ; =&gt; YES or NO">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             Copy
                         </button>
                     </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span>oca-msgbox <span class="tok-string">&quot;Delete selected entities?&quot;</span> <span class="tok-string">&quot;Confirm&quot;</span> <span class="tok-string">&quot;YESNO&quot;</span><span class="tok-paren">)</span> <span class="tok-comment">; =&gt; 6 (Yes) or 7 (No)</span></code></pre>
+                    <pre class="example-code"><code><span class="tok-paren">(</span>oc-msgbox <span class="tok-string">&quot;Delete selected entities?&quot;</span> <span class="tok-string">&quot;Confirm&quot;</span> <span class="tok-string">&quot;YESNO&quot;</span><span class="tok-paren">)</span> <span class="tok-comment">; =&gt; YES or NO</span></code></pre>
                 </div>
                 
             </div>
@@ -5588,19 +5541,19 @@
         <section class="category-section" id="cat-13-section" data-cat="cat-13">
             <div class="cat-section-header">
                 <span class="cat-num-pill">13</span>
-                <h2 class="cat-heading">OpenCAD Native UI (oca-*) — Dialogs &amp; Dockable Panels</h2>
+                <h2 class="cat-heading">OpenCAD Native UI (oc-*) — Dialogs &amp; Dockable Panels</h2>
                 <span class="cat-badge">17 functions</span>
             </div>
             <div class="cat-cards">
                 
-            <div class="func-card" id="oca-text" data-cat="cat-13" data-search="oca-text  (oca-text id label [default]) creates a single-line text input box. control constructors opencad native ui (oca-*) — dialogs &amp; dockable panels">
+            <div class="func-card" id="oc-text" data-cat="cat-13" data-search="oc-text  (oc-text id label [default]) creates a single-line text input box. control constructors opencad native ui (oc-*) — dialogs &amp; dockable panels">
                 <div class="card-header">
                     <div class="card-title-row">
-                        <a href="#oca-text" class="card-title-link">
-                            <h3 class="func-name">oca-text</h3>
+                        <a href="#oc-text" class="card-title-link">
+                            <h3 class="func-name">oc-text</h3>
                         </a>
                         <span class="subcat-badge">Control Constructors</span>
-                        <button class="anchor-btn" onclick="copyDirectLink('oca-text')" title="Copy link to oca-text">
+                        <button class="anchor-btn" onclick="copyDirectLink('oc-text')" title="Copy link to oc-text">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                         </button>
                     </div>
@@ -5609,7 +5562,7 @@
                 
                 <div class="syntax-banner">
                     <span class="section-label">SYNTAX</span>
-                    <div class="syntax-code"><code>(oca-text id label [default])</code></div>
+                    <div class="syntax-code"><code>(oc-text id label [default])</code></div>
                 </div>
                 
                 <div class="summary-body">
@@ -5619,25 +5572,25 @@
                 <div class="example-box">
                     <div class="example-header">
                         <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oca-text &quot;txt_name&quot; &quot;Name&quot; &quot;Part-A&quot;)">
+                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oc-text &quot;txt_name&quot; &quot;Name&quot; &quot;Part-A&quot;)">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             Copy
                         </button>
                     </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span>oca-text <span class="tok-string">&quot;txt_name&quot;</span> <span class="tok-string">&quot;Name&quot;</span> <span class="tok-string">&quot;Part-A&quot;</span><span class="tok-paren">)</span></code></pre>
+                    <pre class="example-code"><code><span class="tok-paren">(</span>oc-text <span class="tok-string">&quot;txt_name&quot;</span> <span class="tok-string">&quot;Name&quot;</span> <span class="tok-string">&quot;Part-A&quot;</span><span class="tok-paren">)</span></code></pre>
                 </div>
                 
             </div>
             
 
-            <div class="func-card" id="oca-number" data-cat="cat-13" data-search="oca-number  (oca-number id label [default] [opts]) creates a numeric input field with optional `&#x27;((min . 0) (max . 100) (step . 1))`. control constructors opencad native ui (oca-*) — dialogs &amp; dockable panels">
+            <div class="func-card" id="oc-number" data-cat="cat-13" data-search="oc-number  (oc-number id label [default] [opts]) creates a numeric input field with optional `&#x27;((min . 0) (max . 100) (step . 1))`. control constructors opencad native ui (oc-*) — dialogs &amp; dockable panels">
                 <div class="card-header">
                     <div class="card-title-row">
-                        <a href="#oca-number" class="card-title-link">
-                            <h3 class="func-name">oca-number</h3>
+                        <a href="#oc-number" class="card-title-link">
+                            <h3 class="func-name">oc-number</h3>
                         </a>
                         <span class="subcat-badge">Control Constructors</span>
-                        <button class="anchor-btn" onclick="copyDirectLink('oca-number')" title="Copy link to oca-number">
+                        <button class="anchor-btn" onclick="copyDirectLink('oc-number')" title="Copy link to oc-number">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                         </button>
                     </div>
@@ -5646,7 +5599,7 @@
                 
                 <div class="syntax-banner">
                     <span class="section-label">SYNTAX</span>
-                    <div class="syntax-code"><code>(oca-number id label [default] [opts])</code></div>
+                    <div class="syntax-code"><code>(oc-number id label [default] [opts])</code></div>
                 </div>
                 
                 <div class="summary-body">
@@ -5656,25 +5609,25 @@
                 <div class="example-box">
                     <div class="example-header">
                         <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oca-number &quot;radius&quot; &quot;Radius&quot; 25.0)">
+                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oc-number &quot;radius&quot; &quot;Radius&quot; 25.0)">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             Copy
                         </button>
                     </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span>oca-number <span class="tok-string">&quot;radius&quot;</span> <span class="tok-string">&quot;Radius&quot;</span> <span class="tok-number">25.0</span><span class="tok-paren">)</span></code></pre>
+                    <pre class="example-code"><code><span class="tok-paren">(</span>oc-number <span class="tok-string">&quot;radius&quot;</span> <span class="tok-string">&quot;Radius&quot;</span> <span class="tok-number">25.0</span><span class="tok-paren">)</span></code></pre>
                 </div>
                 
             </div>
             
 
-            <div class="func-card" id="oca-checkbox" data-cat="cat-13" data-search="oca-checkbox  (oca-checkbox id label [default-bool]) creates a boolean toggle checkbox (`t` or `nil`). control constructors opencad native ui (oca-*) — dialogs &amp; dockable panels">
+            <div class="func-card" id="oc-checkbox" data-cat="cat-13" data-search="oc-checkbox  (oc-checkbox id label [default-bool]) creates a boolean toggle checkbox (`t` or `nil`). control constructors opencad native ui (oc-*) — dialogs &amp; dockable panels">
                 <div class="card-header">
                     <div class="card-title-row">
-                        <a href="#oca-checkbox" class="card-title-link">
-                            <h3 class="func-name">oca-checkbox</h3>
+                        <a href="#oc-checkbox" class="card-title-link">
+                            <h3 class="func-name">oc-checkbox</h3>
                         </a>
                         <span class="subcat-badge">Control Constructors</span>
-                        <button class="anchor-btn" onclick="copyDirectLink('oca-checkbox')" title="Copy link to oca-checkbox">
+                        <button class="anchor-btn" onclick="copyDirectLink('oc-checkbox')" title="Copy link to oc-checkbox">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                         </button>
                     </div>
@@ -5683,7 +5636,7 @@
                 
                 <div class="syntax-banner">
                     <span class="section-label">SYNTAX</span>
-                    <div class="syntax-code"><code>(oca-checkbox id label [default-bool])</code></div>
+                    <div class="syntax-code"><code>(oc-checkbox id label [default-bool])</code></div>
                 </div>
                 
                 <div class="summary-body">
@@ -5693,25 +5646,25 @@
                 <div class="example-box">
                     <div class="example-header">
                         <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oca-checkbox &quot;chk_x&quot; &quot;Draw &#x27;X&#x27; Lines&quot; nil)">
+                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oc-checkbox &quot;chk_x&quot; &quot;Draw &#x27;X&#x27; Lines&quot; nil)">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             Copy
                         </button>
                     </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span>oca-checkbox <span class="tok-string">&quot;chk_x&quot;</span> <span class="tok-string">&quot;Draw &#x27;X&#x27; Lines&quot;</span> nil<span class="tok-paren">)</span></code></pre>
+                    <pre class="example-code"><code><span class="tok-paren">(</span>oc-checkbox <span class="tok-string">&quot;chk_x&quot;</span> <span class="tok-string">&quot;Draw &#x27;X&#x27; Lines&quot;</span> nil<span class="tok-paren">)</span></code></pre>
                 </div>
                 
             </div>
             
 
-            <div class="func-card" id="oca-choice" data-cat="cat-13" data-search="oca-choice  (oca-choice id label options-list [default]) creates a dropdown selector menu from a list of string options. control constructors opencad native ui (oca-*) — dialogs &amp; dockable panels">
+            <div class="func-card" id="oc-choice" data-cat="cat-13" data-search="oc-choice  (oc-choice id label options-list [default]) creates a dropdown selector menu from a list of string options. control constructors opencad native ui (oc-*) — dialogs &amp; dockable panels">
                 <div class="card-header">
                     <div class="card-title-row">
-                        <a href="#oca-choice" class="card-title-link">
-                            <h3 class="func-name">oca-choice</h3>
+                        <a href="#oc-choice" class="card-title-link">
+                            <h3 class="func-name">oc-choice</h3>
                         </a>
                         <span class="subcat-badge">Control Constructors</span>
-                        <button class="anchor-btn" onclick="copyDirectLink('oca-choice')" title="Copy link to oca-choice">
+                        <button class="anchor-btn" onclick="copyDirectLink('oc-choice')" title="Copy link to oc-choice">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                         </button>
                     </div>
@@ -5720,7 +5673,7 @@
                 
                 <div class="syntax-banner">
                     <span class="section-label">SYNTAX</span>
-                    <div class="syntax-code"><code>(oca-choice id label options-list [default])</code></div>
+                    <div class="syntax-code"><code>(oc-choice id label options-list [default])</code></div>
                 </div>
                 
                 <div class="summary-body">
@@ -5730,25 +5683,25 @@
                 <div class="example-box">
                     <div class="example-header">
                         <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oca-choice &quot;col&quot; &quot;Color&quot; &#x27;(&quot;Red&quot; &quot;Blue&quot;) &quot;Red&quot;)">
+                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oc-choice &quot;col&quot; &quot;Color&quot; &#x27;(&quot;Red&quot; &quot;Blue&quot;) &quot;Red&quot;)">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             Copy
                         </button>
                     </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span>oca-choice <span class="tok-string">&quot;col&quot;</span> <span class="tok-string">&quot;Color&quot;</span> &#x27;<span class="tok-paren">(</span><span class="tok-string">&quot;Red&quot;</span> <span class="tok-string">&quot;Blue&quot;</span><span class="tok-paren">)</span> <span class="tok-string">&quot;Red&quot;</span><span class="tok-paren">)</span></code></pre>
+                    <pre class="example-code"><code><span class="tok-paren">(</span>oc-choice <span class="tok-string">&quot;col&quot;</span> <span class="tok-string">&quot;Color&quot;</span> &#x27;<span class="tok-paren">(</span><span class="tok-string">&quot;Red&quot;</span> <span class="tok-string">&quot;Blue&quot;</span><span class="tok-paren">)</span> <span class="tok-string">&quot;Red&quot;</span><span class="tok-paren">)</span></code></pre>
                 </div>
                 
             </div>
             
 
-            <div class="func-card" id="oca-color" data-cat="cat-13" data-search="oca-color  (oca-color id label [default-rgb]) creates an rgb color picker (`&#x27;(r g b)` where values are `0..255`). control constructors opencad native ui (oca-*) — dialogs &amp; dockable panels">
+            <div class="func-card" id="oc-color" data-cat="cat-13" data-search="oc-color  (oc-color id label [default-rgb]) creates an rgb color picker (`&#x27;(r g b)` where values are `0..255`). control constructors opencad native ui (oc-*) — dialogs &amp; dockable panels">
                 <div class="card-header">
                     <div class="card-title-row">
-                        <a href="#oca-color" class="card-title-link">
-                            <h3 class="func-name">oca-color</h3>
+                        <a href="#oc-color" class="card-title-link">
+                            <h3 class="func-name">oc-color</h3>
                         </a>
                         <span class="subcat-badge">Control Constructors</span>
-                        <button class="anchor-btn" onclick="copyDirectLink('oca-color')" title="Copy link to oca-color">
+                        <button class="anchor-btn" onclick="copyDirectLink('oc-color')" title="Copy link to oc-color">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                         </button>
                     </div>
@@ -5757,7 +5710,7 @@
                 
                 <div class="syntax-banner">
                     <span class="section-label">SYNTAX</span>
-                    <div class="syntax-code"><code>(oca-color id label [default-rgb])</code></div>
+                    <div class="syntax-code"><code>(oc-color id label [default-rgb])</code></div>
                 </div>
                 
                 <div class="summary-body">
@@ -5767,25 +5720,25 @@
                 <div class="example-box">
                     <div class="example-header">
                         <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oca-color &quot;clr&quot; &quot;Fill Color&quot; &#x27;(255 0 0))">
+                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oc-color &quot;clr&quot; &quot;Fill Color&quot; &#x27;(255 0 0))">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             Copy
                         </button>
                     </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span>oca-color <span class="tok-string">&quot;clr&quot;</span> <span class="tok-string">&quot;Fill Color&quot;</span> &#x27;<span class="tok-paren">(</span><span class="tok-number">255</span> <span class="tok-number">0</span> <span class="tok-number">0</span><span class="tok-paren">)</span><span class="tok-paren">)</span></code></pre>
+                    <pre class="example-code"><code><span class="tok-paren">(</span>oc-color <span class="tok-string">&quot;clr&quot;</span> <span class="tok-string">&quot;Fill Color&quot;</span> &#x27;<span class="tok-paren">(</span><span class="tok-number">255</span> <span class="tok-number">0</span> <span class="tok-number">0</span><span class="tok-paren">)</span><span class="tok-paren">)</span></code></pre>
                 </div>
                 
             </div>
             
 
-            <div class="func-card" id="oca-file" data-cat="cat-13" data-search="oca-file  (oca-file id label [default-path] [opts]) creates a native file open/save browser control. control constructors opencad native ui (oca-*) — dialogs &amp; dockable panels">
+            <div class="func-card" id="oc-file" data-cat="cat-13" data-search="oc-file  (oc-file id label [default-path] [opts]) creates a native file open/save browser control. control constructors opencad native ui (oc-*) — dialogs &amp; dockable panels">
                 <div class="card-header">
                     <div class="card-title-row">
-                        <a href="#oca-file" class="card-title-link">
-                            <h3 class="func-name">oca-file</h3>
+                        <a href="#oc-file" class="card-title-link">
+                            <h3 class="func-name">oc-file</h3>
                         </a>
                         <span class="subcat-badge">Control Constructors</span>
-                        <button class="anchor-btn" onclick="copyDirectLink('oca-file')" title="Copy link to oca-file">
+                        <button class="anchor-btn" onclick="copyDirectLink('oc-file')" title="Copy link to oc-file">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                         </button>
                     </div>
@@ -5794,7 +5747,7 @@
                 
                 <div class="syntax-banner">
                     <span class="section-label">SYNTAX</span>
-                    <div class="syntax-code"><code>(oca-file id label [default-path] [opts])</code></div>
+                    <div class="syntax-code"><code>(oc-file id label [default-path] [opts])</code></div>
                 </div>
                 
                 <div class="summary-body">
@@ -5804,25 +5757,25 @@
                 <div class="example-box">
                     <div class="example-header">
                         <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oca-file &quot;path&quot; &quot;Output File&quot; &quot;out.dxf&quot;)">
+                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oc-file &quot;path&quot; &quot;Output File&quot; &quot;out.dxf&quot;)">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             Copy
                         </button>
                     </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span>oca-file <span class="tok-string">&quot;path&quot;</span> <span class="tok-string">&quot;Output File&quot;</span> <span class="tok-string">&quot;out.dxf&quot;</span><span class="tok-paren">)</span></code></pre>
+                    <pre class="example-code"><code><span class="tok-paren">(</span>oc-file <span class="tok-string">&quot;path&quot;</span> <span class="tok-string">&quot;Output File&quot;</span> <span class="tok-string">&quot;out.dxf&quot;</span><span class="tok-paren">)</span></code></pre>
                 </div>
                 
             </div>
             
 
-            <div class="func-card" id="oca-table" data-cat="cat-13" data-search="oca-table  (oca-table id label headers [rows] [opts]) creates an editable multi-column table grid. control constructors opencad native ui (oca-*) — dialogs &amp; dockable panels">
+            <div class="func-card" id="oc-table" data-cat="cat-13" data-search="oc-table  (oc-table id label headers [rows] [opts]) creates an editable multi-column table grid. control constructors opencad native ui (oc-*) — dialogs &amp; dockable panels">
                 <div class="card-header">
                     <div class="card-title-row">
-                        <a href="#oca-table" class="card-title-link">
-                            <h3 class="func-name">oca-table</h3>
+                        <a href="#oc-table" class="card-title-link">
+                            <h3 class="func-name">oc-table</h3>
                         </a>
                         <span class="subcat-badge">Control Constructors</span>
-                        <button class="anchor-btn" onclick="copyDirectLink('oca-table')" title="Copy link to oca-table">
+                        <button class="anchor-btn" onclick="copyDirectLink('oc-table')" title="Copy link to oc-table">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                         </button>
                     </div>
@@ -5831,7 +5784,7 @@
                 
                 <div class="syntax-banner">
                     <span class="section-label">SYNTAX</span>
-                    <div class="syntax-code"><code>(oca-table id label headers [rows] [opts])</code></div>
+                    <div class="syntax-code"><code>(oc-table id label headers [rows] [opts])</code></div>
                 </div>
                 
                 <div class="summary-body">
@@ -5841,25 +5794,25 @@
                 <div class="example-box">
                     <div class="example-header">
                         <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oca-table &quot;tbl&quot; &quot;Points&quot; &#x27;(&quot;X&quot; &quot;Y&quot;) &#x27;((&quot;0&quot; &quot;0&quot;)))">
+                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oc-table &quot;tbl&quot; &quot;Points&quot; &#x27;(&quot;X&quot; &quot;Y&quot;) &#x27;((&quot;0&quot; &quot;0&quot;)))">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             Copy
                         </button>
                     </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span>oca-table <span class="tok-string">&quot;tbl&quot;</span> <span class="tok-string">&quot;Points&quot;</span> &#x27;<span class="tok-paren">(</span><span class="tok-string">&quot;X&quot;</span> <span class="tok-string">&quot;Y&quot;</span><span class="tok-paren">)</span> &#x27;<span class="tok-paren">(</span><span class="tok-paren">(</span><span class="tok-string">&quot;0&quot;</span> <span class="tok-string">&quot;0&quot;</span><span class="tok-paren">)</span><span class="tok-paren">)</span><span class="tok-paren">)</span></code></pre>
+                    <pre class="example-code"><code><span class="tok-paren">(</span>oc-table <span class="tok-string">&quot;tbl&quot;</span> <span class="tok-string">&quot;Points&quot;</span> &#x27;<span class="tok-paren">(</span><span class="tok-string">&quot;X&quot;</span> <span class="tok-string">&quot;Y&quot;</span><span class="tok-paren">)</span> &#x27;<span class="tok-paren">(</span><span class="tok-paren">(</span><span class="tok-string">&quot;0&quot;</span> <span class="tok-string">&quot;0&quot;</span><span class="tok-paren">)</span><span class="tok-paren">)</span><span class="tok-paren">)</span></code></pre>
                 </div>
                 
             </div>
             
 
-            <div class="func-card" id="oca-fields" data-cat="cat-13" data-search="oca-fields  (oca-fields [id] title [opts] ctrl1 ...) creates a collapsible group box containing nested controls. control constructors opencad native ui (oca-*) — dialogs &amp; dockable panels">
+            <div class="func-card" id="oc-fields" data-cat="cat-13" data-search="oc-fields  (oc-fields [id] title [opts] ctrl1 ...) creates a collapsible group box containing nested controls. control constructors opencad native ui (oc-*) — dialogs &amp; dockable panels">
                 <div class="card-header">
                     <div class="card-title-row">
-                        <a href="#oca-fields" class="card-title-link">
-                            <h3 class="func-name">oca-fields</h3>
+                        <a href="#oc-fields" class="card-title-link">
+                            <h3 class="func-name">oc-fields</h3>
                         </a>
                         <span class="subcat-badge">Control Constructors</span>
-                        <button class="anchor-btn" onclick="copyDirectLink('oca-fields')" title="Copy link to oca-fields">
+                        <button class="anchor-btn" onclick="copyDirectLink('oc-fields')" title="Copy link to oc-fields">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                         </button>
                     </div>
@@ -5868,7 +5821,7 @@
                 
                 <div class="syntax-banner">
                     <span class="section-label">SYNTAX</span>
-                    <div class="syntax-code"><code>(oca-fields [id] title [opts] ctrl1 ...)</code></div>
+                    <div class="syntax-code"><code>(oc-fields [id] title [opts] ctrl1 ...)</code></div>
                 </div>
                 
                 <div class="summary-body">
@@ -5878,25 +5831,25 @@
                 <div class="example-box">
                     <div class="example-header">
                         <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oca-fields &quot;Advanced&quot; (oca-checkbox &quot;snap&quot; &quot;Snap&quot; T))">
+                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oc-fields &quot;Advanced&quot; (oc-checkbox &quot;snap&quot; &quot;Snap&quot; T))">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             Copy
                         </button>
                     </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span>oca-fields <span class="tok-string">&quot;Advanced&quot;</span> <span class="tok-paren">(</span>oca-checkbox <span class="tok-string">&quot;snap&quot;</span> <span class="tok-string">&quot;Snap&quot;</span> T<span class="tok-paren">)</span><span class="tok-paren">)</span></code></pre>
+                    <pre class="example-code"><code><span class="tok-paren">(</span>oc-fields <span class="tok-string">&quot;Advanced&quot;</span> <span class="tok-paren">(</span>oc-checkbox <span class="tok-string">&quot;snap&quot;</span> <span class="tok-string">&quot;Snap&quot;</span> T<span class="tok-paren">)</span><span class="tok-paren">)</span></code></pre>
                 </div>
                 
             </div>
             
 
-            <div class="func-card" id="oca-button" data-cat="cat-13" data-search="oca-button  (oca-button id label [action]) creates a clickable button. in a panel, `action` is an autolisp command string executed on click. control constructors opencad native ui (oca-*) — dialogs &amp; dockable panels">
+            <div class="func-card" id="oc-button" data-cat="cat-13" data-search="oc-button  (oc-button id label [action]) creates a clickable button. in a panel, `action` is an opencad lisp command string executed on click. control constructors opencad native ui (oc-*) — dialogs &amp; dockable panels">
                 <div class="card-header">
                     <div class="card-title-row">
-                        <a href="#oca-button" class="card-title-link">
-                            <h3 class="func-name">oca-button</h3>
+                        <a href="#oc-button" class="card-title-link">
+                            <h3 class="func-name">oc-button</h3>
                         </a>
                         <span class="subcat-badge">Control Constructors</span>
-                        <button class="anchor-btn" onclick="copyDirectLink('oca-button')" title="Copy link to oca-button">
+                        <button class="anchor-btn" onclick="copyDirectLink('oc-button')" title="Copy link to oc-button">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                         </button>
                     </div>
@@ -5905,35 +5858,35 @@
                 
                 <div class="syntax-banner">
                     <span class="section-label">SYNTAX</span>
-                    <div class="syntax-code"><code>(oca-button id label [action])</code></div>
+                    <div class="syntax-code"><code>(oc-button id label [action])</code></div>
                 </div>
                 
                 <div class="summary-body">
-                    <p>Creates a clickable button. In a panel, <code>action</code> is an AutoLISP command string executed on click.</p>
+                    <p>Creates a clickable button. In a panel, <code>action</code> is an OpenCAD LISP command string executed on click.</p>
                 </div>
                 
                 <div class="example-box">
                     <div class="example-header">
                         <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oca-button &quot;btn_draw&quot; &quot;Draw Shape&quot; &quot;(c:draw-shape)&quot;)">
+                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oc-button &quot;btn_draw&quot; &quot;Draw Shape&quot; &quot;(c:draw-shape)&quot;)">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             Copy
                         </button>
                     </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span>oca-button <span class="tok-string">&quot;btn_draw&quot;</span> <span class="tok-string">&quot;Draw Shape&quot;</span> <span class="tok-string">&quot;(c:draw-shape)&quot;</span><span class="tok-paren">)</span></code></pre>
+                    <pre class="example-code"><code><span class="tok-paren">(</span>oc-button <span class="tok-string">&quot;btn_draw&quot;</span> <span class="tok-string">&quot;Draw Shape&quot;</span> <span class="tok-string">&quot;(c:draw-shape)&quot;</span><span class="tok-paren">)</span></code></pre>
                 </div>
                 
             </div>
             
 
-            <div class="func-card" id="oca-info" data-cat="cat-13" data-search="oca-info  (oca-info text) creates a read-only static label / informational text. control constructors opencad native ui (oca-*) — dialogs &amp; dockable panels">
+            <div class="func-card" id="oc-info" data-cat="cat-13" data-search="oc-info  (oc-info text) creates a read-only static label / informational text. control constructors opencad native ui (oc-*) — dialogs &amp; dockable panels">
                 <div class="card-header">
                     <div class="card-title-row">
-                        <a href="#oca-info" class="card-title-link">
-                            <h3 class="func-name">oca-info</h3>
+                        <a href="#oc-info" class="card-title-link">
+                            <h3 class="func-name">oc-info</h3>
                         </a>
                         <span class="subcat-badge">Control Constructors</span>
-                        <button class="anchor-btn" onclick="copyDirectLink('oca-info')" title="Copy link to oca-info">
+                        <button class="anchor-btn" onclick="copyDirectLink('oc-info')" title="Copy link to oc-info">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                         </button>
                     </div>
@@ -5942,7 +5895,7 @@
                 
                 <div class="syntax-banner">
                     <span class="section-label">SYNTAX</span>
-                    <div class="syntax-code"><code>(oca-info text)</code></div>
+                    <div class="syntax-code"><code>(oc-info text)</code></div>
                 </div>
                 
                 <div class="summary-body">
@@ -5952,25 +5905,25 @@
                 <div class="example-box">
                     <div class="example-header">
                         <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oca-info &quot;Select options below:&quot;)">
+                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oc-info &quot;Select options below:&quot;)">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             Copy
                         </button>
                     </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span>oca-info <span class="tok-string">&quot;Select options below:&quot;</span><span class="tok-paren">)</span></code></pre>
+                    <pre class="example-code"><code><span class="tok-paren">(</span>oc-info <span class="tok-string">&quot;Select options below:&quot;</span><span class="tok-paren">)</span></code></pre>
                 </div>
                 
             </div>
             
 
-            <div class="func-card" id="oca-row" data-cat="cat-13" data-search="oca-row  (oca-row ctrl1 ctrl2 ...) arranges multiple controls horizontally on a single row. control constructors opencad native ui (oca-*) — dialogs &amp; dockable panels">
+            <div class="func-card" id="oc-row" data-cat="cat-13" data-search="oc-row  (oc-row ctrl1 ctrl2 ...) arranges multiple controls horizontally on a single row. control constructors opencad native ui (oc-*) — dialogs &amp; dockable panels">
                 <div class="card-header">
                     <div class="card-title-row">
-                        <a href="#oca-row" class="card-title-link">
-                            <h3 class="func-name">oca-row</h3>
+                        <a href="#oc-row" class="card-title-link">
+                            <h3 class="func-name">oc-row</h3>
                         </a>
                         <span class="subcat-badge">Control Constructors</span>
-                        <button class="anchor-btn" onclick="copyDirectLink('oca-row')" title="Copy link to oca-row">
+                        <button class="anchor-btn" onclick="copyDirectLink('oc-row')" title="Copy link to oc-row">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                         </button>
                     </div>
@@ -5979,7 +5932,7 @@
                 
                 <div class="syntax-banner">
                     <span class="section-label">SYNTAX</span>
-                    <div class="syntax-code"><code>(oca-row ctrl1 ctrl2 ...)</code></div>
+                    <div class="syntax-code"><code>(oc-row ctrl1 ctrl2 ...)</code></div>
                 </div>
                 
                 <div class="summary-body">
@@ -5989,116 +5942,116 @@
                 <div class="example-box">
                     <div class="example-header">
                         <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oca-row (oca-button &quot;b1&quot; &quot;1&quot; &quot;(k 1)&quot;) (oca-button &quot;b2&quot; &quot;2&quot; &quot;(k 2)&quot;))">
+                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oc-row (oc-button &quot;b1&quot; &quot;1&quot; &quot;(k 1)&quot;) (oc-button &quot;b2&quot; &quot;2&quot; &quot;(k 2)&quot;))">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             Copy
                         </button>
                     </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span>oca-row <span class="tok-paren">(</span>oca-button <span class="tok-string">&quot;b1&quot;</span> <span class="tok-string">&quot;1&quot;</span> <span class="tok-string">&quot;(k 1)&quot;</span><span class="tok-paren">)</span> <span class="tok-paren">(</span>oca-button <span class="tok-string">&quot;b2&quot;</span> <span class="tok-string">&quot;2&quot;</span> <span class="tok-string">&quot;(k 2)&quot;</span><span class="tok-paren">)</span><span class="tok-paren">)</span></code></pre>
+                    <pre class="example-code"><code><span class="tok-paren">(</span>oc-row <span class="tok-paren">(</span>oc-button <span class="tok-string">&quot;b1&quot;</span> <span class="tok-string">&quot;1&quot;</span> <span class="tok-string">&quot;(k 1)&quot;</span><span class="tok-paren">)</span> <span class="tok-paren">(</span>oc-button <span class="tok-string">&quot;b2&quot;</span> <span class="tok-string">&quot;2&quot;</span> <span class="tok-string">&quot;(k 2)&quot;</span><span class="tok-paren">)</span><span class="tok-paren">)</span></code></pre>
                 </div>
                 
             </div>
             
 
-            <div class="func-card" id="oca-dialog" data-cat="cat-13" data-search="oca-dialog oca-dialog-show `(oca-dialog title [options-alist] row1 [row2 ...])`
-`(oca-dialog-show dialog-def)` `oca-dialog` builds a dialog definition (optional alist supports `&#x27;((width . 400.0) (submit . &quot;ok&quot;) (cancel . &quot;cancel&quot;))`). `oca-dialog-show` displays it modally and returns an association list of `(id . value)` pairs when submitted, or `nil` if cancelled. modal dialog functions opencad native ui (oca-*) — dialogs &amp; dockable panels">
+            <div class="func-card" id="oc-dialog" data-cat="cat-13" data-search="oc-dialog oc-dialog-show `(oc-dialog title [options-alist] row1 [row2 ...])`
+`(oc-dialog-show dialog-def)` `oc-dialog` builds a dialog definition (optional alist supports `&#x27;((width . 400.0) (submit . &quot;ok&quot;) (cancel . &quot;cancel&quot;))`). `oc-dialog-show` displays it modally and returns an association list of `(id . value)` pairs when submitted, or `nil` if cancelled. modal dialog functions opencad native ui (oc-*) — dialogs &amp; dockable panels">
                 <div class="card-header">
                     <div class="card-title-row">
-                        <a href="#oca-dialog" class="card-title-link">
-                            <h3 class="func-name">oca-dialog</h3>
+                        <a href="#oc-dialog" class="card-title-link">
+                            <h3 class="func-name">oc-dialog</h3>
                         </a>
                         <span class="subcat-badge">Modal Dialog Functions</span>
-                        <button class="anchor-btn" onclick="copyDirectLink('oca-dialog')" title="Copy link to oca-dialog">
+                        <button class="anchor-btn" onclick="copyDirectLink('oc-dialog')" title="Copy link to oc-dialog">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                         </button>
                     </div>
-                    <div class="alias-group"><span class="alias-label">Aliases:</span> <span class="alias-pill">oca-dialog-show</span></div>
+                    <div class="alias-group"><span class="alias-label">Aliases:</span> <span class="alias-pill">oc-dialog-show</span></div>
                 </div>
                 
                 <div class="syntax-banner">
                     <span class="section-label">SYNTAX</span>
-                    <div class="syntax-code"><code>`(oca-dialog title [options-alist] row1 [row2 ...])`</code><br><code>`(oca-dialog-show dialog-def)`</code></div>
+                    <div class="syntax-code"><code>`(oc-dialog title [options-alist] row1 [row2 ...])`</code><br><code>`(oc-dialog-show dialog-def)`</code></div>
                 </div>
                 
                 <div class="summary-body">
-                    <p><code>oca-dialog</code> builds a dialog definition (optional alist supports <code>&#x27;((width . 400.0) (submit . &quot;OK&quot;) (cancel . &quot;Cancel&quot;))</code>). <code>oca-dialog-show</code> displays it modally and returns an association list of <code>(id . value)</code> pairs when submitted, or <code>nil</code> if cancelled.</p>
+                    <p><code>oc-dialog</code> builds a dialog definition (optional alist supports <code>&#x27;((width . 400.0) (submit . &quot;OK&quot;) (cancel . &quot;Cancel&quot;))</code>). <code>oc-dialog-show</code> displays it modally and returns an association list of <code>(id . value)</code> pairs when submitted, or <code>nil</code> if cancelled.</p>
                 </div>
                 
                 <div class="example-box">
                     <div class="example-header">
                         <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(setq dlg (oca-dialog &quot;Circle Parameters&quot;
-            (oca-number &quot;rad&quot; &quot;Radius&quot; 30.0)
-            (oca-checkbox &quot;cross&quot; &quot;Add Crosshairs&quot; T)))
-(setq res (oca-dialog-show dlg))
+                        <button class="copy-btn" onclick="copyExample(this)" data-code="(setq dlg (oc-dialog &quot;Circle Parameters&quot;
+            (oc-number &quot;rad&quot; &quot;Radius&quot; 30.0)
+            (oc-checkbox &quot;cross&quot; &quot;Add Crosshairs&quot; T)))
+(setq res (oc-dialog-show dlg))
 (if res
-  (princ (oca-get-real &quot;rad&quot; res))
+  (princ (oc-get-real &quot;rad&quot; res))
 )">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             Copy
                         </button>
                     </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span><span class="tok-keyword">setq</span> dlg <span class="tok-paren">(</span>oca-dialog <span class="tok-string">&quot;Circle Parameters&quot;</span>
-            <span class="tok-paren">(</span>oca-number <span class="tok-string">&quot;rad&quot;</span> <span class="tok-string">&quot;Radius&quot;</span> <span class="tok-number">30.0</span><span class="tok-paren">)</span>
-            <span class="tok-paren">(</span>oca-checkbox <span class="tok-string">&quot;cross&quot;</span> <span class="tok-string">&quot;Add Crosshairs&quot;</span> T<span class="tok-paren">)</span><span class="tok-paren">)</span><span class="tok-paren">)</span>
-<span class="tok-paren">(</span><span class="tok-keyword">setq</span> res <span class="tok-paren">(</span>oca-dialog-show dlg<span class="tok-paren">)</span><span class="tok-paren">)</span>
+                    <pre class="example-code"><code><span class="tok-paren">(</span><span class="tok-keyword">setq</span> dlg <span class="tok-paren">(</span>oc-dialog <span class="tok-string">&quot;Circle Parameters&quot;</span>
+            <span class="tok-paren">(</span>oc-number <span class="tok-string">&quot;rad&quot;</span> <span class="tok-string">&quot;Radius&quot;</span> <span class="tok-number">30.0</span><span class="tok-paren">)</span>
+            <span class="tok-paren">(</span>oc-checkbox <span class="tok-string">&quot;cross&quot;</span> <span class="tok-string">&quot;Add Crosshairs&quot;</span> T<span class="tok-paren">)</span><span class="tok-paren">)</span><span class="tok-paren">)</span>
+<span class="tok-paren">(</span><span class="tok-keyword">setq</span> res <span class="tok-paren">(</span>oc-dialog-show dlg<span class="tok-paren">)</span><span class="tok-paren">)</span>
 <span class="tok-paren">(</span><span class="tok-keyword">if</span> res
-  <span class="tok-paren">(</span>princ <span class="tok-paren">(</span>oca-get-real <span class="tok-string">&quot;rad&quot;</span> res<span class="tok-paren">)</span><span class="tok-paren">)</span>
+  <span class="tok-paren">(</span>princ <span class="tok-paren">(</span>oc-get-real <span class="tok-string">&quot;rad&quot;</span> res<span class="tok-paren">)</span><span class="tok-paren">)</span>
 <span class="tok-paren">)</span></code></pre>
                 </div>
                 
             </div>
             
 
-            <div class="func-card" id="oca-get" data-cat="cat-13" data-search="oca-get oca-get-int oca-get-real oca-get-str oca-get-bool `(oca-get key alist)`
-`(oca-get-int key alist)`
-`(oca-get-real key alist)`
-`(oca-get-str key alist)`
-`(oca-get-bool key alist)` extracts and coerces control values by `key` from the association list returned by `oca-dialog-show`. modal dialog functions opencad native ui (oca-*) — dialogs &amp; dockable panels">
+            <div class="func-card" id="oc-get" data-cat="cat-13" data-search="oc-get oc-get-int oc-get-real oc-get-str oc-get-bool `(oc-get key alist)`
+`(oc-get-int key alist)`
+`(oc-get-real key alist)`
+`(oc-get-str key alist)`
+`(oc-get-bool key alist)` extracts and coerces control values by `key` from the association list returned by `oc-dialog-show`. modal dialog functions opencad native ui (oc-*) — dialogs &amp; dockable panels">
                 <div class="card-header">
                     <div class="card-title-row">
-                        <a href="#oca-get" class="card-title-link">
-                            <h3 class="func-name">oca-get</h3>
+                        <a href="#oc-get" class="card-title-link">
+                            <h3 class="func-name">oc-get</h3>
                         </a>
                         <span class="subcat-badge">Modal Dialog Functions</span>
-                        <button class="anchor-btn" onclick="copyDirectLink('oca-get')" title="Copy link to oca-get">
+                        <button class="anchor-btn" onclick="copyDirectLink('oc-get')" title="Copy link to oc-get">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                         </button>
                     </div>
-                    <div class="alias-group"><span class="alias-label">Aliases:</span> <span class="alias-pill">oca-get-int</span> <span class="alias-pill">oca-get-real</span> <span class="alias-pill">oca-get-str</span> <span class="alias-pill">oca-get-bool</span></div>
+                    <div class="alias-group"><span class="alias-label">Aliases:</span> <span class="alias-pill">oc-get-int</span> <span class="alias-pill">oc-get-real</span> <span class="alias-pill">oc-get-str</span> <span class="alias-pill">oc-get-bool</span></div>
                 </div>
                 
                 <div class="syntax-banner">
                     <span class="section-label">SYNTAX</span>
-                    <div class="syntax-code"><code>`(oca-get key alist)`</code><br><code>`(oca-get-int key alist)`</code><br><code>`(oca-get-real key alist)`</code><br><code>`(oca-get-str key alist)`</code><br><code>`(oca-get-bool key alist)`</code></div>
+                    <div class="syntax-code"><code>`(oc-get key alist)`</code><br><code>`(oc-get-int key alist)`</code><br><code>`(oc-get-real key alist)`</code><br><code>`(oc-get-str key alist)`</code><br><code>`(oc-get-bool key alist)`</code></div>
                 </div>
                 
                 <div class="summary-body">
-                    <p>Extracts and coerces control values by <code>key</code> from the association list returned by <code>oca-dialog-show</code>.</p>
+                    <p>Extracts and coerces control values by <code>key</code> from the association list returned by <code>oc-dialog-show</code>.</p>
                 </div>
                 
                 <div class="example-box">
                     <div class="example-header">
                         <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(setq r (oca-get-real &quot;rad&quot; res))">
+                        <button class="copy-btn" onclick="copyExample(this)" data-code="(setq r (oc-get-real &quot;rad&quot; res))">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             Copy
                         </button>
                     </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span><span class="tok-keyword">setq</span> r <span class="tok-paren">(</span>oca-get-real <span class="tok-string">&quot;rad&quot;</span> res<span class="tok-paren">)</span><span class="tok-paren">)</span></code></pre>
+                    <pre class="example-code"><code><span class="tok-paren">(</span><span class="tok-keyword">setq</span> r <span class="tok-paren">(</span>oc-get-real <span class="tok-string">&quot;rad&quot;</span> res<span class="tok-paren">)</span><span class="tok-paren">)</span></code></pre>
                 </div>
                 
             </div>
             
 
-            <div class="func-card" id="oca-panel-register" data-cat="cat-13" data-search="oca-panel-register  `(oca-panel-register panel-id title [options-alist] ctrl1 [ctrl2 ...])` registers a persistent dockable panel in the opencad studio side pane and seeds all default control states. dockable side panel functions opencad native ui (oca-*) — dialogs &amp; dockable panels">
+            <div class="func-card" id="oc-panel-register" data-cat="cat-13" data-search="oc-panel-register  `(oc-panel-register panel-id title [options-alist] ctrl1 [ctrl2 ...])` registers a persistent dockable panel in the opencad studio side pane and seeds all default control states. dockable side panel functions opencad native ui (oc-*) — dialogs &amp; dockable panels">
                 <div class="card-header">
                     <div class="card-title-row">
-                        <a href="#oca-panel-register" class="card-title-link">
-                            <h3 class="func-name">oca-panel-register</h3>
+                        <a href="#oc-panel-register" class="card-title-link">
+                            <h3 class="func-name">oc-panel-register</h3>
                         </a>
                         <span class="subcat-badge">Dockable Side Panel Functions</span>
-                        <button class="anchor-btn" onclick="copyDirectLink('oca-panel-register')" title="Copy link to oca-panel-register">
+                        <button class="anchor-btn" onclick="copyDirectLink('oc-panel-register')" title="Copy link to oc-panel-register">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                         </button>
                     </div>
@@ -6107,7 +6060,7 @@
                 
                 <div class="syntax-banner">
                     <span class="section-label">SYNTAX</span>
-                    <div class="syntax-code"><code>`(oca-panel-register panel-id title [options-alist] ctrl1 [ctrl2 ...])`</code></div>
+                    <div class="syntax-code"><code>`(oc-panel-register panel-id title [options-alist] ctrl1 [ctrl2 ...])`</code></div>
                 </div>
                 
                 <div class="summary-body">
@@ -6117,35 +6070,35 @@
                 <div class="example-box">
                     <div class="example-header">
                         <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oca-panel-register &quot;shape_panel&quot; &quot;Shape Generator&quot;
+                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oc-panel-register &quot;shape_panel&quot; &quot;Shape Generator&quot;
   &#x27;((width . 260.0))
-  (oca-choice &quot;choice_color&quot; &quot;Color&quot; &#x27;(&quot;Red&quot; &quot;Green&quot; &quot;Blue&quot;) &quot;Red&quot;)
-  (oca-checkbox &quot;chk_draw_x&quot; &quot;Draw &#x27;X&#x27; Lines&quot; nil)
-  (oca-button &quot;btn_draw&quot; &quot;Draw Shape&quot; &quot;(c:draw-shape)&quot;)
+  (oc-choice &quot;choice_color&quot; &quot;Color&quot; &#x27;(&quot;Red&quot; &quot;Green&quot; &quot;Blue&quot;) &quot;Red&quot;)
+  (oc-checkbox &quot;chk_draw_x&quot; &quot;Draw &#x27;X&#x27; Lines&quot; nil)
+  (oc-button &quot;btn_draw&quot; &quot;Draw Shape&quot; &quot;(c:draw-shape)&quot;)
 )">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             Copy
                         </button>
                     </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span>oca-panel-register <span class="tok-string">&quot;shape_panel&quot;</span> <span class="tok-string">&quot;Shape Generator&quot;</span>
+                    <pre class="example-code"><code><span class="tok-paren">(</span>oc-panel-register <span class="tok-string">&quot;shape_panel&quot;</span> <span class="tok-string">&quot;Shape Generator&quot;</span>
   &#x27;<span class="tok-paren">(</span><span class="tok-paren">(</span>width . <span class="tok-number">260.0</span><span class="tok-paren">)</span><span class="tok-paren">)</span>
-  <span class="tok-paren">(</span>oca-choice <span class="tok-string">&quot;choice_color&quot;</span> <span class="tok-string">&quot;Color&quot;</span> &#x27;<span class="tok-paren">(</span><span class="tok-string">&quot;Red&quot;</span> <span class="tok-string">&quot;Green&quot;</span> <span class="tok-string">&quot;Blue&quot;</span><span class="tok-paren">)</span> <span class="tok-string">&quot;Red&quot;</span><span class="tok-paren">)</span>
-  <span class="tok-paren">(</span>oca-checkbox <span class="tok-string">&quot;chk_draw_x&quot;</span> <span class="tok-string">&quot;Draw &#x27;X&#x27; Lines&quot;</span> nil<span class="tok-paren">)</span>
-  <span class="tok-paren">(</span>oca-button <span class="tok-string">&quot;btn_draw&quot;</span> <span class="tok-string">&quot;Draw Shape&quot;</span> <span class="tok-string">&quot;(c:draw-shape)&quot;</span><span class="tok-paren">)</span>
+  <span class="tok-paren">(</span>oc-choice <span class="tok-string">&quot;choice_color&quot;</span> <span class="tok-string">&quot;Color&quot;</span> &#x27;<span class="tok-paren">(</span><span class="tok-string">&quot;Red&quot;</span> <span class="tok-string">&quot;Green&quot;</span> <span class="tok-string">&quot;Blue&quot;</span><span class="tok-paren">)</span> <span class="tok-string">&quot;Red&quot;</span><span class="tok-paren">)</span>
+  <span class="tok-paren">(</span>oc-checkbox <span class="tok-string">&quot;chk_draw_x&quot;</span> <span class="tok-string">&quot;Draw &#x27;X&#x27; Lines&quot;</span> nil<span class="tok-paren">)</span>
+  <span class="tok-paren">(</span>oc-button <span class="tok-string">&quot;btn_draw&quot;</span> <span class="tok-string">&quot;Draw Shape&quot;</span> <span class="tok-string">&quot;(c:draw-shape)&quot;</span><span class="tok-paren">)</span>
 <span class="tok-paren">)</span></code></pre>
                 </div>
                 
             </div>
             
 
-            <div class="func-card" id="oca-panel-toggle" data-cat="cat-13" data-search="oca-panel-toggle  `(oca-panel-toggle panel-id [show-bool])` opens, closes, or toggles visibility of a registered dockable panel. pass `t` to explicitly show, or omit `show-bool` to toggle. dockable side panel functions opencad native ui (oca-*) — dialogs &amp; dockable panels">
+            <div class="func-card" id="oc-panel-toggle" data-cat="cat-13" data-search="oc-panel-toggle  `(oc-panel-toggle panel-id [show-bool])` opens, closes, or toggles visibility of a registered dockable panel. pass `t` to explicitly show, or omit `show-bool` to toggle. dockable side panel functions opencad native ui (oc-*) — dialogs &amp; dockable panels">
                 <div class="card-header">
                     <div class="card-title-row">
-                        <a href="#oca-panel-toggle" class="card-title-link">
-                            <h3 class="func-name">oca-panel-toggle</h3>
+                        <a href="#oc-panel-toggle" class="card-title-link">
+                            <h3 class="func-name">oc-panel-toggle</h3>
                         </a>
                         <span class="subcat-badge">Dockable Side Panel Functions</span>
-                        <button class="anchor-btn" onclick="copyDirectLink('oca-panel-toggle')" title="Copy link to oca-panel-toggle">
+                        <button class="anchor-btn" onclick="copyDirectLink('oc-panel-toggle')" title="Copy link to oc-panel-toggle">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                         </button>
                     </div>
@@ -6154,7 +6107,7 @@
                 
                 <div class="syntax-banner">
                     <span class="section-label">SYNTAX</span>
-                    <div class="syntax-code"><code>`(oca-panel-toggle panel-id [show-bool])`</code></div>
+                    <div class="syntax-code"><code>`(oc-panel-toggle panel-id [show-bool])`</code></div>
                 </div>
                 
                 <div class="summary-body">
@@ -6164,25 +6117,25 @@
                 <div class="example-box">
                     <div class="example-header">
                         <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oca-panel-toggle &quot;shape_panel&quot; T)">
+                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oc-panel-toggle &quot;shape_panel&quot; T)">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             Copy
                         </button>
                     </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span>oca-panel-toggle <span class="tok-string">&quot;shape_panel&quot;</span> T<span class="tok-paren">)</span></code></pre>
+                    <pre class="example-code"><code><span class="tok-paren">(</span>oc-panel-toggle <span class="tok-string">&quot;shape_panel&quot;</span> T<span class="tok-paren">)</span></code></pre>
                 </div>
                 
             </div>
             
 
-            <div class="func-card" id="oca-panel-update" data-cat="cat-13" data-search="oca-panel-update  `(oca-panel-update panel-id values-alist)` programmatically updates one or more control values in a live dockable panel without re-registering it. dockable side panel functions opencad native ui (oca-*) — dialogs &amp; dockable panels">
+            <div class="func-card" id="oc-panel-update" data-cat="cat-13" data-search="oc-panel-update  `(oc-panel-update panel-id values-alist)` programmatically updates one or more control values in a live dockable panel without re-registering it. dockable side panel functions opencad native ui (oc-*) — dialogs &amp; dockable panels">
                 <div class="card-header">
                     <div class="card-title-row">
-                        <a href="#oca-panel-update" class="card-title-link">
-                            <h3 class="func-name">oca-panel-update</h3>
+                        <a href="#oc-panel-update" class="card-title-link">
+                            <h3 class="func-name">oc-panel-update</h3>
                         </a>
                         <span class="subcat-badge">Dockable Side Panel Functions</span>
-                        <button class="anchor-btn" onclick="copyDirectLink('oca-panel-update')" title="Copy link to oca-panel-update">
+                        <button class="anchor-btn" onclick="copyDirectLink('oc-panel-update')" title="Copy link to oc-panel-update">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                         </button>
                     </div>
@@ -6191,7 +6144,7 @@
                 
                 <div class="syntax-banner">
                     <span class="section-label">SYNTAX</span>
-                    <div class="syntax-code"><code>`(oca-panel-update panel-id values-alist)`</code></div>
+                    <div class="syntax-code"><code>`(oc-panel-update panel-id values-alist)`</code></div>
                 </div>
                 
                 <div class="summary-body">
@@ -6201,36 +6154,36 @@
                 <div class="example-box">
                     <div class="example-header">
                         <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oca-panel-update &quot;calc&quot; (list (cons &quot;display&quot; &quot;123.45&quot;)))">
+                        <button class="copy-btn" onclick="copyExample(this)" data-code="(oc-panel-update &quot;calc&quot; (list (cons &quot;display&quot; &quot;123.45&quot;)))">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             Copy
                         </button>
                     </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span>oca-panel-update <span class="tok-string">&quot;calc&quot;</span> <span class="tok-paren">(</span>list <span class="tok-paren">(</span>cons <span class="tok-string">&quot;display&quot;</span> <span class="tok-string">&quot;123.45&quot;</span><span class="tok-paren">)</span><span class="tok-paren">)</span><span class="tok-paren">)</span></code></pre>
+                    <pre class="example-code"><code><span class="tok-paren">(</span>oc-panel-update <span class="tok-string">&quot;calc&quot;</span> <span class="tok-paren">(</span>list <span class="tok-paren">(</span>cons <span class="tok-string">&quot;display&quot;</span> <span class="tok-string">&quot;123.45&quot;</span><span class="tok-paren">)</span><span class="tok-paren">)</span><span class="tok-paren">)</span></code></pre>
                 </div>
                 
             </div>
             
 
-            <div class="func-card" id="oca-panel-get" data-cat="cat-13" data-search="oca-panel-get oca-panel-get-bool oca-panel-get-str `(oca-panel-get panel-id control-id)`
-`(oca-panel-get-bool panel-id control-id)`
-`(oca-panel-get-str panel-id control-id)` reads the current live value of any control (`checkbox`, `choice`, `text`, `number`, `color`) inside a dockable panel. automatically synchronized whenever the user interacts with the panel ui. dockable side panel functions opencad native ui (oca-*) — dialogs &amp; dockable panels">
+            <div class="func-card" id="oc-panel-get" data-cat="cat-13" data-search="oc-panel-get oc-panel-get-bool oc-panel-get-str `(oc-panel-get panel-id control-id)`
+`(oc-panel-get-bool panel-id control-id)`
+`(oc-panel-get-str panel-id control-id)` reads the current live value of any control (`checkbox`, `choice`, `text`, `number`, `color`) inside a dockable panel. automatically synchronized whenever the user interacts with the panel ui. dockable side panel functions opencad native ui (oc-*) — dialogs &amp; dockable panels">
                 <div class="card-header">
                     <div class="card-title-row">
-                        <a href="#oca-panel-get" class="card-title-link">
-                            <h3 class="func-name">oca-panel-get</h3>
+                        <a href="#oc-panel-get" class="card-title-link">
+                            <h3 class="func-name">oc-panel-get</h3>
                         </a>
                         <span class="subcat-badge">Dockable Side Panel Functions</span>
-                        <button class="anchor-btn" onclick="copyDirectLink('oca-panel-get')" title="Copy link to oca-panel-get">
+                        <button class="anchor-btn" onclick="copyDirectLink('oc-panel-get')" title="Copy link to oc-panel-get">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                         </button>
                     </div>
-                    <div class="alias-group"><span class="alias-label">Aliases:</span> <span class="alias-pill">oca-panel-get-bool</span> <span class="alias-pill">oca-panel-get-str</span></div>
+                    <div class="alias-group"><span class="alias-label">Aliases:</span> <span class="alias-pill">oc-panel-get-bool</span> <span class="alias-pill">oc-panel-get-str</span></div>
                 </div>
                 
                 <div class="syntax-banner">
                     <span class="section-label">SYNTAX</span>
-                    <div class="syntax-code"><code>`(oca-panel-get panel-id control-id)`</code><br><code>`(oca-panel-get-bool panel-id control-id)`</code><br><code>`(oca-panel-get-str panel-id control-id)`</code></div>
+                    <div class="syntax-code"><code>`(oc-panel-get panel-id control-id)`</code><br><code>`(oc-panel-get-bool panel-id control-id)`</code><br><code>`(oc-panel-get-str panel-id control-id)`</code></div>
                 </div>
                 
                 <div class="summary-body">
@@ -6240,14 +6193,14 @@
                 <div class="example-box">
                     <div class="example-header">
                         <span class="section-label">EXAMPLE</span>
-                        <button class="copy-btn" onclick="copyExample(this)" data-code="(setq col    (oca-panel-get &quot;shape_panel&quot; &quot;choice_color&quot;))
-(setq draw-x (oca-panel-get-bool &quot;shape_panel&quot; &quot;chk_draw_x&quot;))">
+                        <button class="copy-btn" onclick="copyExample(this)" data-code="(setq col    (oc-panel-get &quot;shape_panel&quot; &quot;choice_color&quot;))
+(setq draw-x (oc-panel-get-bool &quot;shape_panel&quot; &quot;chk_draw_x&quot;))">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             Copy
                         </button>
                     </div>
-                    <pre class="example-code"><code><span class="tok-paren">(</span><span class="tok-keyword">setq</span> col    <span class="tok-paren">(</span>oca-panel-get <span class="tok-string">&quot;shape_panel&quot;</span> <span class="tok-string">&quot;choice_color&quot;</span><span class="tok-paren">)</span><span class="tok-paren">)</span>
-<span class="tok-paren">(</span><span class="tok-keyword">setq</span> draw-x <span class="tok-paren">(</span>oca-panel-get-bool <span class="tok-string">&quot;shape_panel&quot;</span> <span class="tok-string">&quot;chk_draw_x&quot;</span><span class="tok-paren">)</span><span class="tok-paren">)</span></code></pre>
+                    <pre class="example-code"><code><span class="tok-paren">(</span><span class="tok-keyword">setq</span> col    <span class="tok-paren">(</span>oc-panel-get <span class="tok-string">&quot;shape_panel&quot;</span> <span class="tok-string">&quot;choice_color&quot;</span><span class="tok-paren">)</span><span class="tok-paren">)</span>
+<span class="tok-paren">(</span><span class="tok-keyword">setq</span> draw-x <span class="tok-paren">(</span>oc-panel-get-bool <span class="tok-string">&quot;shape_panel&quot;</span> <span class="tok-string">&quot;chk_draw_x&quot;</span><span class="tok-paren">)</span><span class="tok-paren">)</span></code></pre>
                 </div>
                 
             </div>
@@ -6259,12 +6212,12 @@
         <section class="category-section" id="cat-14-section" data-cat="cat-14">
             <div class="cat-section-header">
                 <span class="cat-num-pill">14</span>
-                <h2 class="cat-heading">Visual LISP (vl-*) Extensions</h2>
+                <h2 class="cat-heading">Extended LISP (vl-*) Functions</h2>
                 <span class="cat-badge">21 functions</span>
             </div>
             <div class="cat-cards">
                 
-            <div class="func-card" id="vl-string-search" data-cat="cat-14" data-search="vl-string-search  (vl-string-search pattern str [start-pos]) returns 0-based index of `pattern` in `str`, or `nil`. string utilities visual lisp (vl-*) extensions">
+            <div class="func-card" id="vl-string-search" data-cat="cat-14" data-search="vl-string-search  (vl-string-search pattern str [start-pos]) returns 0-based index of `pattern` in `str`, or `nil`. string utilities extended lisp (vl-*) functions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vl-string-search" class="card-title-link">
@@ -6301,7 +6254,7 @@
             </div>
             
 
-            <div class="func-card" id="vl-string-subst" data-cat="cat-14" data-search="vl-string-subst  (vl-string-subst new-str pattern str [start-pos]) replaces the first occurrence of `pattern` in `str` with `new-str`. string utilities visual lisp (vl-*) extensions">
+            <div class="func-card" id="vl-string-subst" data-cat="cat-14" data-search="vl-string-subst  (vl-string-subst new-str pattern str [start-pos]) replaces the first occurrence of `pattern` in `str` with `new-str`. string utilities extended lisp (vl-*) functions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vl-string-subst" class="card-title-link">
@@ -6338,7 +6291,7 @@
             </div>
             
 
-            <div class="func-card" id="vl-string-trim" data-cat="cat-14" data-search="vl-string-trim  (vl-string-trim char-set str) strips characters in `char-set` from both ends of `str`. string utilities visual lisp (vl-*) extensions">
+            <div class="func-card" id="vl-string-trim" data-cat="cat-14" data-search="vl-string-trim  (vl-string-trim char-set str) strips characters in `char-set` from both ends of `str`. string utilities extended lisp (vl-*) functions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vl-string-trim" class="card-title-link">
@@ -6375,7 +6328,7 @@
             </div>
             
 
-            <div class="func-card" id="vl-string-left-trim" data-cat="cat-14" data-search="vl-string-left-trim vl-string-right-trim (vl-string-left-trim char-set str) strips characters in `char-set` from the start or end of `str`. string utilities visual lisp (vl-*) extensions">
+            <div class="func-card" id="vl-string-left-trim" data-cat="cat-14" data-search="vl-string-left-trim vl-string-right-trim (vl-string-left-trim char-set str) strips characters in `char-set` from the start or end of `str`. string utilities extended lisp (vl-*) functions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vl-string-left-trim" class="card-title-link">
@@ -6412,7 +6365,7 @@
             </div>
             
 
-            <div class="func-card" id="vl-string-translate" data-cat="cat-14" data-search="vl-string-translate  (vl-string-translate src-set dest-set str) replaces characters in `str` matching `src-set` with corresponding characters in `dest-set`. string utilities visual lisp (vl-*) extensions">
+            <div class="func-card" id="vl-string-translate" data-cat="cat-14" data-search="vl-string-translate  (vl-string-translate src-set dest-set str) replaces characters in `str` matching `src-set` with corresponding characters in `dest-set`. string utilities extended lisp (vl-*) functions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vl-string-translate" class="card-title-link">
@@ -6449,7 +6402,7 @@
             </div>
             
 
-            <div class="func-card" id="vl-string--list" data-cat="cat-14" data-search="vl-string-&gt;list vl-list-&gt;string (vl-string-&gt;list str)` / `(vl-list-&gt;string int-list) converts between a string and a list of ascii integer codes. string utilities visual lisp (vl-*) extensions">
+            <div class="func-card" id="vl-string--list" data-cat="cat-14" data-search="vl-string-&gt;list vl-list-&gt;string (vl-string-&gt;list str)` / `(vl-list-&gt;string int-list) converts between a string and a list of ascii integer codes. string utilities extended lisp (vl-*) functions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vl-string--list" class="card-title-link">
@@ -6486,7 +6439,7 @@
             </div>
             
 
-            <div class="func-card" id="vl-princ-to-string" data-cat="cat-14" data-search="vl-princ-to-string vl-prin1-to-string (vl-princ-to-string expr) formats `expr` as an unquoted (`princ`) or quoted (`prin1`) string. string utilities visual lisp (vl-*) extensions">
+            <div class="func-card" id="vl-princ-to-string" data-cat="cat-14" data-search="vl-princ-to-string vl-prin1-to-string (vl-princ-to-string expr) formats `expr` as an unquoted (`princ`) or quoted (`prin1`) string. string utilities extended lisp (vl-*) functions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vl-princ-to-string" class="card-title-link">
@@ -6523,7 +6476,7 @@
             </div>
             
 
-            <div class="func-card" id="vl-symbol-name" data-cat="cat-14" data-search="vl-symbol-name  (vl-symbol-name sym) returns the name of symbol `sym` as a string. string utilities visual lisp (vl-*) extensions">
+            <div class="func-card" id="vl-symbol-name" data-cat="cat-14" data-search="vl-symbol-name  (vl-symbol-name sym) returns the name of symbol `sym` as a string. string utilities extended lisp (vl-*) functions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vl-symbol-name" class="card-title-link">
@@ -6560,7 +6513,7 @@
             </div>
             
 
-            <div class="func-card" id="vl-remove" data-cat="cat-14" data-search="vl-remove  (vl-remove elem list) removes all elements equal to `elem` from `list`. list &amp; functional utilities visual lisp (vl-*) extensions">
+            <div class="func-card" id="vl-remove" data-cat="cat-14" data-search="vl-remove  (vl-remove elem list) removes all elements equal to `elem` from `list`. list &amp; functional utilities extended lisp (vl-*) functions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vl-remove" class="card-title-link">
@@ -6597,7 +6550,7 @@
             </div>
             
 
-            <div class="func-card" id="vl-remove-if" data-cat="cat-14" data-search="vl-remove-if vl-remove-if-not (vl-remove-if pred-fn list) removes (`vl-remove-if`) or keeps (`vl-remove-if-not`) elements satisfying `pred-fn`. list &amp; functional utilities visual lisp (vl-*) extensions">
+            <div class="func-card" id="vl-remove-if" data-cat="cat-14" data-search="vl-remove-if vl-remove-if-not (vl-remove-if pred-fn list) removes (`vl-remove-if`) or keeps (`vl-remove-if-not`) elements satisfying `pred-fn`. list &amp; functional utilities extended lisp (vl-*) functions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vl-remove-if" class="card-title-link">
@@ -6634,7 +6587,7 @@
             </div>
             
 
-            <div class="func-card" id="vl-position" data-cat="cat-14" data-search="vl-position  (vl-position elem list) returns the 0-based index of `elem` in `list`, or `nil`. list &amp; functional utilities visual lisp (vl-*) extensions">
+            <div class="func-card" id="vl-position" data-cat="cat-14" data-search="vl-position  (vl-position elem list) returns the 0-based index of `elem` in `list`, or `nil`. list &amp; functional utilities extended lisp (vl-*) functions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vl-position" class="card-title-link">
@@ -6671,7 +6624,7 @@
             </div>
             
 
-            <div class="func-card" id="vl-sort" data-cat="cat-14" data-search="vl-sort vl-sort-i (vl-sort list compare-fn) sorts `list` (`vl-sort`) or returns sorted 0-based indices (`vl-sort-i`) using `compare-fn`. list &amp; functional utilities visual lisp (vl-*) extensions">
+            <div class="func-card" id="vl-sort" data-cat="cat-14" data-search="vl-sort vl-sort-i (vl-sort list compare-fn) sorts `list` (`vl-sort`) or returns sorted 0-based indices (`vl-sort-i`) using `compare-fn`. list &amp; functional utilities extended lisp (vl-*) functions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vl-sort" class="card-title-link">
@@ -6708,7 +6661,7 @@
             </div>
             
 
-            <div class="func-card" id="vl-list-length" data-cat="cat-14" data-search="vl-list-length  (vl-list-length list) returns list length for proper lists, or `nil` for dotted lists. list &amp; functional utilities visual lisp (vl-*) extensions">
+            <div class="func-card" id="vl-list-length" data-cat="cat-14" data-search="vl-list-length  (vl-list-length list) returns list length for proper lists, or `nil` for dotted lists. list &amp; functional utilities extended lisp (vl-*) functions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vl-list-length" class="card-title-link">
@@ -6745,7 +6698,7 @@
             </div>
             
 
-            <div class="func-card" id="vl-member-if" data-cat="cat-14" data-search="vl-member-if vl-member-if-not (vl-member-if pred-fn list) returns the tail of `list` starting at the first element satisfying (or not satisfying) `pred-fn`. list &amp; functional utilities visual lisp (vl-*) extensions">
+            <div class="func-card" id="vl-member-if" data-cat="cat-14" data-search="vl-member-if vl-member-if-not (vl-member-if pred-fn list) returns the tail of `list` starting at the first element satisfying (or not satisfying) `pred-fn`. list &amp; functional utilities extended lisp (vl-*) functions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vl-member-if" class="card-title-link">
@@ -6782,7 +6735,7 @@
             </div>
             
 
-            <div class="func-card" id="vl-every" data-cat="cat-14" data-search="vl-every vl-some (vl-every pred-fn list1 [list2 ...]) tests whether all (`vl-every`) or any (`vl-some`) elements satisfy `pred-fn`. list &amp; functional utilities visual lisp (vl-*) extensions">
+            <div class="func-card" id="vl-every" data-cat="cat-14" data-search="vl-every vl-some (vl-every pred-fn list1 [list2 ...]) tests whether all (`vl-every`) or any (`vl-some`) elements satisfy `pred-fn`. list &amp; functional utilities extended lisp (vl-*) functions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vl-every" class="card-title-link">
@@ -6819,7 +6772,7 @@
             </div>
             
 
-            <div class="func-card" id="vl-filename-base" data-cat="cat-14" data-search="vl-filename-base vl-filename-directory vl-filename-extension (vl-filename-base path) extracts the base name, directory path, or file extension from `path`. file system &amp; error handling visual lisp (vl-*) extensions">
+            <div class="func-card" id="vl-filename-base" data-cat="cat-14" data-search="vl-filename-base vl-filename-directory vl-filename-extension (vl-filename-base path) extracts the base name, directory path, or file extension from `path`. file system &amp; error handling extended lisp (vl-*) functions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vl-filename-base" class="card-title-link">
@@ -6856,7 +6809,7 @@
             </div>
             
 
-            <div class="func-card" id="vl-file-copy" data-cat="cat-14" data-search="vl-file-copy vl-file-delete vl-file-rename (vl-file-copy src dst [append]) copies, deletes, or renames files on disk. file system &amp; error handling visual lisp (vl-*) extensions">
+            <div class="func-card" id="vl-file-copy" data-cat="cat-14" data-search="vl-file-copy vl-file-delete vl-file-rename (vl-file-copy src dst [append]) copies, deletes, or renames files on disk. file system &amp; error handling extended lisp (vl-*) functions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vl-file-copy" class="card-title-link">
@@ -6893,7 +6846,7 @@
             </div>
             
 
-            <div class="func-card" id="vl-file-size" data-cat="cat-14" data-search="vl-file-size vl-file-systime (vl-file-size path) returns file size in bytes or modification timestamp list. file system &amp; error handling visual lisp (vl-*) extensions">
+            <div class="func-card" id="vl-file-size" data-cat="cat-14" data-search="vl-file-size vl-file-systime (vl-file-size path) returns file size in bytes or modification timestamp list. file system &amp; error handling extended lisp (vl-*) functions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vl-file-size" class="card-title-link">
@@ -6930,7 +6883,7 @@
             </div>
             
 
-            <div class="func-card" id="vl-directory-files" data-cat="cat-14" data-search="vl-directory-files  (vl-directory-files [dir [pattern [mode]]]) lists files or folders in `dir` (`mode`: `-1`=dirs only, `1`=files only, `0`=all). file system &amp; error handling visual lisp (vl-*) extensions">
+            <div class="func-card" id="vl-directory-files" data-cat="cat-14" data-search="vl-directory-files  (vl-directory-files [dir [pattern [mode]]]) lists files or folders in `dir` (`mode`: `-1`=dirs only, `1`=files only, `0`=all). file system &amp; error handling extended lisp (vl-*) functions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vl-directory-files" class="card-title-link">
@@ -6971,7 +6924,7 @@
 (setq r (vl-catch-all-apply &#x27;/ &#x27;(10 0)))
 (if (vl-catch-all-error-p r)
 (princ (vl-catch-all-error-message r))
-) file system &amp; error handling visual lisp (vl-*) extensions">
+) file system &amp; error handling extended lisp (vl-*) functions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vl-catch-all-apply" class="card-title-link">
@@ -7013,7 +6966,7 @@
             </div>
             
 
-            <div class="func-card" id="vl-load-com" data-cat="cat-14" data-search="vl-load-com  (vl-load-com) compatibility initializer that returns `t`. file system &amp; error handling visual lisp (vl-*) extensions">
+            <div class="func-card" id="vl-load-com" data-cat="cat-14" data-search="vl-load-com  (vl-load-com) compatibility initializer that returns `t`. file system &amp; error handling extended lisp (vl-*) functions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vl-load-com" class="card-title-link">
@@ -7045,12 +6998,12 @@
         <section class="category-section" id="cat-15-section" data-cat="cat-15">
             <div class="cat-section-header">
                 <span class="cat-num-pill">15</span>
-                <h2 class="cat-heading">ActiveX / VLA (vlax-*) Extensions</h2>
+                <h2 class="cat-heading">Object Model / VLA (vlax-*) Extensions</h2>
                 <span class="cat-badge">12 functions</span>
             </div>
             <div class="cat-cards">
                 
-            <div class="func-card" id="vlax-ename--vla-object" data-cat="cat-15" data-search="vlax-ename-&gt;vla-object vlax-vla-object-&gt;ename  converts between an `ename` and a `vla-object`. object properties &amp; methods activex / vla (vlax-*) extensions">
+            <div class="func-card" id="vlax-ename--vla-object" data-cat="cat-15" data-search="vlax-ename-&gt;vla-object vlax-vla-object-&gt;ename  converts between an `ename` and a `vla-object`. object properties &amp; methods object model / vla (vlax-*) extensions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vlax-ename--vla-object" class="card-title-link">
@@ -7082,7 +7035,7 @@
             </div>
             
 
-            <div class="func-card" id="vlax-get-property" data-cat="cat-15" data-search="vlax-get-property vlax-get (vlax-get-property obj prop) reads property `prop` (e.g., `&#x27;layer`, `&#x27;radius`, `&#x27;center`, `&#x27;startpoint`, `&#x27;endpoint`, `&#x27;length`, `&#x27;area`, `&#x27;color`). object properties &amp; methods activex / vla (vlax-*) extensions">
+            <div class="func-card" id="vlax-get-property" data-cat="cat-15" data-search="vlax-get-property vlax-get (vlax-get-property obj prop) reads property `prop` (e.g., `&#x27;layer`, `&#x27;radius`, `&#x27;center`, `&#x27;startpoint`, `&#x27;endpoint`, `&#x27;length`, `&#x27;area`, `&#x27;color`). object properties &amp; methods object model / vla (vlax-*) extensions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vlax-get-property" class="card-title-link">
@@ -7119,7 +7072,7 @@
             </div>
             
 
-            <div class="func-card" id="vlax-put-property" data-cat="cat-15" data-search="vlax-put-property vlax-put (vlax-put-property obj prop val) updates property `prop` on `obj` to `val`. object properties &amp; methods activex / vla (vlax-*) extensions">
+            <div class="func-card" id="vlax-put-property" data-cat="cat-15" data-search="vlax-put-property vlax-put (vlax-put-property obj prop val) updates property `prop` on `obj` to `val`. object properties &amp; methods object model / vla (vlax-*) extensions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vlax-put-property" class="card-title-link">
@@ -7156,7 +7109,7 @@
             </div>
             
 
-            <div class="func-card" id="vlax-invoke-method" data-cat="cat-15" data-search="vlax-invoke-method vlax-invoke (vlax-invoke-method obj method [args ...]) invokes a method on `obj` (e.g., `&#x27;delete`, `&#x27;update`). object properties &amp; methods activex / vla (vlax-*) extensions">
+            <div class="func-card" id="vlax-invoke-method" data-cat="cat-15" data-search="vlax-invoke-method vlax-invoke (vlax-invoke-method obj method [args ...]) invokes a method on `obj` (e.g., `&#x27;delete`, `&#x27;update`). object properties &amp; methods object model / vla (vlax-*) extensions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vlax-invoke-method" class="card-title-link">
@@ -7193,7 +7146,7 @@
             </div>
             
 
-            <div class="func-card" id="vlax-property-available-p" data-cat="cat-15" data-search="vlax-property-available-p vlax-method-applicable-p  checks whether a property or method is supported by `obj`. object properties &amp; methods activex / vla (vlax-*) extensions">
+            <div class="func-card" id="vlax-property-available-p" data-cat="cat-15" data-search="vlax-property-available-p vlax-method-applicable-p  checks whether a property or method is supported by `obj`. object properties &amp; methods object model / vla (vlax-*) extensions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vlax-property-available-p" class="card-title-link">
@@ -7225,7 +7178,7 @@
             </div>
             
 
-            <div class="func-card" id="vlax-ldata-put" data-cat="cat-15" data-search="vlax-ldata-put  (vlax-ldata-put dict key val) stores a lisp value `val` under `(dict, key)`. persistent ldata dictionary storage activex / vla (vlax-*) extensions">
+            <div class="func-card" id="vlax-ldata-put" data-cat="cat-15" data-search="vlax-ldata-put  (vlax-ldata-put dict key val) stores a lisp value `val` under `(dict, key)`. persistent ldata dictionary storage object model / vla (vlax-*) extensions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vlax-ldata-put" class="card-title-link">
@@ -7262,7 +7215,7 @@
             </div>
             
 
-            <div class="func-card" id="vlax-ldata-get" data-cat="cat-15" data-search="vlax-ldata-get  (vlax-ldata-get dict key [default]) retrieves the value stored at `(dict, key)`, or `default`. persistent ldata dictionary storage activex / vla (vlax-*) extensions">
+            <div class="func-card" id="vlax-ldata-get" data-cat="cat-15" data-search="vlax-ldata-get  (vlax-ldata-get dict key [default]) retrieves the value stored at `(dict, key)`, or `default`. persistent ldata dictionary storage object model / vla (vlax-*) extensions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vlax-ldata-get" class="card-title-link">
@@ -7299,7 +7252,7 @@
             </div>
             
 
-            <div class="func-card" id="vlax-ldata-delete" data-cat="cat-15" data-search="vlax-ldata-delete vlax-ldata-list  deletes a key or lists all `(key . val)` entries in `dict`. persistent ldata dictionary storage activex / vla (vlax-*) extensions">
+            <div class="func-card" id="vlax-ldata-delete" data-cat="cat-15" data-search="vlax-ldata-delete vlax-ldata-list  deletes a key or lists all `(key . val)` entries in `dict`. persistent ldata dictionary storage object model / vla (vlax-*) extensions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vlax-ldata-delete" class="card-title-link">
@@ -7331,7 +7284,7 @@
             </div>
             
 
-            <div class="func-card" id="vlax-make-variant" data-cat="cat-15" data-search="vlax-make-variant vlax-variant-value  wraps and unwraps variant containers. variants, safearrays &amp; curve queries activex / vla (vlax-*) extensions">
+            <div class="func-card" id="vlax-make-variant" data-cat="cat-15" data-search="vlax-make-variant vlax-variant-value  wraps and unwraps variant containers. variants, safearrays &amp; curve queries object model / vla (vlax-*) extensions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vlax-make-variant" class="card-title-link">
@@ -7363,7 +7316,7 @@
             </div>
             
 
-            <div class="func-card" id="vlax-make-safearray" data-cat="cat-15" data-search="vlax-make-safearray vlax-safearray-value  creates a safearray container and extracts its elements as a list. variants, safearrays &amp; curve queries activex / vla (vlax-*) extensions">
+            <div class="func-card" id="vlax-make-safearray" data-cat="cat-15" data-search="vlax-make-safearray vlax-safearray-value  creates a safearray container and extracts its elements as a list. variants, safearrays &amp; curve queries object model / vla (vlax-*) extensions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vlax-make-safearray" class="card-title-link">
@@ -7395,7 +7348,7 @@
             </div>
             
 
-            <div class="func-card" id="vlax-curve-getstartpoint" data-cat="cat-15" data-search="vlax-curve-getstartpoint vlax-curve-getendpoint (vlax-curve-getstartpoint curve) returns the start or end point `(x y z)` of a curve entity. variants, safearrays &amp; curve queries activex / vla (vlax-*) extensions">
+            <div class="func-card" id="vlax-curve-getstartpoint" data-cat="cat-15" data-search="vlax-curve-getstartpoint vlax-curve-getendpoint (vlax-curve-getstartpoint curve) returns the start or end point `(x y z)` of a curve entity. variants, safearrays &amp; curve queries object model / vla (vlax-*) extensions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vlax-curve-getstartpoint" class="card-title-link">
@@ -7432,7 +7385,7 @@
             </div>
             
 
-            <div class="func-card" id="vlax-curve-getdistatparam" data-cat="cat-15" data-search="vlax-curve-getdistatparam vlax-curve-getparamatdist  converts between curve parameter and distance along the curve. variants, safearrays &amp; curve queries activex / vla (vlax-*) extensions">
+            <div class="func-card" id="vlax-curve-getdistatparam" data-cat="cat-15" data-search="vlax-curve-getdistatparam vlax-curve-getparamatdist  converts between curve parameter and distance along the curve. variants, safearrays &amp; curve queries object model / vla (vlax-*) extensions">
                 <div class="card-header">
                     <div class="card-title-row">
                         <a href="#vlax-curve-getdistatparam" class="card-title-link">

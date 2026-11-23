@@ -1,6 +1,6 @@
-# OpenCAD Studio AutoLISP Function Reference
+# OpenCAD LISP Function Reference
 
-This reference documents every built-in function, special form, CAD bridge operation, Visual LISP extension, and native UI constructor implemented in the **opencad-lisp** engine.
+This reference documents every built-in function, special form, CAD bridge operation, extended LISP function, and native UI constructor implemented in the **opencad-lisp-engine** runtime.
 
 **Argument Conventions:**
 - `arg` — Required argument.
@@ -141,7 +141,7 @@ This reference documents every built-in function, special form, CAD bridge opera
 
 ### `eval`
 - **Syntax**: `(eval expr)`
-- **Summary**: Evaluates `expr` a second time as an AutoLISP expression.
+- **Summary**: Evaluates `expr` a second time as an OpenCAD LISP expression.
 - **Example**:
   ```lisp
   (setq code '(+ 10 20))
@@ -174,10 +174,10 @@ This reference documents every built-in function, special form, CAD bridge opera
 
 ### `ver` / `vl-version` / `lisp-implementation-type`
 - **Syntax**: `(ver)`, `(vl-version)`, `(lisp-implementation-type)`
-- **Summary**: Returns version and implementation strings for the AutoLISP runtime.
+- **Summary**: Returns version and implementation strings for the OpenCAD LISP runtime.
 - **Example**:
   ```lisp
-  (ver) ; => "Visual LISP 2026 (opencad-lisp native Rust engine v0.1.0)"
+  (ver) ; => "OpenCAD LISP 2026 (opencad-lisp-engine native Rust engine v0.1.0)"
   ```
 
 ---
@@ -669,7 +669,7 @@ This reference documents every built-in function, special form, CAD bridge opera
 
 ### `load`
 - **Syntax**: `(load filename [onfailure])`
-- **Summary**: Reads and evaluates an AutoLISP `.lsp` file. Automatically appends `.lsp` if omitted. If loading fails and `onfailure` is provided, returns `onfailure`.
+- **Summary**: Reads and evaluates an OpenCAD LISP `.lsp` file. Automatically appends `.lsp` if omitted. If loading fails and `onfailure` is provided, returns `onfailure`.
 - **Example**:
   ```lisp
   (load "routine")
@@ -687,32 +687,24 @@ This reference documents every built-in function, special form, CAD bridge opera
 
 ## 8. Clipboard & Utility Extensions
 
-### `get_clipboard` / `dos_getclipboard`
-- **Syntax**: `(get_clipboard)` or `(dos_getclipboard)`
+### `get_clipboard`
+- **Syntax**: `(get_clipboard)`
 - **Summary**: Retrieves the current plain-text contents of the system clipboard.
 - **Example**:
   ```lisp
-  (setq text (dos_getclipboard))
+  (setq text (get_clipboard))
   ```
 
-### `set_clipboard` / `dos_setclipboard`
-- **Syntax**: `(set_clipboard val)` or `(dos_setclipboard val)`
+### `set_clipboard`
+- **Syntax**: `(set_clipboard val)`
 - **Summary**: Copies `val` (converted to string) to the system clipboard and returns the string.
 - **Example**:
   ```lisp
-  (dos_setclipboard "42.50")
+  (set_clipboard "42.50")
   ```
 
-### `dos_clipboard`
-- **Syntax**: `(dos_clipboard [new-text])`
-- **Summary**: Unified getter/setter. With no arguments, returns current clipboard text; with `new-text`, sets the clipboard and returns the new text.
-- **Example**:
-  ```lisp
-  (dos_clipboard "Copied from AutoLISP")
-  ```
-
-### `msgbox` / `dos_msgbox` / `oca-msgbox`
-- **Syntax**: `(oca-msgbox prompt [title] [buttons-spec])` *(aliases: `msgbox`, `dos_msgbox`)*
+### `msgbox` / `oc-msgbox`
+- **Syntax**: `(oc-msgbox prompt [title] [buttons-spec])` *(alias: `msgbox`)*
 - **Parameters**:
   - `prompt` *(string | any)*: Message text displayed in dialog body.
   - `[title]` *(optional string, default: `"OpenCAD Studio"`)*: Dialog window title.
@@ -720,10 +712,10 @@ This reference documents every built-in function, special form, CAD bridge opera
     - Integer flags: `0`=OK, `1`=OK/Cancel, `2`=Abort/Retry/Ignore, `3`=Yes/No/Cancel, `4`=Yes/No, `5`=Retry/Cancel.
     - Symbols / Strings: `'ok`, `'okcancel`, `'yesno`, `'retrycancel`, `'abortretryignore`, `'yesnocancel`.
     - Alist: `'((buttons . yesno) (title . "...") (icon . warning))`.
-- **Returns**: Standard button ID integer: `1`=OK, `2`=Cancel, `3`=Abort, `4`=Retry, `5`=Ignore, `6`=Yes, `7`=No.
+- **Returns**: Standard button ID integer (`msgbox`: `1`=OK, `2`=Cancel, `3`=Abort, `4`=Retry, `5`=Ignore, `6`=Yes, `7`=No) or symbol (`oc-msgbox`: `'OK`, `'CANCEL`, `'YES`, `'NO`, etc.).
 - **Example**:
   ```lisp
-  (oca-msgbox "Delete selected entities?" "Confirm" "YESNO") ; => 6 (Yes) or 7 (No)
+  (oc-msgbox "Delete selected entities?" "Confirm" "YESNO") ; => YES or NO
   ```
 
 ---
@@ -896,22 +888,22 @@ This reference documents every built-in function, special form, CAD bridge opera
 
 ---
 
-## 13. OpenCAD Native UI (`oca-*`) — Dialogs & Dockable Panels
+## 13. OpenCAD Native UI (`oc-*`) — Dialogs & Dockable Panels
 
-OpenCAD Studio provides native UI controls and containers that can be instantiated and controlled directly from AutoLISP routines. These controls match the OpenCAD Studio dark/light design system and iced widget tree.
+OpenCAD Studio provides native UI controls and containers that can be instantiated and controlled directly from OpenCAD LISP routines. These controls match the OpenCAD Studio dark/light design system and iced widget tree.
 
 ### Control Constructors
-Used inside both modal dialogs (`oca-dialog`) and dockable side panels (`oca-panel-register`):
+Used inside both modal dialogs (`oc-dialog`) and dockable side panels (`oc-panel-register`):
 
-- **`oca-text`**: `(oca-text id label [default])`
+- **`oc-text`**: `(oc-text id label [default])`
   - Creates a single-line text input box.
   - **Parameters**:
     - `id` *(string | symbol)*: Unique control identifier for extracting values.
     - `label` *(string | symbol)*: Label text displayed alongside the input field.
     - `[default]` *(optional string, default: `""`)*: Initial text string.
-  - **Example**: `(oca-text "txt_name" "Name" "Part-A")`
+  - **Example**: `(oc-text "txt_name" "Name" "Part-A")`
 
-- **`oca-number`**: `(oca-number id label [default] [options])`
+- **`oc-number`**: `(oc-number id label [default] [options])`
   - Creates a numeric input field with spinner constraints.
   - **Parameters**:
     - `id` *(string | symbol)*: Unique control identifier.
@@ -922,35 +914,35 @@ Used inside both modal dialogs (`oca-dialog`) and dockable side panels (`oca-pan
       - `(max . <number>)`: Maximum permitted value.
       - `(step . <number>)`: Step increment for adjustment.
       - `(default . <number>)`: Default value when options passed in 3rd position.
-  - **Example**: `(oca-number "radius" "Radius" 25.0 '((min . 1.0) (max . 100.0) (step . 0.5)))`
+  - **Example**: `(oc-number "radius" "Radius" 25.0 '((min . 1.0) (max . 100.0) (step . 0.5)))`
 
-- **`oca-checkbox`**: `(oca-checkbox id label [default-bool] [options])`
+- **`oc-checkbox`**: `(oc-checkbox id label [default-bool] [options])`
   - Creates a boolean toggle checkbox.
   - **Parameters**:
     - `id` *(string | symbol)*: Unique control identifier.
     - `label` *(string | symbol)*: Label text displayed next to the checkbox.
     - `[default-bool]` *(optional boolean, default: `nil`)*: Initial state (`T` for checked, `nil` for unchecked).
     - `[options]` *(optional alist)*: Alignment alist supporting `(align-h . "left"|"center"|"right")` and `(align-v . "top"|"middle"|"bottom")`.
-  - **Example**: `(oca-checkbox "chk_x" "Draw 'X' Lines" nil)`
+  - **Example**: `(oc-checkbox "chk_x" "Draw 'X' Lines" nil)`
 
-- **`oca-choice`**: `(oca-choice id label options-list [default])`
+- **`oc-choice`**: `(oc-choice id label options-list [default])`
   - Creates a dropdown selector menu from a list of options.
   - **Parameters**:
     - `id` *(string | symbol)*: Unique control identifier.
     - `label` *(string | symbol)*: Label text displayed beside the dropdown.
     - `options-list` *(list of strings)*: Available dropdown item strings.
     - `[default]` *(optional integer, string, or alist, default: `0`)*: 0-based index, matching string value, or `'((default . <val>))`.
-  - **Example**: `(oca-choice "col" "Color" '("Red" "Blue" "Green") "Red")`
+  - **Example**: `(oc-choice "col" "Color" '("Red" "Blue" "Green") "Red")`
 
-- **`oca-color`**: `(oca-color id label [default-rgb])`
+- **`oc-color`**: `(oc-color id label [default-rgb])`
   - Creates an RGB color picker.
   - **Parameters**:
     - `id` *(string | symbol)*: Unique control identifier.
     - `label` *(string | symbol)*: Label text displayed next to the color swatch.
     - `[default-rgb]` *(optional list of 3 integers, default: `'(0 0 0)`)*: Initial RGB color `'(r g b)` with components in `0..255`.
-  - **Example**: `(oca-color "clr" "Fill Color" '(255 0 0))`
+  - **Example**: `(oc-color "clr" "Fill Color" '(255 0 0))`
 
-- **`oca-file`**: `(oca-file id label [default-path] [options])`
+- **`oc-file`**: `(oc-file id label [default-path] [options])`
   - Creates a native file open/save browser control with a text path input and browse button.
   - **Parameters**:
     - `id` *(string | symbol)*: Unique control identifier.
@@ -960,9 +952,9 @@ Used inside both modal dialogs (`oca-dialog`) and dockable side panels (`oca-pan
       - `(filter . "<label>")`: Descriptive filter label (e.g. `"DXF Files (*.dxf)"`).
       - `(extensions . ("<ext1>" ...))`: List of allowed extensions without dots (e.g. `'("dxf" "dwg")`).
       - `(save . <bool>)`: `T` for a Save File dialog, `nil` for an Open File dialog (default: `nil`).
-  - **Example**: `(oca-file "path" "Output File" "out.dxf" '((filter . "DXF Files (*.dxf)") (extensions . ("dxf")) (save . T)))`
+  - **Example**: `(oc-file "path" "Output File" "out.dxf" '((filter . "DXF Files (*.dxf)") (extensions . ("dxf")) (save . T)))`
 
-- **`oca-table`**: `(oca-table id label headers [rows] [options])`
+- **`oc-table`**: `(oc-table id label headers [rows] [options])`
   - Creates an editable multi-column data table grid.
   - **Parameters**:
     - `id` *(string | symbol)*: Unique control identifier.
@@ -972,9 +964,9 @@ Used inside both modal dialogs (`oca-dialog`) and dockable side panels (`oca-pan
     - `[options]` *(optional alist)*: Table behavior options supporting:
       - `(allow_add . <bool>)`: Show "+" button to append new rows (default: `T`).
       - `(allow_delete . <bool>)`: Show "-" button to remove selected rows (default: `T`).
-  - **Example**: `(oca-table "tbl" "Points" '("X" "Y" "Z") '(("0" "0" "0")) '((allow_add . T) (allow_delete . T)))`
+  - **Example**: `(oc-table "tbl" "Points" '("X" "Y" "Z") '(("0" "0" "0")) '((allow_add . T) (allow_delete . T)))`
 
-- **`oca-fields`**: `(oca-fields [id] title [options] ctrl1 [ctrl2 ...])`
+- **`oc-fields`**: `(oc-fields [id] title [options] ctrl1 [ctrl2 ...])`
   - Creates a collapsible group box containing nested child controls.
   - **Parameters**:
     - `[id]` *(optional string | symbol)*: Section identifier (defaults to slugified title).
@@ -982,166 +974,166 @@ Used inside both modal dialogs (`oca-dialog`) and dockable side panels (`oca-pan
     - `[options]` *(optional alist)*: Group box options supporting:
       - `(collapsed . <bool>)`: `T` to start collapsed, `nil` to start expanded (default: `nil`).
     - `ctrl1 [ctrl2 ...]` *(controls)*: One or more nested child controls inside this section.
-  - **Example**: `(oca-fields "Advanced" '((collapsed . nil)) (oca-checkbox "snap" "Object Snap" T))`
+  - **Example**: `(oc-fields "Advanced" '((collapsed . nil)) (oc-checkbox "snap" "Object Snap" T))`
 
-- **`oca-button`**: `(oca-button id label [action] [options])`
+- **`oc-button`**: `(oc-button id label [action] [options])`
   - Creates a clickable button.
   - **Parameters**:
     - `id` *(string | symbol)*: Unique button identifier.
     - `label` *(string | symbol)*: Text displayed on the button face.
-    - `[action]` *(optional string or alist, default: `"click"`)*: In dock panels, an AutoLISP command string evaluated on click (e.g. `"(c:draw-shape)"`). In interactive modal dialogs, passed to the action callback as the `action` string.
+    - `[action]` *(optional string or alist, default: `"click"`)*: In dock panels, an OpenCAD LISP command string evaluated on click (e.g. `"(c:draw-shape)"`). In interactive modal dialogs, passed to the action callback as the `action` string.
     - `[options]` *(optional alist)*: Layout and styling options supporting:
       - `(action . "<str>")`: Action string if passed in options alist.
       - `(align-h . "left"|"center"|"right")`: Horizontal button alignment within its container.
       - `(width . <number>)`: Explicit button width in pixels (e.g. `140.0`).
-  - **Example**: `(oca-button "btn_draw" "Draw Shape" "draw_action" '((align-h . "center") (width . 140.0)))`
+  - **Example**: `(oc-button "btn_draw" "Draw Shape" "draw_action" '((align-h . "center") (width . 140.0)))`
 
-- **`oca-info`**: `(oca-info [id] text [options])`
+- **`oc-info`**: `(oc-info [id] text [options])`
   - Creates a read-only static label / informational text block.
   - **Parameters**:
     - `[id]` *(optional string | symbol)*: Optional control identifier for reactive text updates.
     - `text` *(string | symbol)*: Informational or instructional text string to display.
     - `[options]` *(optional alist)*: Styling options supporting:
       - `(align-h . "left"|"center"|"right")`: Horizontal text alignment (default: `"left"`).
-  - **Example**: `(oca-info "lbl_status" "Select options below:" '((align-h . "center")))`
+  - **Example**: `(oc-info "lbl_status" "Select options below:" '((align-h . "center")))`
 
-- **`oca-row`**: `(oca-row [options] ctrl1 ctrl2 ...)`
+- **`oc-row`**: `(oc-row [options] ctrl1 ctrl2 ...)`
   - Arranges multiple controls horizontally on a single row.
   - **Parameters**:
     - `[options]` *(optional alist)*: Alignment options supporting:
       - `(align-h . "left"|"center"|"right")`: Horizontal alignment of controls in row.
       - `(align-v . "top"|"middle"|"bottom")`: Vertical alignment of controls in row.
     - `ctrl1 ctrl2 ...` *(controls)*: One or more controls placed horizontally side-by-side.
-  - **Example**: `(oca-row '((align-h . "center") (align-v . "middle")) (oca-button "b1" "Action 1") (oca-button "b2" "Action 2"))`
+  - **Example**: `(oc-row '((align-h . "center") (align-v . "middle")) (oc-button "b1" "Action 1") (oc-button "b2" "Action 2"))`
 
-- **`oca-column`**: `(oca-column [options] ctrl1 ctrl2 ...)`
+- **`oc-column`**: `(oc-column [options] ctrl1 ctrl2 ...)`
   - Arranges multiple controls vertically in a single column container.
   - **Parameters**:
     - `[options]` *(optional alist)*: Alignment options supporting:
       - `(align-h . "left"|"center"|"right")`: Horizontal alignment within column.
       - `(align-v . "top"|"middle"|"bottom")`: Vertical alignment within column.
     - `ctrl1 ctrl2 ...` *(controls)*: One or more controls stacked vertically.
-  - **Example**: `(oca-column '((align-h . "center")) (oca-text "t1" "Label" "") (oca-button "b1" "OK"))`
+  - **Example**: `(oc-column '((align-h . "center")) (oc-text "t1" "Label" "") (oc-button "b1" "OK"))`
 
 ---
 
 ### Modal Dialog Functions
 
-#### `oca-dialog` & `oca-dialog-show`
+#### `oc-dialog` & `oc-dialog-show`
 - **Syntax**:
-  - `(oca-dialog title [options] row1 [row2 ...])`
-  - `(oca-dialog-show dialog-def [action_callback])`
-- **Parameters (`oca-dialog`)**:
+  - `(oc-dialog title [options] row1 [row2 ...])`
+  - `(oc-dialog-show dialog-def [action_callback])`
+- **Parameters (`oc-dialog`)**:
   - `title` *(string | symbol)*: Title bar text for the modal dialog window.
   - `[options]` *(optional alist)*: Dialog window options supporting:
     - `(width . <number>)`: Minimum dialog width in pixels (e.g. `450.0`).
     - `(submit . "<str>")`: Custom text for the submit button (default: `"OK"`).
     - `(cancel . "<str>")`: Custom text for the cancel button (default: `"Cancel"`).
   - `row1 [row2 ...]` *(controls)*: One or more rows, columns, or controls defining the dialog content.
-- **Parameters (`oca-dialog-show`)**:
-  - `dialog-def` *(dialog definition)*: Dialog object created by `(oca-dialog ...)`.
+- **Parameters (`oc-dialog-show`)**:
+  - `dialog-def` *(dialog definition)*: Dialog object created by `(oc-dialog ...)`.
   - `[action_callback]` *(optional symbol or lambda)*: Interactive callback function `(defun callback (control-id action current-values) ...)`. When supplied, buttons, inputs, and picks trigger this callback without closing the dialog, enabling real-time two-way updates.
     - Return `'((update . ((control-id . new-val) ...)))` to update values in-place.
     - Return `'((replace . new-dialog-def))` to dynamically replace the dialog layout.
     - Return `'submit` to programmatically submit, `'close` to dismiss, or `nil` for no-op.
-- **Summary**: `oca-dialog` builds a modal dialog definition. `oca-dialog-show` displays it modally and returns an association list of `(id . value)` pairs when submitted, or `nil` if cancelled.
+- **Summary**: `oc-dialog` builds a modal dialog definition. `oc-dialog-show` displays it modally and returns an association list of `(id . value)` pairs when submitted, or `nil` if cancelled.
 - **Example**:
   ```lisp
-  (setq dlg (oca-dialog "Circle Parameters"
+  (setq dlg (oc-dialog "Circle Parameters"
               '((width . 400.0))
-              (oca-number "rad" "Radius" 30.0 '((min . 1.0) (max . 500.0)))
-              (oca-checkbox "cross" "Add Crosshairs" T)))
-  (setq res (oca-dialog-show dlg))
+              (oc-number "rad" "Radius" 30.0 '((min . 1.0) (max . 500.0)))
+              (oc-checkbox "cross" "Add Crosshairs" T)))
+  (setq res (oc-dialog-show dlg))
   (if res
-    (princ (strcat "\nRadius: " (rtos (oca-get-real "rad" res))))
+    (princ (strcat "\nRadius: " (rtos (oc-get-real "rad" res))))
   )
   ```
 
-#### Dialog Result Getters (`oca-get*`)
+#### Dialog Result Getters (`oc-get*`)
 - **Syntax**:
-  - `(oca-get key alist)`
-  - `(oca-get-int key alist)`
-  - `(oca-get-real key alist)`
-  - `(oca-get-str key alist)`
-  - `(oca-get-bool key alist)`
+  - `(oc-get key alist)`
+  - `(oc-get-int key alist)`
+  - `(oc-get-real key alist)`
+  - `(oc-get-str key alist)`
+  - `(oc-get-bool key alist)`
 - **Parameters**:
   - `key` *(string | symbol)*: Control ID string to look up.
-  - `alist` *(association list)*: Result association list returned by `(oca-dialog-show ...)`.
-- **Summary**: Extracts and coerces control values by `key` from the association list returned by `oca-dialog-show`.
+  - `alist` *(association list)*: Result association list returned by `(oc-dialog-show ...)`.
+- **Summary**: Extracts and coerces control values by `key` from the association list returned by `oc-dialog-show`.
 - **Example**:
   ```lisp
-  (setq r (oca-get-real "rad" res))
-  (setq s (oca-get-str "txt_name" res))
-  (setq b (oca-get-bool "cross" res))
+  (setq r (oc-get-real "rad" res))
+  (setq s (oc-get-str "txt_name" res))
+  (setq b (oc-get-bool "cross" res))
   ```
 
 ---
 
 ### Dockable Side Panel Functions
 
-#### `oca-panel-register`
-- **Syntax**: `(oca-panel-register panel-id title [options] ctrl1 [ctrl2 ...])`
+#### `oc-panel-register`
+- **Syntax**: `(oc-panel-register panel-id title [options] ctrl1 [ctrl2 ...])`
 - **Parameters**:
   - `panel-id` *(string | symbol)*: Unique identifier for the dockable side panel.
   - `title` *(string | symbol)*: Header title text displayed on the side panel tab.
   - `[options]` *(optional alist)*: Panel configuration options supporting:
     - `(width . <number>)`: Default dock panel width in pixels (e.g. `260.0`).
-    - `(command . "<cmd>")`: AutoLISP command string to invoke if opened from menu.
+    - `(command . "<cmd>")`: OpenCAD LISP command string to invoke if opened from menu.
   - `ctrl1 [ctrl2 ...]` *(controls)*: Controls rendered vertically inside the side panel.
 - **Summary**: Registers a persistent dockable panel in the OpenCAD Studio side pane and seeds all default control states.
 - **Example**:
   ```lisp
-  (oca-panel-register "shape_panel" "Shape Generator"
+  (oc-panel-register "shape_panel" "Shape Generator"
     '((width . 260.0))
-    (oca-choice "choice_color" "Color" '("Red" "Green" "Blue") "Red")
-    (oca-checkbox "chk_draw_x" "Draw 'X' Lines" nil)
-    (oca-button "btn_draw" "Draw Shape" "(c:draw-shape)")
+    (oc-choice "choice_color" "Color" '("Red" "Green" "Blue") "Red")
+    (oc-checkbox "chk_draw_x" "Draw 'X' Lines" nil)
+    (oc-button "btn_draw" "Draw Shape" "(c:draw-shape)")
   )
   ```
 
-#### `oca-panel-toggle`
-- **Syntax**: `(oca-panel-toggle panel-id [show])`
+#### `oc-panel-toggle`
+- **Syntax**: `(oc-panel-toggle panel-id [show])`
 - **Parameters**:
   - `panel-id` *(string | symbol)*: Identifier of the registered side panel.
   - `[show]` *(optional boolean)*: `T` to explicitly show, `nil` to hide. If omitted, toggles open/closed.
 - **Summary**: Opens, closes, or toggles visibility of a registered dockable panel.
 - **Example**:
   ```lisp
-  (oca-panel-toggle "shape_panel" T)
+  (oc-panel-toggle "shape_panel" T)
   ```
 
-#### `oca-panel-update`
-- **Syntax**: `(oca-panel-update panel-id values-alist)`
+#### `oc-panel-update`
+- **Syntax**: `(oc-panel-update panel-id values-alist)`
 - **Parameters**:
   - `panel-id` *(string | symbol)*: Identifier of the registered side panel.
   - `values-alist` *(association list)*: List of `(("control_id" . new-value) ...)` pairs to update in-place without re-registering.
 - **Summary**: Programmatically updates one or more control values in a live dockable panel.
 - **Example**:
   ```lisp
-  (oca-panel-update "calc" (list (cons "display" "123.45")))
+  (oc-panel-update "calc" (list (cons "display" "123.45")))
   ```
 
-#### `oca-panel-get` / `oca-panel-get-num` / `oca-panel-get-real` / `oca-panel-get-bool` / `oca-panel-get-str`
+#### `oc-panel-get` / `oc-panel-get-num` / `oc-panel-get-real` / `oc-panel-get-bool` / `oc-panel-get-str`
 - **Syntax**:
-  - `(oca-panel-get panel-id control-id)`
-  - `(oca-panel-get-num panel-id control-id)`
-  - `(oca-panel-get-real panel-id control-id)`
-  - `(oca-panel-get-bool panel-id control-id)`
-  - `(oca-panel-get-str panel-id control-id)`
+  - `(oc-panel-get panel-id control-id)`
+  - `(oc-panel-get-num panel-id control-id)`
+  - `(oc-panel-get-real panel-id control-id)`
+  - `(oc-panel-get-bool panel-id control-id)`
+  - `(oc-panel-get-str panel-id control-id)`
 - **Parameters**:
   - `panel-id` *(string | symbol)*: Side panel identifier.
   - `control-id` *(string | symbol)*: Target control identifier inside the panel.
 - **Summary**: Reads the current live value of any control (`checkbox`, `choice`, `text`, `number`, `color`) inside a dockable panel. Automatically synchronized whenever the user interacts with the panel UI.
 - **Example**:
   ```lisp
-  (setq col    (oca-panel-get "shape_panel" "choice_color"))
-  (setq draw-x (oca-panel-get-bool "shape_panel" "chk_draw_x"))
-  (setq radius (oca-panel-get-num "shape_panel" "rad"))
+  (setq col    (oc-panel-get "shape_panel" "choice_color"))
+  (setq draw-x (oc-panel-get-bool "shape_panel" "chk_draw_x"))
+  (setq radius (oc-panel-get-num "shape_panel" "rad"))
   ```
 
 ---
 
-## 14. Visual LISP (`vl-*`) Extensions
+## 14. Extended LISP (`vl-*`) Functions
 
 ### String Utilities
 
@@ -1222,7 +1214,7 @@ Used inside both modal dialogs (`oca-dialog`) and dockable side panels (`oca-pan
 
 ---
 
-## 15. ActiveX / VLA (`vlax-*`) Extensions
+## 15. Object Model / VLA (`vlax-*`) Extensions
 
 ### Object Properties & Methods
 

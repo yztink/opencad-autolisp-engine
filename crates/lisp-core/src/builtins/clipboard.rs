@@ -133,15 +133,6 @@ pub fn register(env: &mut Env) {
         }
     });
 
-    // Alias: dos_getclipboard
-    env.def_subr("DOS_GETCLIPBOARD", |_args, _| {
-        match platform::get_text() {
-            Ok(Some(s)) => Ok(Value::Str(s)),
-            Ok(None) => Ok(Value::Nil),
-            Err(e) => Err(LispError::Io(format!("dos_getclipboard error: {}", e))),
-        }
-    });
-
     // ── SET_CLIPBOARD ─────────────────────────────────────────────────────────
     // Usage: (set_clipboard "text to copy")
     // Returns: "text to copy" on success, or nil / error
@@ -158,50 +149,6 @@ pub fn register(env: &mut Env) {
         match platform::set_text(&text) {
             Ok(_) => Ok(Value::Str(text)),
             Err(e) => Err(LispError::Io(format!("set_clipboard error: {}", e))),
-        }
-    });
-
-    // Alias: dos_setclipboard
-    env.def_subr("DOS_SETCLIPBOARD", |args, _| {
-        if args.len() != 1 {
-            return Err(LispError::WrongArgCount { expected: "1 (text)", actual: args.len() });
-        }
-        let text = match &args[0] {
-            Value::Str(s) => s.clone(),
-            Value::Nil => String::new(),
-            other => other.to_string(),
-        };
-
-        match platform::set_text(&text) {
-            Ok(_) => Ok(Value::Str(text)),
-            Err(e) => Err(LispError::Io(format!("dos_setclipboard error: {}", e))),
-        }
-    });
-
-    // ── DOS_CLIPBOARD (polymorphic get / set matching DOSLib specification) ──
-    // Usage:
-    //   (dos_clipboard)        => get clipboard text
-    //   (dos_clipboard "text") => set clipboard text
-    env.def_subr("DOS_CLIPBOARD", |args, _| {
-        if args.is_empty() {
-            match platform::get_text() {
-                Ok(Some(s)) => Ok(Value::Str(s)),
-                Ok(None) => Ok(Value::Nil),
-                Err(e) => Err(LispError::Io(format!("dos_clipboard error: {}", e))),
-            }
-        } else if args.len() == 1 {
-            let text = match &args[0] {
-                Value::Str(s) => s.clone(),
-                Value::Nil => String::new(),
-                other => other.to_string(),
-            };
-
-            match platform::set_text(&text) {
-                Ok(_) => Ok(Value::Str(text)),
-                Err(e) => Err(LispError::Io(format!("dos_clipboard error: {}", e))),
-            }
-        } else {
-            Err(LispError::WrongArgCount { expected: "0 or 1 ([text])", actual: args.len() })
         }
     });
 }

@@ -8,7 +8,7 @@
 
 ## Cross-Repo Dependencies
 
-<!-- Does this change require paired updates in `opencad-autolisp-and-ide` or `OpenCADStudio`? Link downstream/upstream PRs or state "None". -->
+<!-- Does this change require paired updates in `opencad-lisp-and-ide` or `OpenCADStudio`? Link downstream/upstream PRs or state "None". -->
 - None
 
 ## Verification

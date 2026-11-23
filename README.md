@@ -1,16 +1,16 @@
-# OpenCAD AutoLISP Engine (`opencad-autolisp-engine`)
+# OpenCAD LISP Engine (`opencad-lisp-engine`)
 
 > [!WARNING]
 > **Status: Extreme Alpha / Active Development**  
 > This project is in an early experimental stage and under active development. Language coverage, CAD bridge primitives, and internal interfaces are subject to rapid evolution.
 
-High-performance, memory-safe, cross-platform AutoLISP, Visual LISP (`vl-*`), and ActiveX (`vlax-*`) runtime engine written in Rust for **OpenCAD Studio** and standalone CAD scripting.
+High-performance, memory-safe, cross-platform OpenCAD LISP, LISP extension (`vl-*`), and Object Model (`vlax-*`) runtime engine written in Rust for **OpenCAD Studio** and standalone CAD scripting.
 
 ---
 
 ## Overview
 
-`opencad-autolisp-engine` provides a complete, authoritative implementation of the AutoLISP programming language. It includes a pure Lisp runtime, CAD bridge abstraction layer, interactive terminal REPL, C-compatible shared library (`opencad_lisp.dll`), and standalone CLI runner.
+`opencad-lisp-engine` provides a complete, authoritative implementation of the OpenCAD LISP programming language. It includes a pure Lisp runtime, CAD bridge abstraction layer, interactive terminal REPL, C-compatible shared library (`opencad_lisp.dll`), and standalone CLI runner.
 
 ---
 
@@ -19,7 +19,7 @@ High-performance, memory-safe, cross-platform AutoLISP, Visual LISP (`vl-*`), an
 | Crate | Purpose |
 |---|---|
 | **`lisp-core`** | Pure Lisp runtime: lexer, reader/parser, AST, tree-walking evaluator, lexical scoping, closures, tail recursion, error diagnostics with stack traces, and standard `vl-*` string, list, math, and file utilities. Zero external CAD dependencies. |
-| **`lisp-cad`** | CAD domain integration: `(command ...)`, `(entmake ...)`, `(entget ...)`, `(entmod ...)`, `(ssget ...)`, `(getpoint ...)`, `(tblsearch ...)`, `(tblnext ...)`, curve and lightweight polyline geometry, `(defun c:...)` command auto-registration, `ocl-panel-*` dynamic GUI sidebars, and DCL dialogs via the `CadBridge` trait. |
+| **`lisp-cad`** | CAD domain integration: `(command ...)`, `(entmake ...)`, `(entget ...)`, `(entmod ...)`, `(ssget ...)`, `(getpoint ...)`, `(tblsearch ...)`, `(tblnext ...)`, curve and lightweight polyline geometry, `(defun c:...)` command auto-registration, `oc-panel-*` dynamic GUI sidebars, and DCL dialogs via the `CadBridge` trait. |
 | **`lisp-repl`** | Interactive REPL services: terminal line editing, bracket balancing, history management, and JSON-RPC IDE server protocol. |
 | **`lisp-c-api`** | C-compatible shared library (`opencad_lisp.dll` / `.so`) and C header (`opencad_lisp.h`) for embedding the engine into foreign CAD plugins or C/C++ applications. |
 | **`lisp-cli`** | Standalone CLI binary (`oclisp`) for terminal REPL and batch script execution. |
@@ -33,7 +33,7 @@ High-performance, memory-safe, cross-platform AutoLISP, Visual LISP (`vl-*`), an
   - List manipulation (`cons`, `car`, `cdr`, `assoc`, `nth`, `mapcar`, `apply`, `append`, `reverse`, `subst`).
   - Special forms: `defun`, `lambda`, `quote`, `setq`, `progn`, `let`.
   - S-expression breakpoints and stepping hooks for IDE debuggers.
-- **Visual LISP & Utility Library**:
+- **Extended LISP & Utility Library**:
   - Comprehensive `vl-*` file manipulation (`vl-file-copy`, `vl-file-delete`, `vl-file-size`, `vl-directory-files`).
   - String functions (`vl-string-search`, `vl-string-subst`, `vl-string-trim`, `vl-string->list`).
   - Error catching (`vl-catch-all-apply`, `vl-catch-all-error-p`, `vl-catch-all-error-message`).
@@ -62,7 +62,7 @@ cargo test --workspace
 ```
 Runs 58 comprehensive tests covering:
 - Core arithmetic, scoping, error stacks, and recursion depth limits.
-- Visual LISP extensions and string operations.
+- Extended LISP functions and string operations.
 - Polyline curve geometry, arc interpolation, and coordinate transformations.
 - Symbol table search and iteration (`tblsearch`, `tblnext`).
 - Selection set operations (`ssget`, `sslength`, `ssname`).
@@ -78,7 +78,7 @@ The `lisp-cli` crate produces the `oclisp` command-line binary:
 # Start an interactive REPL session:
 cargo run -p lisp-cli
 
-# Execute an AutoLISP file:
+# Execute an OpenCAD LISP file:
 cargo run -p lisp-cli -- path/to/script.lsp
 ```
 

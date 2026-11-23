@@ -241,14 +241,14 @@ impl Default for LispEngine {
     }
 }
 
-/// Creates a new AutoLISP engine instance.
+/// Creates a new OpenCAD LISP engine instance.
 /// Returns a raw pointer that must be freed using `lisp_engine_destroy`.
 #[no_mangle]
 pub extern "C" fn lisp_engine_create() -> *mut LispEngine {
     Box::into_raw(Box::new(LispEngine::new()))
 }
 
-/// Destroys an AutoLISP engine instance and frees its memory.
+/// Destroys an OpenCAD LISP engine instance and frees its memory.
 #[no_mangle]
 pub extern "C" fn lisp_engine_destroy(engine: *mut LispEngine) {
     if !engine.is_null() {
@@ -259,7 +259,7 @@ pub extern "C" fn lisp_engine_destroy(engine: *mut LispEngine) {
 }
 
 /// Registers a CAD command execution callback: `int callback(const char* cmd_str)`.
-/// This enables `(command ...)` in AutoLISP to drive the CAD host directly.
+/// This enables `(command ...)` in OpenCAD LISP to drive the CAD host directly.
 #[no_mangle]
 pub extern "C" fn lisp_engine_set_command_callback(
     engine: *mut LispEngine,
@@ -272,7 +272,7 @@ pub extern "C" fn lisp_engine_set_command_callback(
     engine_ref.bridge.lock().unwrap().cmd_callback = callback;
 }
 
-/// Evaluates an AutoLISP code string.
+/// Evaluates an OpenCAD LISP code string.
 /// Returns 0 on success, -1 on evaluation error, -2 on null input.
 #[no_mangle]
 pub extern "C" fn lisp_eval_string(

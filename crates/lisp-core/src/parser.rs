@@ -138,7 +138,7 @@ impl Parser {
     fn next_spanned_token(&mut self) -> Result<SpannedToken, LispError> {
         if self.cursor >= self.tokens.len() {
             Err(LispError::Syntax(
-                "Unexpected EOF while parsing AutoLISP".to_string(),
+                "Unexpected EOF while parsing OpenCAD LISP".to_string(),
             ))
         } else {
             let t = self.tokens[self.cursor].clone();

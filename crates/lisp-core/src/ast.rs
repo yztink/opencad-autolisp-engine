@@ -6,7 +6,7 @@ use std::sync::Arc;
 use crate::env::Env;
 use crate::error::LispError;
 
-/// Case-insensitive AutoLISP symbol (stored normalized as uppercase).
+/// Case-insensitive OpenCAD LISP symbol (stored normalized as uppercase).
 #[derive(Clone, Debug, Hash, PartialEq, Eq)]
 pub struct Symbol(pub String);
 
@@ -94,7 +94,7 @@ impl UserFunction {
         self.name.as_ref().map(|s| s.as_str()).unwrap_or("LAMBDA")
     }
 
-    /// Reconstructs the AutoLISP `(DEFUN ...)` or `(LAMBDA ...)` source representation.
+    /// Reconstructs the OpenCAD LISP `(DEFUN ...)` or `(LAMBDA ...)` source representation.
     pub fn format_defun(&self) -> String {
         let params_str = self.params.iter().map(|p| p.as_str()).collect::<Vec<_>>().join(" ");
         let locals_str = self.locals.iter().map(|l| l.as_str()).collect::<Vec<_>>().join(" ");
@@ -151,7 +151,7 @@ impl PartialEq for UserFunction {
 /// Native built-in primitive function pointer.
 pub type NativeFn = Arc<dyn Fn(&[Value], &mut Rc<RefCell<Env>>) -> Result<Value, LispError> + Send + Sync>;
 
-/// All dynamically typed values in AutoLISP.
+/// All dynamically typed values in OpenCAD LISP.
 #[derive(Clone)]
 pub enum Value {
     Nil,
@@ -183,7 +183,7 @@ impl Value {
     }
 
     /// Empty-name symbol returned by 0-argument `(princ)`, `(prin1)`, and `(print)`
-    /// for quiet command/script exits (distinct from `nil` per standard AutoLISP).
+    /// for quiet command/script exits (distinct from `nil` per standard OpenCAD LISP).
     pub fn quiet_symbol() -> Self {
         Value::Sym(Symbol(String::new()))
     }

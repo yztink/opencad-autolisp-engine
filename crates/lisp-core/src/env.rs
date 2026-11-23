@@ -45,9 +45,9 @@ impl Env {
         self.bindings.insert(sym, val);
     }
 
-    /// Sets variable matching AutoLISP `SETQ` semantics:
+    /// Sets variable matching OpenCAD LISP `SETQ` semantics:
     /// Walks up the environment chain. If symbol is bound in an ancestor, updates it there;
-    /// otherwise in AutoLISP semantics, undeclared symbols are global, so bind it at the root environment!
+    /// otherwise in OpenCAD LISP semantics, undeclared symbols are global, so bind it at the root environment!
     pub fn setq(env_rc: &Rc<RefCell<Env>>, sym: Symbol, val: Value) {
         let mut curr = Some(env_rc.clone());
         let mut root = env_rc.clone();
@@ -62,7 +62,7 @@ impl Env {
         }
 
         // Symbol was not found anywhere in ancestor chain.
-        // In AutoLISP, variables not declared in the local parameter list are GLOBAL.
+        // In OpenCAD LISP, variables not declared in the local parameter list are GLOBAL.
         root.borrow_mut().bindings.insert(sym, val);
     }
 

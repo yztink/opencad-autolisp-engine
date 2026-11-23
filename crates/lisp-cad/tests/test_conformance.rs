@@ -150,8 +150,8 @@ fn test_conformance_strings_and_chars() {
     let (_mock, mut env) = setup_env();
 
     assert_eq!(eval_str("(strcat \"Open\" \"CAD\" \" Studio\")", &mut env).unwrap(), Value::Str("OpenCAD Studio".into()));
-    assert_eq!(eval_str("(strlen \"AutoLISP\")", &mut env).unwrap(), Value::Int(8));
-    assert_eq!(eval_str("(substr \"AutoLISP\" 5 4)", &mut env).unwrap(), Value::Str("LISP".into()));
+    assert_eq!(eval_str("(strlen \"OpenCADLISP\")", &mut env).unwrap(), Value::Int(11));
+    assert_eq!(eval_str("(substr \"OpenCADLISP\" 8 4)", &mut env).unwrap(), Value::Str("LISP".into()));
     assert_eq!(eval_str("(strcase \"Hello World\")", &mut env).unwrap(), Value::Str("HELLO WORLD".into()));
     assert_eq!(eval_str("(strcase \"Hello World\" t)", &mut env).unwrap(), Value::Str("hello world".into()));
     assert_eq!(eval_str("(itoa 123)", &mut env).unwrap(), Value::Str("123".into()));
@@ -192,7 +192,7 @@ fn test_conformance_geometry() {
 }
 
 #[test]
-fn test_conformance_visual_lisp_vl() {
+fn test_conformance_vl_extensions() {
     let (_mock, mut env) = setup_env();
 
     // vl-string-*
@@ -263,7 +263,7 @@ fn test_conformance_cad_and_vlax() {
     assert_eq!(eval_str("(initget 1 \"Yes No\")", &mut env).unwrap(), Value::Nil);
     assert_eq!(eval_str("(getorient '(0 0 0) \"Direction: \")", &mut env).unwrap(), Value::Real(1.1071487177940905));
 
-    // VLAX ActiveX emulation
+    // VLAX Object Model emulation
     eval_str("(setq vla (vlax-ename->vla-object e1))", &mut env).unwrap();
     assert_eq!(eval_str("(vlax-vla-object->ename vla)", &mut env).unwrap(), last_e);
     assert_eq!(eval_str("(vlax-get-property vla 'Layer)", &mut env).unwrap(), Value::Str("PARTITION".into()));
@@ -288,14 +288,9 @@ fn test_conformance_cad_and_vlax() {
     assert_eq!(eval_str("(vlax-ldata-delete \"PROJECT\" \"REV\")", &mut env).unwrap(), Value::T);
     assert_eq!(eval_str("(vlax-ldata-get \"PROJECT\" \"REV\")", &mut env).unwrap(), Value::Nil);
 
-    // ── Clipboard Operations (get_clipboard, set_clipboard, dos_clipboard) ──
+    // ── Clipboard Operations (get_clipboard, set_clipboard) ──
     assert_eq!(eval_str("(set_clipboard \"OpenCAD Clipboard Text 123\")", &mut env).unwrap(), Value::Str("OpenCAD Clipboard Text 123".into()));
     assert_eq!(eval_str("(get_clipboard)", &mut env).unwrap(), Value::Str("OpenCAD Clipboard Text 123".into()));
-
-    // Polymorphic dos_clipboard
-    assert_eq!(eval_str("(dos_clipboard \"DOSLib Polymo Copy\")", &mut env).unwrap(), Value::Str("DOSLib Polymo Copy".into()));
-    assert_eq!(eval_str("(dos_clipboard)", &mut env).unwrap(), Value::Str("DOSLib Polymo Copy".into()));
-    assert_eq!(eval_str("(get_clipboard)", &mut env).unwrap(), Value::Str("DOSLib Polymo Copy".into()));
 }
 
 #[test]

@@ -18,15 +18,15 @@ pub fn register_all(env: &mut Env) {
     io::register(env);
     clipboard::register(env);
 
-    // Standard AutoLISP version query
+    // Standard OpenCAD LISP version query
     env.def_subr("VER", |_, _| {
-        Ok(Value::Str("Visual LISP 2026 (opencad-autolisp-engine native Rust engine v0.1.0)".into()))
+        Ok(Value::Str("OpenCAD LISP 2026 (opencad-lisp-engine native Rust engine v0.1.0)".into()))
     });
     env.def_subr("VL-VERSION", |_, _| {
-        Ok(Value::Str("Visual LISP 2026 (opencad-autolisp-engine native Rust engine v0.1.0)".into()))
+        Ok(Value::Str("OpenCAD LISP 2026 (opencad-lisp-engine native Rust engine v0.1.0)".into()))
     });
     env.def_subr("LISP-IMPLEMENTATION-TYPE", |_, _| {
-        Ok(Value::Str("opencad-autolisp-engine (Rust)".into()))
+        Ok(Value::Str("opencad-lisp-engine (Rust)".into()))
     });
 
     // Error & Execution Flow
@@ -44,6 +44,6 @@ pub fn register_all(env: &mut Env) {
     env.def_subr("EXIT", |_, _| Err(crate::error::LispError::UserExit));
     env.def_subr("QUIT", |_, _| Err(crate::error::LispError::UserExit));
 
-    // AutoLISP predefined symbols
+    // OpenCAD LISP predefined symbols
     env.set_local(crate::ast::Symbol::new("PAUSE"), Value::Str("\\".into()));
 }

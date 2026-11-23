@@ -1,4 +1,4 @@
-; Sample AutoLISP script demonstrating calculations, strings, and Visual LISP
+; Sample OpenCAD LISP script demonstrating calculations, strings, and LISP extensions
 (setq title "OpenCAD LISP Engine Test"
       radius 50.0
       area (* pi radius radius))

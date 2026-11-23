@@ -50,10 +50,10 @@ assert res == 0, "Command eval failed"
 assert len(executed_commands) == 1, "Expected 1 executed CAD command"
 print("3. CAD command successfully executed via callback!")
 
-# 4. Test Visual LISP
+# 4. Test OpenCAD LISP extensions
 res = dll.lisp_eval_string(ctypes.c_void_p(engine), b'(vl-string-subst "CAD" "LISP" "OpenLISP")', buf, 1024)
 assert res == 0, "VL eval failed"
-print("4. Visual LISP result:", buf.value.decode("utf-8"))
+print("4. OpenCAD LISP extension result:", buf.value.decode("utf-8"))
 
 dll.lisp_engine_destroy(ctypes.c_void_p(engine))
 print("\nSuccess: opencad_lisp.dll passed all FFI and CAD callback tests!")

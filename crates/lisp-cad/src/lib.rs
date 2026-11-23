@@ -19,7 +19,7 @@ pub use ui_types::*;
 
 use lisp_core::{create_default_env, Env};
 
-/// Creates an AutoLISP environment bound to a live CAD bridge.
+/// Creates an OpenCAD LISP environment bound to a live CAD bridge.
 pub fn create_cad_env(bridge: Arc<Mutex<dyn CadBridge>>) -> Rc<RefCell<Env>> {
     let env = create_default_env();
     register_cad_builtins(&mut env.borrow_mut(), bridge);
@@ -142,7 +142,7 @@ mod tests {
     }
 
     #[test]
-    fn test_vlax_activex_emulation() {
+    fn test_vlax_object_model_emulation() {
         let mock = Arc::new(Mutex::new(MockCadBridge::new()));
         let mut env = create_cad_env(mock.clone());
 
@@ -205,7 +205,7 @@ mod tests {
     }
 
     #[test]
-    fn test_msgbox_and_oca_msgbox() {
+    fn test_msgbox_and_oc_msgbox() {
         let mock = Arc::new(Mutex::new(MockCadBridge::new()));
         let mut env = create_cad_env(mock.clone());
 
@@ -219,18 +219,14 @@ mod tests {
         assert_eq!(br.msg_boxes[0].1, Some("Greetings".to_string()));
         drop(br);
 
-        // dos_msgbox alias
-        let res_dos = eval_str(r#"(dos_msgbox "Dos prompt")"#, &mut env).unwrap();
-        assert_eq!(res_dos, Value::Int(1));
-
-        // oca-msgbox with symbol
+        // oc-msgbox with symbol
         mock.lock().unwrap().mock_msgbox_response = Some(6); // IDYES
-        let res_ocl = eval_str(r#"(oca-msgbox "Proceed with operation?" "Confirm" 'yesno)"#, &mut env).unwrap();
-        assert_eq!(res_ocl, Value::Sym("YES".into()));
+        let res_oc = eval_str(r#"(oc-msgbox "Proceed with operation?" "Confirm" 'yesno)"#, &mut env).unwrap();
+        assert_eq!(res_oc, Value::Sym("YES".into()));
     }
 
     #[test]
-    fn test_oca_dialog_construction_and_show() {
+    fn test_oc_dialog_construction_and_show() {
         let mock = Arc::new(Mutex::new(MockCadBridge::new()));
         let mut env = create_cad_env(mock.clone());
 
@@ -243,20 +239,20 @@ mod tests {
             Some(serde_json::to_string(&DialogResponse::Submitted(submitted_vals)).unwrap());
 
         let code = r#"
-            (setq dlg (oca-dialog "Offset Tool"
+            (setq dlg (oc-dialog "Offset Tool"
                         '((width . 400.0) (submit . "Generate"))
-                        (oca-row
-                          (oca-text "txt_layer" "Target Layer" "0")
-                          (oca-number "num_offset" "Offset Distance" 10.0 '((min . 0.1) (max . 500.0))))
-                        (oca-row
-                          (oca-checkbox "chk_join" "Join Segments" T))
-                        (oca-row
-                          (oca-choice "cmb_side" "Side" '("Both" "Left" "Right") "Both"))))
+                        (oc-row
+                          (oc-text "txt_layer" "Target Layer" "0")
+                          (oc-number "num_offset" "Offset Distance" 10.0 '((min . 0.1) (max . 500.0))))
+                        (oc-row
+                          (oc-checkbox "chk_join" "Join Segments" T))
+                        (oc-row
+                          (oc-choice "cmb_side" "Side" '("Both" "Left" "Right") "Both"))))
 
-            (setq res (oca-dialog-show dlg))
-            (list (oca-get "txt_layer" res)
-                  (oca-get-real "num_offset" res)
-                  (oca-get-bool "chk_join" res))
+            (setq res (oc-dialog-show dlg))
+            (list (oc-get "txt_layer" res)
+                  (oc-get-real "num_offset" res)
+                  (oc-get-bool "chk_join" res))
         "#;
 
         let res = eval_str(code, &mut env).unwrap();
@@ -280,24 +276,24 @@ mod tests {
     }
 
     #[test]
-    fn test_oca_panel_integration() {
+    fn test_oc_panel_integration() {
         let mock = Arc::new(Mutex::new(MockCadBridge::new()));
         let mut env = create_cad_env(mock.clone());
 
         let code = r#"
-            (oca-panel-register "wall_tool" "Wall Parameters"
+            (oc-panel-register "wall_tool" "Wall Parameters"
               '((width . 280) (command . "WALLTOOL"))
-              (oca-fields "Wall Properties"
-                (oca-row
-                  (oca-text "thickness" "Thickness" "6.0")
-                  (oca-number "height" "Height" 96.0)))
-              (oca-button "btn_apply" "Apply Changes" "apply"))
+              (oc-fields "Wall Properties"
+                (oc-row
+                  (oc-text "thickness" "Thickness" "6.0")
+                  (oc-number "height" "Height" 96.0)))
+              (oc-button "btn_apply" "Apply Changes" "apply"))
 
-            (oca-panel-update "wall_tool"
+            (oc-panel-update "wall_tool"
               '((thickness . "8.0")
                 (height . 120.0)))
 
-            (oca-panel-toggle "wall_tool" T)
+            (oc-panel-toggle "wall_tool" T)
         "#;
 
         let res = eval_str(code, &mut env).unwrap();

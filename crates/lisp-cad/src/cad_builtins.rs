@@ -103,7 +103,7 @@ pub fn register_cad_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
     let b_cmd = bridge.clone();
     env.command_hook = Some(Arc::new(move |cmd_name: &str| {
         let mut br = b_cmd.lock().unwrap();
-        let _ = br.register_command(cmd_name, "AutoLISP Registered Command");
+        let _ = br.register_command(cmd_name, "OpenCAD LISP Registered Command");
     }));
 
     let b = bridge.clone();
@@ -910,7 +910,7 @@ pub fn register_cad_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         Ok(Value::Nil)
     });
 
-    // ── 7. ActiveX Emulation: (vlax-*) ─────────────────────────────────────────
+    // ── 7. Object Model Emulation: (vlax-*) ────────────────────────────────────
 
     env.def_subr("VLAX-ENAME->VLA-OBJECT", |args, _| {
         if args.len() != 1 { return Err(LispError::WrongArgCount { expected: "1", actual: args.len() }); }
@@ -1190,7 +1190,7 @@ pub fn register_cad_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         }
     });
 
-    // ActiveX Reflection & Type introspection
+    // Object Model Reflection & Type introspection
     env.def_subr("VLAX-METHOD-APPLICABLE-P", move |args, _| {
         if args.len() != 2 {
             return Err(LispError::WrongArgCount { expected: "2 (vla-object method-sym)", actual: args.len() });
@@ -1211,7 +1211,7 @@ pub fn register_cad_builtins(env: &mut Env, bridge: Arc<Mutex<dyn CadBridge>>) {
         }
     });
 
-    // ActiveX Variants and Safearrays
+    // Variants and Safearrays
     env.def_subr("VLAX-MAKE-VARIANT", move |args, _| {
         if args.is_empty() || args.len() > 2 {
             return Err(LispError::WrongArgCount { expected: "1 or 2 (val [type])", actual: args.len() });
