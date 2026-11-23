@@ -45,7 +45,7 @@ fn main() {
 }
 
 fn run_repl() {
-    println!("OpenCAD LISP Engine (Rust) v0.1.0");
+    println!("OpenCAD LISP Engine (Rust) v0.2.0");
     println!("Type OpenCAD LISP expressions to evaluate. Multiline parentheses are balanced automatically.\nType 'quit' or 'exit' to exit.\n");
 
     let mut session = ReplSession::new();

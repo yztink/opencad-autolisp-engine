@@ -20,10 +20,10 @@ pub fn register_all(env: &mut Env) {
 
     // Standard OpenCAD LISP version query
     env.def_subr("VER", |_, _| {
-        Ok(Value::Str("OpenCAD LISP 2026 (opencad-lisp-engine native Rust engine v0.1.0)".into()))
+        Ok(Value::Str("OpenCAD LISP 2026 (opencad-lisp-engine native Rust engine v0.2.0)".into()))
     });
     env.def_subr("VL-VERSION", |_, _| {
-        Ok(Value::Str("OpenCAD LISP 2026 (opencad-lisp-engine native Rust engine v0.1.0)".into()))
+        Ok(Value::Str("OpenCAD LISP 2026 (opencad-lisp-engine native Rust engine v0.2.0)".into()))
     });
     env.def_subr("LISP-IMPLEMENTATION-TYPE", |_, _| {
         Ok(Value::Str("opencad-lisp-engine (Rust)".into()))

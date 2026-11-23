@@ -177,7 +177,7 @@ This reference documents every built-in function, special form, CAD bridge opera
 - **Summary**: Returns version and implementation strings for the OpenCAD LISP runtime.
 - **Example**:
   ```lisp
-  (ver) ; => "OpenCAD LISP 2026 (opencad-lisp-engine native Rust engine v0.1.0)"
+  (ver) ; => "OpenCAD LISP 2026 (opencad-lisp-engine native Rust engine v0.2.0)"
   ```
 
 ---
